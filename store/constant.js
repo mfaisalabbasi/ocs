@@ -1,1 +1,5 @@
 export const AUTH_USER = 'AUTH_USER';
+export const REGISTER_SUCCEED = 'REGISTER_SUCCEED';
+export const REGISTER_FAILED = 'REGISTER_FAILED';
+export const LOGIN_SUCCEED = 'LOGIN_SUCCEED';
+export const LOGIN_FAILED = 'LOGING_FAILED';

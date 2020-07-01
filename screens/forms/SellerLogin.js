@@ -28,7 +28,7 @@ const Login = ({navigation}) => {
         email: '',
         password: '',
       });
-      dispatch(loginAction());
+      dispatch(loginAction);
     }
   };
   return (
@@ -57,7 +57,7 @@ const Login = ({navigation}) => {
             size={40}
           />
           <Text style={styles.heading}>Welcome Back,</Text>
-          <Text style={styles.smallheading}>Sign in to continue</Text>
+          <Text style={styles.smallheading}>Sign in to start serving</Text>
         </View>
         {err ? (
           <Text style={styles.redText}>
@@ -97,18 +97,19 @@ const Login = ({navigation}) => {
             <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>Login</Text>
           </View>
         </TouchableNativeFeedback>
-        <View style={styles.regBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate('SellerLogin')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>Login as seller!</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Customer')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>|| Register as customer</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <View
+            style={{
+              alignItems: 'center',
+              width: '90%',
+              justifyContent: 'center',
+
+              padding: 5,
+            }}>
+            <Text style={styles.smallheading}>Login as Customer!</Text>
+            {/* <Text> Register</Text> */}
+          </View>
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -196,12 +197,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: 'red',
     fontFamily: 'ebrima',
-  },
-  regBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    justifyContent: 'center',
   },
 });
 

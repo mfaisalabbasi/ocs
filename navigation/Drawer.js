@@ -4,8 +4,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Stacks from './Stacks';
 import CustomLogo from './CustomLogo';
 import {View, Text} from 'react-native';
+import {TouchableNativeFeedback} from 'react-native-gesture-handler';
+import {useDispatch} from 'react-redux';
+import {logoutAction} from '../store/actions/auth';
 const Drawer = ({color}) => {
   const Drawer = createDrawerNavigator();
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutAction());
+  };
   const About = () => {
     return (
       <View>
@@ -30,8 +37,24 @@ const Drawer = ({color}) => {
   };
   const Logout = () => {
     return (
-      <View>
-        <Text>hi</Text>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+        }}>
+        <TouchableNativeFeedback onPress={handleLogout}>
+          <View
+            style={{
+              backgroundColor: '#498DF6',
+              width: 150,
+              height: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: '#FFFFFF'}}>Logout</Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     );
   };

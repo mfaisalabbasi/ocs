@@ -3,6 +3,7 @@ import React from 'react';
 import Navigation from './navigation/Navigation';
 import {Provider} from 'react-redux';
 import {store} from './store/reducers/index';
+import {View, StatusBar} from 'react-native';
 
 function App() {
   return (

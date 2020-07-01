@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, TouchableNativeFeedback, Text} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableNativeFeedback,
+  StatusBar,
+  Text,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MapView from 'react-native-maps';
 
@@ -34,7 +40,7 @@ const Home = props => {
             <Icon
               type="Ionicons"
               name="ios-notifications-outline"
-              color="#3680F3"
+              color="#2257A9"
               size={22}
               onPress={() => props.navigation.toggleDrawer()}
             />
@@ -45,6 +51,7 @@ const Home = props => {
   });
   return (
     <View style={styles.screen}>
+      <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
       <View style={styles.mapArea}>
         <MapView
           style={styles.map}
@@ -64,6 +71,7 @@ const Home = props => {
               marginRight: 7,
               fontSize: 18,
               fontFamily: 'ebrima',
+              fontWeight: '900',
             }}>
             Choose service
           </Text>
@@ -106,12 +114,12 @@ const styles = StyleSheet.create({
   },
   selectOptions: {
     width: '90%',
-    backgroundColor: '#3680F3',
+    backgroundColor: '#326ECC',
     height: '8%',
     zIndex: 1,
     marginVertical: 30,
     borderRadius: 10,
-    elevation: 3,
+    elevation: 1,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',

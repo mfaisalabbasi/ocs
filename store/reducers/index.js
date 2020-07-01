@@ -1,8 +1,9 @@
-import {createStore, combineReducers} from 'redux';
-import auth from './auth';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import register from './register';
 
 const rootReducer = combineReducers({
-  auth: auth,
+  register: register,
 });
 
-export const store = createStore(rootReducer);
+export const store = createStore(rootReducer, applyMiddleware(thunk));

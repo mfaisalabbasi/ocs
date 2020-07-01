@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,15 +8,39 @@ import {
   TextInput,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {authUser} from '../../store/actions/auth';
+import {authUser, registerCustomer} from '../../store/actions/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Customer = ({navigation}) => {
   const [selectedValue, setSelectedValue] = useState('Choose Service');
   const dispatch = useDispatch();
-  const handleRegister = () => {
-    dispatch(authUser(true));
+
+  // user registration
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+  });
+  const {name, email, password, phone} = user;
+  const [err, seterr] = useState(false);
+
+  const handleRegisteration = async () => {
+    if (!name || !email || !password || !phone) {
+      seterr(true);
+    } else {
+      dispatch(registerCustomer(user));
+      seterr(false);
+      setUser({
+        name: '',
+        email: '',
+        password: '',
+        phone: '',
+      });
+      // dispatch(authUser(true));
+    }
   };
+
   return (
     <View style={styles.screen}>
       <View
@@ -44,26 +68,44 @@ const Customer = ({navigation}) => {
           <Text style={styles.heading}>Register as customer</Text>
           <Text style={styles.smallheading}>on click's Services</Text>
         </View>
+
+        {err ? (
+          <Text style={styles.redText}>
+            Error :- Fill All the Fields correctlty Before submitting
+          </Text>
+        ) : null}
+
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
             placeholder="Enter your name ..."
             placeholderTextColor="lightgray"
+            name="name"
+            value={name}
+            onChangeText={text => setUser({...user, name: text})}
           />
         </View>
+
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
             placeholder="Enter your email ..."
             placeholderTextColor="lightgray"
+            value={email}
+            name="email"
+            onChangeText={text => setUser({...user, email: text})}
           />
         </View>
+
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
             placeholder="Enter your phone ..."
             placeholderTextColor="lightgray"
             keyboardType="phone-pad"
+            value={phone}
+            name="phone"
+            onChangeText={text => setUser({...user, phone: text})}
           />
         </View>
 
@@ -73,10 +115,13 @@ const Customer = ({navigation}) => {
             placeholder="Enter your password ..."
             placeholderTextColor="lightgray"
             secureTextEntry={true}
+            value={password}
+            name="password"
+            onChangeText={text => setUser({...user, password: text})}
           />
         </View>
 
-        <TouchableNativeFeedback onPress={handleRegister}>
+        <TouchableNativeFeedback onPress={handleRegisteration}>
           <View style={styles.button}>
             <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
               Register
@@ -180,6 +225,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     elevation: 2,
+  },
+  errBox: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '90%',
+  },
+  redText: {
+    fontSize: 10,
+    color: 'red',
+    fontFamily: 'ebrima',
   },
 });
 

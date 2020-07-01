@@ -6,17 +6,11 @@ import Login from '../screens/forms/Login';
 import Register from '../screens/forms/Register';
 import Customer from '../screens/forms/Customer';
 import Drawer from './Drawer';
+import SellerLogin from '../screens/forms/SellerLogin';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Navigation = props => {
-  const authenticated = useSelector(state => state.auth.auth);
-  const [signed, setsigned] = useState(false);
-  const statechange = () => {
-    return setsigned(authenticated);
-  };
-  useEffect(() => {
-    statechange();
-  }, [statechange]);
+  const authenticated = useSelector(state => state.register.authentication);
   const Stack = createStackNavigator();
 
   return (
@@ -25,13 +19,14 @@ const Navigation = props => {
         screenOptions={{
           headerShown: false,
         }}>
-        {signed ? (
+        {authenticated ? (
           <>
             <Stack.Screen name="Home" component={Drawer} />
           </>
         ) : (
           <>
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="SellerLogin" component={SellerLogin} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Customer" component={Customer} />
           </>

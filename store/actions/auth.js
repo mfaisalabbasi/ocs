@@ -5,30 +5,36 @@ import {
   LOGIN_SUCCEED,
   LOGIN_FAILED,
 } from '../constant';
-
-export const authUser = auth => {
-  return {
-    type: AUTH_USER,
-    payload: auth,
-  };
-};
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const registerCustomer = user => async dispatch => {
   try {
-    const req = await fetch(
-      'https://on-click-services.firebaseio.com/customers.json',
+    const {email, password, phone, name} = user;
+    const authUser = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
       {
         method: 'post',
         headers: {
           ContentType: 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({email, password}),
       },
     );
-    const res = await req.json();
+    const res = await authUser.json();
+    const userid = res.localId;
+    await fetch(`https://on-click-s.firebaseio.com/customers/${userid}.json`, {
+      method: 'put',
+      headers: {
+        ContentType: 'application/json',
+      },
+      body: JSON.stringify({name, email, phone}),
+    });
+    // const token = res.idToken;
+    // const val = JSON.stringify(token);
+    // await AsyncStorage.setItem('token', val);
     dispatch({
       type: REGISTER_SUCCEED,
-      payload: res,
+      payload: userid,
     });
   } catch (err) {
     dispatch({
@@ -40,20 +46,31 @@ export const registerCustomer = user => async dispatch => {
 
 export const registerSeller = user => async dispatch => {
   try {
-    const req = await fetch(
-      'https://on-click-services.firebaseio.com/sellers.json',
+    const {name, email, phone, service, password} = user;
+    const authUser = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
       {
         method: 'post',
         headers: {
           ContentType: 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({email, password}),
       },
     );
-    const res = await req.json();
+
+    const res = await authUser.json();
+    const userId = res.localId;
+    await fetch(`https://on-click-s.firebaseio.com/sellers/${userId}.json`, {
+      method: 'put',
+      headers: {
+        ContentType: 'application/json',
+      },
+      body: JSON.stringify({name, email, phone, service}),
+    });
+
     dispatch({
       type: REGISTER_SUCCEED,
-      payload: res,
+      payload: userId,
     });
   } catch (err) {
     dispatch({

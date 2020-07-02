@@ -8,11 +8,13 @@ import Customer from '../screens/forms/Customer';
 import Drawer from './Drawer';
 import SellerLogin from '../screens/forms/SellerLogin';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const Navigation = props => {
+const Navigation = async props => {
   const authenticated = useSelector(state => state.register.authentication);
   const Stack = createStackNavigator();
 
+  const token = await AsyncStorage.getItem('token');
   return (
     <NavigationContainer>
       <Stack.Navigator

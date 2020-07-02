@@ -28,7 +28,7 @@ const Login = ({navigation}) => {
         email: '',
         password: '',
       });
-      dispatch(loginAction);
+      dispatch(loginAction());
     }
   };
   return (

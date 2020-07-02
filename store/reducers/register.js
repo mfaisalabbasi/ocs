@@ -1,7 +1,6 @@
 import {
   REGISTER_SUCCEED,
   REGISTER_FAILED,
-  AUTH_USER,
   LOGIN_SUCCEED,
   LOGIN_FAILED,
 } from '../constant';

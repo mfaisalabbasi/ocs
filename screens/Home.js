@@ -51,100 +51,50 @@ const Home = props => {
       );
     },
   });
-  const loading = useSelector(state => state.register.loading);
-  const user = useSelector(state => state.register.user);
+
   return (
     <View style={styles.screen}>
-      {loading ? (
-        <Fragment>
-          <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
-          <ActivityIndicator size="large" color="#87A5D3" />
-        </Fragment>
-      ) : (
-        <View
-          style={{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}>
-          <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
-          <View style={styles.mapArea}>
-            <MapView
-              style={styles.map}
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-            />
-          </View>
-          <TouchableNativeFeedback>
-            <View style={styles.selectOptions}>
-              <Text
-                style={{
-                  color: '#FFFFFF',
-                  marginRight: 7,
-                  fontSize: 18,
-                  fontFamily: 'ebrima',
-                  fontWeight: '900',
-                }}>
-                Choose service
-              </Text>
-              <Icon
-                type="Ionicons"
-                name="ios-arrow-dropdown"
-                size={20}
-                color="#FFFFFF"
-                onPress={() => props.navigation.toggleDrawer()}
-              />
-            </View>
-          </TouchableNativeFeedback>
+      <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
+      <View style={styles.mapArea}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      </View>
+      <TouchableNativeFeedback>
+        <View style={styles.selectOptions}>
+          <Text
+            style={{
+              color: '#FFFFFF',
+              marginRight: 7,
+              fontSize: 18,
+              fontFamily: 'ebrima',
+              fontWeight: '900',
+            }}>
+            Choose service
+          </Text>
+          <Icon
+            type="Ionicons"
+            name="ios-arrow-dropdown"
+            size={20}
+            color="#FFFFFF"
+            onPress={() => props.navigation.toggleDrawer()}
+          />
         </View>
-      )}
+      </TouchableNativeFeedback>
     </View>
-    // <View style={styles.screen}>
-    //   <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
-    //   <View style={styles.mapArea}>
-    //     <MapView
-    //       style={styles.map}
-    //       initialRegion={{
-    //         latitude: 37.78825,
-    //         longitude: -122.4324,
-    //         latitudeDelta: 0.0922,
-    //         longitudeDelta: 0.0421,
-    //       }}
-    //     />
-    //   </View>
-    //   <TouchableNativeFeedback>
-    //     <View style={styles.selectOptions}>
-    //       <Text
-    //         style={{
-    //           color: '#FFFFFF',
-    //           marginRight: 7,
-    //           fontSize: 18,
-    //           fontFamily: 'ebrima',
-    //           fontWeight: '900',
-    //         }}>
-    //         Choose service
-    //       </Text>
-    //       <Icon
-    //         type="Ionicons"
-    //         name="ios-arrow-dropdown"
-    //         size={20}
-    //         color="#FFFFFF"
-    //         onPress={() => props.navigation.toggleDrawer()}
-    //       />
-    //     </View>
-    //   </TouchableNativeFeedback>
-    // </View>
   );
 };
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   header: {

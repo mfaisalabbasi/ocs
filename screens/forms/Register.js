@@ -8,7 +8,7 @@ import {
   TextInput,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {registerSeller} from '../../store/actions/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const Register = ({navigation}) => {
@@ -22,6 +22,7 @@ const Register = ({navigation}) => {
   const {name, email, phone, password, service} = user;
   //handling Registration
   const [err, seterr] = useState(false);
+  const er = useSelector(state => state.register.error.sellerRegister);
 
   const dispatch = useDispatch();
   const handleRegister = async () => {
@@ -66,10 +67,17 @@ const Register = ({navigation}) => {
           <Text style={styles.heading}>Register as a seller,</Text>
           <Text style={styles.smallheading}>Let's serve togather</Text>
         </View>
-        {err ? (
-          <Text style={styles.redText}>
-            Error :- Fill All the Fields, make sure service is selected
-          </Text>
+        {err || er ? (
+          <View
+            style={{
+              ...styles.input,
+              borderWidth: 0,
+            }}>
+            <Text style={styles.redText}>
+              Error :- Fill All the Fields correctlty Before submitting, use
+              email that not in use before, and password more than six chracter
+            </Text>
+          </View>
         ) : null}
         <View style={styles.inputs}>
           <TextInput

@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {authUser, registerCustomer} from '../../store/actions/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {registerCustomer} from '../../store/actions/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Customer = ({navigation}) => {
@@ -23,6 +23,8 @@ const Customer = ({navigation}) => {
     password: '',
   });
   const {name, email, password, phone} = user;
+  const er = useSelector(state => state.register.error.registerEr);
+
   const [err, seterr] = useState(false);
 
   const handleRegisteration = async () => {
@@ -37,7 +39,6 @@ const Customer = ({navigation}) => {
         password: '',
         phone: '',
       });
-      // dispatch(authUser(true));
     }
   };
 
@@ -69,10 +70,17 @@ const Customer = ({navigation}) => {
           <Text style={styles.smallheading}>on click's Services</Text>
         </View>
 
-        {err ? (
-          <Text style={styles.redText}>
-            Error :- Fill All the Fields correctlty Before submitting
-          </Text>
+        {err || er ? (
+          <View
+            style={{
+              ...styles.input,
+              borderWidth: 0,
+            }}>
+            <Text style={styles.redText}>
+              Error :- Fill All the Fields correctlty Before submitting, use
+              email that not in use before, and password more than six chracter
+            </Text>
+          </View>
         ) : null}
 
         <View style={styles.inputs}>

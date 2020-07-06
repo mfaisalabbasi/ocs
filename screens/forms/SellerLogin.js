@@ -9,11 +9,13 @@ import {
   StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {loginAction} from '../../store/actions/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {sellerLoginAction} from '../../store/actions/auth';
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const [err, seterr] = useState(false);
+  const er = useSelector(state => state.register.error.sellerLogin);
+
   const [user, setuser] = useState({
     email: '',
     password: '',
@@ -28,7 +30,7 @@ const Login = ({navigation}) => {
         email: '',
         password: '',
       });
-      dispatch(loginAction());
+      dispatch(sellerLoginAction(user));
     }
   };
   return (
@@ -59,7 +61,7 @@ const Login = ({navigation}) => {
           <Text style={styles.heading}>Welcome Back,</Text>
           <Text style={styles.smallheading}>Sign in to start serving</Text>
         </View>
-        {err ? (
+        {err || er ? (
           <Text style={styles.redText}>
             Error :- check your credential, email or password not correct
           </Text>

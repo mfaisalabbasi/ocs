@@ -3,9 +3,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../screens/Home';
 import Logout from '../screens/settings/Logout';
 import Settings from '../screens/settings/Settings';
-import UpdateName from '../screens/settings/UpdateName';
-import UpdateNumber from '../screens/settings/UpdateNumber';
 import ChangePassword from '../screens/settings/ChangePassword';
+import UpdateProfile from '../screens/settings/UpdateProfile';
 
 export const Stacks = () => {
   const Stack = createStackNavigator();
@@ -37,14 +36,9 @@ export const settingStack = () => {
         }}
       />
       <Stack.Screen
-        name="updatename"
-        component={UpdateName}
-        options={{title: 'Update Username'}}
-      />
-      <Stack.Screen
-        name="updatenumber"
-        component={UpdateNumber}
-        options={{title: 'Update Mobile'}}
+        name="updateprofile"
+        component={UpdateProfile}
+        options={{title: 'Update Profile'}}
       />
       <Stack.Screen
         name="changepassword"

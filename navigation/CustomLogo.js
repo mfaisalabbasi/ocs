@@ -4,8 +4,10 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
+import {useSelector} from 'react-redux';
 
 const CustomLogo = props => {
+  const name = useSelector(state => state.user.user.name);
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.screen}>
@@ -23,7 +25,7 @@ const CustomLogo = props => {
                 fontWeight: '900',
                 fontFamily: 'ebrima',
               }}>
-              Muhammad Faisal Abbasi
+              {name}
             </Text>
           </View>
         </View>

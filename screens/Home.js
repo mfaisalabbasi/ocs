@@ -1,15 +1,15 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   TouchableNativeFeedback,
   StatusBar,
   Text,
-  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MapView from 'react-native-maps';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUser} from '../store/actions/user';
 
 const Home = props => {
   props.navigation.setOptions({
@@ -51,7 +51,11 @@ const Home = props => {
       );
     },
   });
-
+  const dispatch = useDispatch();
+  const userid = useSelector(state => state.register.user.localId);
+  useEffect(() => {
+    dispatch(getUser(userid));
+  }, []);
   return (
     <View style={styles.screen}>
       <StatusBar backgroundColor="#2257A9" barStyle="light-content" />

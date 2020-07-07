@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icoon from 'react-native-vector-icons/Ionicons';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
 
 const Settings = ({navigation}) => {
   navigation.setOptions({
@@ -22,6 +23,8 @@ const Settings = ({navigation}) => {
       );
     },
   });
+  const user = useSelector(state => state.user.user);
+  const email = useSelector(state => state.register.user.email);
   return (
     <View style={styles.screen}>
       <ScrollView
@@ -32,7 +35,13 @@ const Settings = ({navigation}) => {
         }}>
         <View style={styles.settingForm}>
           <TouchableNativeFeedback
-            onPress={() => navigation.navigate('updatename')}>
+            onPress={() =>
+              navigation.navigate('updateprofile', {
+                upname: user.name,
+                upemail: user.email,
+                upphone: user.phone,
+              })
+            }>
             <View style={styles.inputs}>
               <View style={styles.icon}>
                 <Icon
@@ -44,12 +53,18 @@ const Settings = ({navigation}) => {
               </View>
               <View style={styles.input}>
                 <Text style={styles.txt}>Your Name:-</Text>
-                <Text style={styles.txt}>Muhammad Faisal Abbasi</Text>
+                <Text style={styles.txt}>{user.name}</Text>
               </View>
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
-            onPress={() => alert('Unable to change Email !!!')}>
+            onPress={() =>
+              navigation.navigate('updateprofile', {
+                upname: user.name,
+                upemail: user.email,
+                upphone: user.phone,
+              })
+            }>
             <View style={styles.inputs}>
               <View style={styles.icon}>
                 <Icoon
@@ -61,12 +76,18 @@ const Settings = ({navigation}) => {
               </View>
               <View style={styles.input}>
                 <Text style={styles.txt}>Your Email:-</Text>
-                <Text style={styles.txt}>mfaisal@gmail.com</Text>
+                <Text style={styles.txt}>{email}</Text>
               </View>
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
-            onPress={() => navigation.navigate('updatenumber')}>
+            onPress={() =>
+              navigation.navigate('updateprofile', {
+                upname: user.name,
+                upemail: user.email,
+                upphone: user.phone,
+              })
+            }>
             <View style={styles.inputs}>
               <View style={styles.icon}>
                 <Icon
@@ -78,7 +99,7 @@ const Settings = ({navigation}) => {
               </View>
               <View style={styles.input}>
                 <Text style={styles.txt}>Your Mobile:-</Text>
-                <Text style={styles.txt}>+923139190128</Text>
+                <Text style={styles.txt}>{user.phone}</Text>
               </View>
             </View>
           </TouchableNativeFeedback>

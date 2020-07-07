@@ -6,3 +6,7 @@ export const LOGIN_FAILED = 'LOGING_FAILED';
 export const SELLER_REGISTER_FAILED = 'SELLER_REGISTER_FAILED';
 export const SELLER_LOGIN_FAILED = 'SELLER_LOGIN_FAILED';
 export const LOGOUT = 'LOGOUT';
+export const GET_USER = 'GET_USER';
+export const FAILED_USER = 'FAILED_USER';
+export const UPDATE_SUCCESS = 'UPDATE_SUCCESS';
+export const UPDATE_FAIL = 'UPDATE_FAIL';

@@ -7,18 +7,10 @@ import Register from '../screens/forms/Register';
 import Customer from '../screens/forms/Customer';
 import Drawer from './Drawer';
 import SellerLogin from '../screens/forms/SellerLogin';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const Navigation = props => {
   const authenticated = useSelector(state => state.register.authentication);
 
-  const token = async () => {
-    let val = await AsyncStorage.getItem('secret');
-    console.log('mytkn-----------------', val);
-  };
-  useEffect(() => {
-    token();
-  }, [token]);
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>

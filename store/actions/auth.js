@@ -6,6 +6,10 @@ import {
   SELLER_LOGIN_FAILED,
   SELLER_REGISTER_FAILED,
   LOGOUT,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_FAILED,
+  RESET_PASSWORD_FAILED,
+  RESET_PASSWORD_SUCCESS,
 } from '../constant';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -190,5 +194,72 @@ export const logoutAction = () => async dispatch => {
     });
   } catch (error) {
     console.log('error');
+  }
+};
+
+//-----------------------------------------------------------------------Change password
+
+export const changePassword = (idToken, password) => async dispatch => {
+  try {
+    const req = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
+      {
+        method: 'post',
+        headers: {ContentType: 'application/json'},
+        body: JSON.stringify({idToken, password}),
+      },
+    );
+    const res = await req.json();
+    if (res.error) {
+      dispatch({
+        type: CHANGE_PASSWORD_FAILED,
+        payload: error,
+      });
+    } else {
+      dispatch({
+        type: CHANGE_PASSWORD_SUCCESS,
+        payload: res,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: CHANGE_PASSWORD_FAILED,
+      payload: error,
+    });
+  }
+};
+
+//-----------------------------------------------------------------------Reset password
+
+export const resetPassword = email => async dispatch => {
+  try {
+    const requestType = 'PASSWORD_RESET';
+    const req = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
+      {
+        method: 'post',
+        headers: {ContentType: 'application/json'},
+        body: JSON.stringify({requestType, email}),
+      },
+    );
+    const res = await req.json();
+    console.log('this is res of rest', res);
+    if (res.error) {
+      dispatch({
+        type: RESET_PASSWORD_FAILED,
+        payload: res.error,
+      });
+    } else {
+      dispatch({
+        type: RESET_PASSWORD_SUCCESS,
+        payload: res,
+      });
+    }
+  } catch (error) {
+    console.log('fuck', error);
+    dispatch({
+      type: RESET_PASSWORD_FAILED,
+      payload: error,
+    });
   }
 };

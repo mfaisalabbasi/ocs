@@ -7,6 +7,7 @@ import Register from '../screens/forms/Register';
 import Customer from '../screens/forms/Customer';
 import Drawer from './Drawer';
 import SellerLogin from '../screens/forms/SellerLogin';
+import ResetPassword from '../screens/forms/ResetPassword';
 
 const Navigation = props => {
   const authenticated = useSelector(state => state.register.authentication);
@@ -28,6 +29,21 @@ const Navigation = props => {
             <Stack.Screen name="SellerLogin" component={SellerLogin} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Customer" component={Customer} />
+            <Stack.Screen
+              name="resetpassword"
+              component={ResetPassword}
+              options={{
+                headerShown: true,
+                title: 'Reset Password',
+                headerStyle: {
+                  backgroundColor: '#2C7AF2',
+                },
+                headerTintColor: '#FFFFFF',
+                headerTitleStyle: {
+                  fontFamily: 'ebrima',
+                },
+              }}
+            />
           </>
         )}
       </Stack.Navigator>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,32 +7,37 @@ import {
   TouchableOpacity,
   TextInput,
   StatusBar,
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginAction} from '../../store/actions/auth';
+import {ScrollView} from 'react-native-gesture-handler';
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const er = useSelector(state => state.register.error.login);
+  const loading = useSelector(state => state.register.loading);
+  const [press, setpress] = useState(false);
   const [err, seterr] = useState(false);
+
   const [user, setuser] = useState({
     email: '',
     password: '',
   });
   const {email, password} = user;
   const loginHandler = () => {
+    setpress(true);
     seterr(false);
     if (!email || !password) {
       seterr(true);
     } else {
       seterr(false);
-      setuser({
-        email: '',
-        password: '',
-      });
       dispatch(loginAction(user));
     }
+    setTimeout(() => setpress(false), 1000);
   };
+
   return (
     <View style={styles.screen}>
       <StatusBar backgroundColor="#7687A0" barStyle="light-content" />
@@ -56,11 +61,20 @@ const Login = ({navigation}) => {
             type="FontAwesome"
             name="user-circle-o"
             color="#498DF6"
-            size={40}
+            size={35}
           />
           <Text style={styles.heading}>Welcome Back,</Text>
           <Text style={styles.smallheading}>Sign in to continue</Text>
         </View>
+        {loading && press ? (
+          <View>
+            <ActivityIndicator size="small" color="#498DF6" />
+            <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>
+              Checking
+            </Text>
+          </View>
+        ) : null}
+
         {err || er ? (
           <Text style={styles.redText}>
             Error :- check your credential, email or password not correct
@@ -85,6 +99,7 @@ const Login = ({navigation}) => {
             onChangeText={text => setuser({...user, password: text})}
           />
         </View>
+
         <View
           style={{
             width: '90%',
@@ -92,8 +107,14 @@ const Login = ({navigation}) => {
             flexDirection: 'row',
             marginVertical: 3,
           }}>
-          <Text style={styles.smallheading}>Forgot password?</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('resetpassword')}>
+            <View>
+              <Text style={styles.smallheading}>Forgot password?</Text>
+            </View>
+          </TouchableOpacity>
         </View>
+
         <TouchableNativeFeedback onPress={loginHandler}>
           <View style={styles.button}>
             <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>Login</Text>
@@ -112,6 +133,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
+
       <View
         style={{
           width: '100%',
@@ -149,10 +171,10 @@ const styles = StyleSheet.create({
   head: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
   },
   heading: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'ebrima',
     fontWeight: '400',
   },
@@ -167,6 +189,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   input: {
+    padding: 8,
     fontSize: 12,
     fontFamily: 'ebrima',
     width: '90%',
@@ -186,7 +209,7 @@ const styles = StyleSheet.create({
   button: {
     width: '85%',
     backgroundColor: '#498DF6',
-    marginVertical: 10,
+    marginVertical: 9,
     paddingHorizontal: 5,
     paddingVertical: 12,
     justifyContent: 'center',

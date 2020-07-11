@@ -32,7 +32,15 @@ export const updateName = (userid, user) => async dispatch => {
     );
     const res = await req.json();
     console.log('thisss', res);
+    dispatch({
+      type: GET_USER,
+      payload: res,
+    });
   } catch (error) {
     console.log('thiss err', error);
+    dispatch({
+      type: FAILED_USER,
+      payload: error,
+    });
   }
 };

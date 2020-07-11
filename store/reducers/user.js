@@ -13,14 +13,14 @@ const user = (state = initialState, action) => {
     case GET_USER:
       return {
         ...state,
-        loading: false,
         user: payload,
+        loading: false,
       };
     case FAILED_USER:
       return {
         ...state,
-        loading: false,
         error: paylaod,
+        loading: false,
       };
     default:
       return state;

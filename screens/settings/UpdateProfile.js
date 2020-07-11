@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,6 +14,7 @@ import {updateName} from '../../store/actions/user';
 const UpdateProfile = ({route, navigation}) => {
   const {upname, upemail, upphone} = route.params;
   const [err, seterr] = useState(false);
+  const [press, setpress] = useState(false);
   const [user, setuser] = useState({
     name: upname,
     email: upemail,
@@ -22,14 +24,16 @@ const UpdateProfile = ({route, navigation}) => {
 
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
+
   const handleUpdate = () => {
+    setpress(true);
     if (!name || !phone) {
       seterr(true);
     } else {
       seterr(false);
       dispatch(updateName(userid, user));
-      navigation.navigate('setting');
     }
+    setTimeout(() => setpress(false), 1000);
   };
   return (
     <View style={styles.screen}>
@@ -39,6 +43,16 @@ const UpdateProfile = ({route, navigation}) => {
           <Text style={styles.heading}>On Click Services</Text>
           <Text style={styles.smallheading}>Update Your Profile Info</Text>
         </View>
+        {press ? (
+          <View>
+            <ActivityIndicator size="small" color="#498DF6" />
+            <Text
+              style={{fontFamily: 'ebrima', color: '#498DF6', fontSize: 12}}>
+              Updating profile
+            </Text>
+          </View>
+        ) : null}
+
         {err ? (
           <Text style={styles.redText}>
             Error :- You can't update Profile without adding valid Value
@@ -55,7 +69,6 @@ const UpdateProfile = ({route, navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="New ..."
             placeholderTextColor="lightgray"
             value={email}
           />
@@ -63,10 +76,10 @@ const UpdateProfile = ({route, navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Confirm new ..."
             placeholderTextColor="lightgray"
             value={phone}
             onChangeText={text => setuser({...user, phone: text})}
+            keyboardType="phone-pad"
           />
         </View>
 

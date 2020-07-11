@@ -6,17 +6,21 @@ import {
   SELLER_REGISTER_FAILED,
   SELLER_LOGIN_FAILED,
   LOGOUT,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_FAILED,
 } from '../constant';
 
 const initialState = {
   loading: true,
   authentication: false,
   user: {},
+  updateduser: {},
   error: {
     login: null,
     registerEr: null,
     sellerRegister: null,
     sellerLogin: null,
+    changepassword: null,
   },
 };
 const registerCustomer = (state = initialState, action) => {
@@ -24,17 +28,18 @@ const registerCustomer = (state = initialState, action) => {
   switch (type) {
     case REGISTER_SUCCEED:
     case LOGIN_SUCCEED:
+    case CHANGE_PASSWORD_SUCCESS:
       return {
         ...state,
-        loading: false,
         authentication: true,
         user: payload,
+        loading: false,
         error: {},
       };
     case REGISTER_FAILED:
       return {
         ...state,
-        loading: false,
+
         authentication: false,
         error: {
           ...state,
@@ -44,7 +49,7 @@ const registerCustomer = (state = initialState, action) => {
     case SELLER_REGISTER_FAILED:
       return {
         ...state,
-        loading: false,
+
         authentication: false,
         error: {
           ...state,
@@ -54,7 +59,7 @@ const registerCustomer = (state = initialState, action) => {
     case LOGIN_FAILED:
       return {
         ...state,
-        loading: false,
+
         authentication: false,
         error: {
           ...state,
@@ -64,7 +69,7 @@ const registerCustomer = (state = initialState, action) => {
     case SELLER_LOGIN_FAILED:
       return {
         ...state,
-        loading: false,
+
         authentication: false,
         error: {
           ...state,
@@ -75,9 +80,17 @@ const registerCustomer = (state = initialState, action) => {
     case LOGOUT:
       return {
         ...state,
-        loading: false,
         authentication: false,
+        loading: true,
       };
+    case CHANGE_PASSWORD_FAILED:
+      return {
+        ...state,
+
+        authentication: true,
+        error: {...state, changepassword: payload},
+      };
+
     default:
       return state;
   }

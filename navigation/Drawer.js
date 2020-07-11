@@ -1,19 +1,10 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Stacks, settingStack} from './Stacks';
+import {Stacks, settingStack, aboutStacks, NotiStacks} from './Stacks';
 import CustomLogo from './CustomLogo';
-import {View, Text} from 'react-native';
 const Drawer = ({color}) => {
   const Drawer = createDrawerNavigator();
-
-  const About = () => {
-    return (
-      <View>
-        <Text>hi</Text>
-      </View>
-    );
-  };
 
   return (
     <Drawer.Navigator
@@ -30,7 +21,7 @@ const Drawer = ({color}) => {
         },
       }}>
       <Drawer.Screen
-        name="  Home"
+        name="Home"
         component={Stacks}
         options={{
           drawerIcon: ({color}) => {
@@ -42,7 +33,24 @@ const Drawer = ({color}) => {
       />
 
       <Drawer.Screen
-        name="  Settings"
+        name="Notifications"
+        component={NotiStacks}
+        options={{
+          drawerIcon: ({color}) => {
+            return (
+              <Icon
+                type="Ionicons"
+                name="ios-notifications"
+                color={color}
+                size={29}
+              />
+            );
+          },
+        }}
+      />
+
+      <Drawer.Screen
+        name="Settings"
         component={settingStack}
         options={{
           drawerIcon: ({color}) => {
@@ -59,8 +67,8 @@ const Drawer = ({color}) => {
       />
 
       <Drawer.Screen
-        name="  About Us"
-        component={About}
+        name="About Us"
+        component={aboutStacks}
         options={{
           drawerIcon: ({color}) => {
             return (

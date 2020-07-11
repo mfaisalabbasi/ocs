@@ -4,83 +4,85 @@ import {
   Text,
   StyleSheet,
   TouchableNativeFeedback,
+  TouchableOpacity,
   TextInput,
+  StatusBar,
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
-import {changePassword} from '../../store/actions/auth';
-
-const ChangePassword = ({navigation}) => {
-  const [press, setpress] = useState(false);
-  const [newpassword, setnewpassword] = useState('');
-  const [confirmpassword, setconfirmpassword] = useState('');
-  const [err, seterr] = useState(false);
-  const er = useSelector(state => state.register.error.changepassword);
+import {resetPassword} from '../../store/actions/auth';
+const ResetPassword = ({navigation}) => {
   const dispatch = useDispatch();
-  const idToken = useSelector(state => state.register.user.idToken);
-
-  const handlePassword = () => {
+  const er = useSelector(state => state.resetpassword.error.resetError);
+  const [press, setpress] = useState(false);
+  const [err, seterr] = useState(false);
+  const [user, setuser] = useState({
+    email: '',
+  });
+  const {email} = user;
+  const loginHandler = () => {
     setpress(true);
-    if (newpassword !== confirmpassword || newpassword.length < 6) {
+    seterr(false);
+    if (!email) {
       seterr(true);
     } else {
       seterr(false);
-      dispatch(changePassword(idToken, newpassword));
+      setuser({
+        email: '',
+      });
+      dispatch(resetPassword(email));
     }
     setTimeout(() => setpress(false), 1000);
   };
-
   return (
     <View style={styles.screen}>
+      <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
       <View style={styles.form}>
         <View style={styles.head}>
-          <Icon type="FontAwesome" name="edit" color="gray" size={30} />
-          <Text style={styles.heading}>On Click Services</Text>
-          <Text style={styles.smallheading}>Change Your Password</Text>
+          <Icon type="FontAwesome" name="edit" color="gray" size={40} />
+          <Text style={styles.heading}>Enter your Email</Text>
+          <Text style={styles.smallheading}>check your email</Text>
         </View>
         {press ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
-            <Text
-              style={{fontFamily: 'ebrima', color: '#498DF6', fontSize: 12}}>
-              Changing password
+            <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>
+              Sending
             </Text>
           </View>
         ) : null}
         {err || er ? (
           <Text style={styles.redText}>
-            Error :- Password must be more than 6 chracter and both should match
+            Error :- Fill with Registered Email
           </Text>
         ) : null}
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Enter new Password ..."
+            placeholder=" ..."
             placeholderTextColor="lightgray"
-            value={newpassword}
-            onChangeText={text => setnewpassword(text)}
-            secureTextEntry={true}
+            value={email}
+            onChangeText={text => setuser({...user, email: text})}
           />
         </View>
-        <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm new Password ..."
-            placeholderTextColor="lightgray"
-            value={confirmpassword}
-            onChangeText={text => setconfirmpassword(text)}
-            secureTextEntry={true}
-          />
-        </View>
-
-        <TouchableNativeFeedback onPress={handlePassword}>
+        <TouchableNativeFeedback onPress={loginHandler}>
           <View style={styles.button}>
-            <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
-              Change Password
-            </Text>
+            <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>Login</Text>
           </View>
         </TouchableNativeFeedback>
+        <View style={styles.regBtn}>
+          <TouchableOpacity onPress={() => navigation.navigate('SellerLogin')}>
+            <View style={{paddingVertical: 8, padding: 3}}>
+              <Text style={styles.smallheading}>Login as seller!</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Customer')}>
+            <View style={{paddingVertical: 8, padding: 3}}>
+              <Text style={styles.smallheading}>|| Register as customer</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -107,19 +109,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   heading: {
-    fontSize: 16,
+    fontSize: 20,
     fontFamily: 'ebrima',
     fontWeight: '400',
   },
   smallheading: {
-    fontSize: 8,
+    fontSize: 10,
     fontFamily: 'ebrima',
     color: '#498DF6',
   },
 
   inputs: {
     width: '100%',
-    marginVertical: 3,
+    marginVertical: 5,
   },
   input: {
     fontSize: 12,
@@ -137,24 +139,29 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: 5,
   },
   button: {
-    width: '60%',
+    width: '85%',
     backgroundColor: '#498DF6',
     marginVertical: 10,
     paddingHorizontal: 5,
-    paddingVertical: 8,
+    paddingVertical: 12,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
     elevation: 2,
   },
   redText: {
-    fontSize: 8,
+    fontSize: 10,
     color: 'red',
     fontFamily: 'ebrima',
   },
+  regBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
+    justifyContent: 'center',
+  },
 });
 
-export default ChangePassword;
+export default ResetPassword;

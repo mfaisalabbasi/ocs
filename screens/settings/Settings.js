@@ -11,12 +11,12 @@ const Settings = ({navigation}) => {
       return (
         <TouchableNativeFeedback>
           <View style={styles.header}>
-            <Icon
+            <Icoon
               type="Ionicons"
-              name="chevron-left"
+              name="ios-menu"
               color="#FFFFFF"
-              size={22}
-              onPress={() => navigation.navigate('Ho')}
+              size={32}
+              onPress={() => navigation.toggleDrawer()}
             />
           </View>
         </TouchableNativeFeedback>
@@ -25,6 +25,7 @@ const Settings = ({navigation}) => {
   });
   const user = useSelector(state => state.user.user);
   const email = useSelector(state => state.register.user.email);
+  const ocs = 'On Click Services';
   return (
     <View style={styles.screen}>
       <ScrollView
@@ -53,7 +54,9 @@ const Settings = ({navigation}) => {
               </View>
               <View style={styles.input}>
                 <Text style={styles.txt}>Your Name:-</Text>
-                <Text style={styles.txt}>{user.name}</Text>
+                <Text style={styles.txt}>
+                  {user === null ? ocs : user.name}
+                </Text>
               </View>
             </View>
           </TouchableNativeFeedback>
@@ -76,7 +79,7 @@ const Settings = ({navigation}) => {
               </View>
               <View style={styles.input}>
                 <Text style={styles.txt}>Your Email:-</Text>
-                <Text style={styles.txt}>{email}</Text>
+                <Text style={styles.txt}>{!email ? ocs : email}</Text>
               </View>
             </View>
           </TouchableNativeFeedback>
@@ -99,7 +102,9 @@ const Settings = ({navigation}) => {
               </View>
               <View style={styles.input}>
                 <Text style={styles.txt}>Your Mobile:-</Text>
-                <Text style={styles.txt}>{user.phone}</Text>
+                <Text style={styles.txt}>
+                  {user === null ? ocs : user.phone}
+                </Text>
               </View>
             </View>
           </TouchableNativeFeedback>

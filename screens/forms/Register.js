@@ -6,6 +6,7 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {useDispatch, useSelector} from 'react-redux';
@@ -23,22 +24,19 @@ const Register = ({navigation}) => {
   //handling Registration
   const [err, seterr] = useState(false);
   const er = useSelector(state => state.register.error.sellerRegister);
+  const loading = useSelector(state => state.register.loading);
+  const [press, setpress] = useState(false);
 
   const dispatch = useDispatch();
   const handleRegister = async () => {
+    setpress(true);
     if (!name || !email || !password || !phone || service === '') {
       seterr(true);
     } else {
       dispatch(registerSeller(user));
       seterr(false);
-      setuser({
-        name: '',
-        email: '',
-        password: '',
-        phone: '',
-        service: '',
-      });
     }
+    setTimeout(() => setpress(false), 1000);
   };
   return (
     <View style={styles.screen}>
@@ -67,6 +65,14 @@ const Register = ({navigation}) => {
           <Text style={styles.heading}>Register as a seller,</Text>
           <Text style={styles.smallheading}>Let's serve togather</Text>
         </View>
+        {loading && press ? (
+          <View>
+            <ActivityIndicator size="small" color="#498DF6" />
+            <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>
+              Checking
+            </Text>
+          </View>
+        ) : null}
         {err || er ? (
           <View
             style={{

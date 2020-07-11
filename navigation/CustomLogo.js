@@ -7,7 +7,8 @@ import {
 import {useSelector} from 'react-redux';
 
 const CustomLogo = props => {
-  const name = useSelector(state => state.user.user.name);
+  const user = useSelector(state => state.user.user);
+  const ocs = 'On Click Services';
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.screen}>
@@ -25,7 +26,7 @@ const CustomLogo = props => {
                 fontWeight: '900',
                 fontFamily: 'ebrima',
               }}>
-              {name}
+              {user === null ? ocs : user.name}
             </Text>
           </View>
         </View>

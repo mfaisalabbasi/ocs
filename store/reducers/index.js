@@ -4,6 +4,7 @@ import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
 import register from './register';
 import user from './user';
+import resetpassword from './resetpassword';
 
 const persistConfig = {
   key: 'root',
@@ -13,6 +14,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   register,
   user,
+  resetpassword,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

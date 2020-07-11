@@ -6,6 +6,7 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {registerCustomer} from '../../store/actions/auth';
@@ -24,22 +25,19 @@ const Customer = ({navigation}) => {
   });
   const {name, email, password, phone} = user;
   const er = useSelector(state => state.register.error.registerEr);
-
+  const loading = useSelector(state => state.register.loading);
+  const [press, setpress] = useState(false);
   const [err, seterr] = useState(false);
 
   const handleRegisteration = async () => {
+    setpress(true);
     if (!name || !email || !password || !phone) {
       seterr(true);
     } else {
       dispatch(registerCustomer(user));
       seterr(false);
-      setUser({
-        name: '',
-        email: '',
-        password: '',
-        phone: '',
-      });
     }
+    setTimeout(() => setpress(false), 1000);
   };
 
   return (
@@ -69,7 +67,14 @@ const Customer = ({navigation}) => {
           <Text style={styles.heading}>Register as customer</Text>
           <Text style={styles.smallheading}>on click's Services</Text>
         </View>
-
+        {loading && press ? (
+          <View>
+            <ActivityIndicator size="small" color="#498DF6" />
+            <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>
+              Checking
+            </Text>
+          </View>
+        ) : null}
         {err || er ? (
           <View
             style={{

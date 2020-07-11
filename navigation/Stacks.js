@@ -5,12 +5,63 @@ import Logout from '../screens/settings/Logout';
 import Settings from '../screens/settings/Settings';
 import ChangePassword from '../screens/settings/ChangePassword';
 import UpdateProfile from '../screens/settings/UpdateProfile';
+import About from '../screens/About';
+import Notification from '../screens/Notification';
 
 export const Stacks = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
       <Stack.Screen name="Ho" component={Home} />
+      <Stack.Screen
+        name="Notifications"
+        component={Notification}
+        options={{
+          headerStyle: {
+            backgroundColor: '#2C7AF2',
+          },
+          headerTintColor: '#FFFFFF',
+          headerTitleStyle: {
+            fontFamily: 'ebrima',
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const NotiStacks = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#2C7AF2',
+        },
+        headerTintColor: '#FFFFFF',
+        headerTitleStyle: {
+          fontFamily: 'ebrima',
+        },
+      }}>
+      <Stack.Screen name="Notifications" component={Notification} />
+    </Stack.Navigator>
+  );
+};
+
+export const aboutStacks = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#2C7AF2',
+        },
+        headerTintColor: '#FFFFFF',
+        headerTitleStyle: {
+          fontFamily: 'ebrima',
+        },
+      }}>
+      <Stack.Screen name="About Us" component={About} />
     </Stack.Navigator>
   );
 };
@@ -35,6 +86,7 @@ export const settingStack = () => {
           title: 'Profile Settings',
         }}
       />
+
       <Stack.Screen
         name="updateprofile"
         component={UpdateProfile}

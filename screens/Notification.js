@@ -14,12 +14,12 @@ const Notification = ({navigation}) => {
     headerLeft: () => {
       return (
         <View style={styles.header}>
-          <Icon
-            type="Ionicons"
-            name="ios-menu"
+          <Icoon
+            type="AntDesign"
+            name="arrowleft"
             color="#FFFFFF"
-            size={33}
-            onPress={() => navigation.toggleDrawer()}
+            size={25}
+            onPress={() => navigation.navigate('Home')}
           />
         </View>
       );

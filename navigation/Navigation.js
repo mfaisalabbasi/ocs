@@ -21,7 +21,7 @@ const Navigation = props => {
         }}>
         {authenticated ? (
           <>
-            <Stack.Screen name="Home" component={Drawer} />
+            <Stack.Screen name="draw" component={Drawer} />
           </>
         ) : (
           <>

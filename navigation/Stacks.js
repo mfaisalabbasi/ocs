@@ -12,7 +12,7 @@ export const Stacks = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Ho" component={Home} />
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="Notifications"
         component={Notification}

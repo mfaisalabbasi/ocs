@@ -21,7 +21,7 @@ const Drawer = ({color}) => {
         },
       }}>
       <Drawer.Screen
-        name="Home"
+        name="Home  "
         component={Stacks}
         options={{
           drawerIcon: ({color}) => {

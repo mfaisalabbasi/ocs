@@ -15,14 +15,13 @@ import {resetPassword} from '../../store/actions/auth';
 const ResetPassword = ({navigation}) => {
   const dispatch = useDispatch();
   const er = useSelector(state => state.resetpassword.error.resetError);
-  const [press, setpress] = useState(false);
+  const loading = useSelector(state => state.resetpassword.loading);
   const [err, seterr] = useState(false);
   const [user, setuser] = useState({
     email: '',
   });
   const {email} = user;
   const loginHandler = () => {
-    setpress(true);
     seterr(false);
     if (!email) {
       seterr(true);
@@ -33,7 +32,6 @@ const ResetPassword = ({navigation}) => {
       });
       dispatch(resetPassword(email));
     }
-    setTimeout(() => setpress(false), 1000);
   };
   return (
     <View style={styles.screen}>
@@ -44,7 +42,7 @@ const ResetPassword = ({navigation}) => {
           <Text style={styles.heading}>Enter your Email</Text>
           <Text style={styles.smallheading}>check your email</Text>
         </View>
-        {press ? (
+        {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
             <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>

@@ -14,7 +14,6 @@ import {updateName} from '../../store/actions/user';
 const UpdateProfile = ({route, navigation}) => {
   const {upname, upemail, upphone} = route.params;
   const [err, seterr] = useState(false);
-  const [press, setpress] = useState(false);
   const [user, setuser] = useState({
     name: upname,
     email: upemail,
@@ -24,16 +23,15 @@ const UpdateProfile = ({route, navigation}) => {
 
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
+  const loading = useSelector(state => state.user.loading);
 
   const handleUpdate = () => {
-    setpress(true);
     if (!name || !phone) {
       seterr(true);
     } else {
       seterr(false);
       dispatch(updateName(userid, user));
     }
-    setTimeout(() => setpress(false), 1000);
   };
   return (
     <View style={styles.screen}>
@@ -43,7 +41,7 @@ const UpdateProfile = ({route, navigation}) => {
           <Text style={styles.heading}>On Click Services</Text>
           <Text style={styles.smallheading}>Update Your Profile Info</Text>
         </View>
-        {press ? (
+        {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
             <Text

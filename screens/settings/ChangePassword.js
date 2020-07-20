@@ -12,23 +12,23 @@ import {useDispatch, useSelector} from 'react-redux';
 import {changePassword} from '../../store/actions/auth';
 
 const ChangePassword = ({navigation}) => {
-  const [press, setpress] = useState(false);
   const [newpassword, setnewpassword] = useState('');
   const [confirmpassword, setconfirmpassword] = useState('');
   const [err, seterr] = useState(false);
   const er = useSelector(state => state.register.error.changepassword);
   const dispatch = useDispatch();
   const idToken = useSelector(state => state.register.user.idToken);
+  const loading = useSelector(state => state.register.loading);
 
   const handlePassword = () => {
-    setpress(true);
     if (newpassword !== confirmpassword || newpassword.length < 6) {
       seterr(true);
     } else {
       seterr(false);
       dispatch(changePassword(idToken, newpassword));
+      setnewpassword('');
+      setconfirmpassword('');
     }
-    setTimeout(() => setpress(false), 1000);
   };
 
   return (
@@ -39,7 +39,7 @@ const ChangePassword = ({navigation}) => {
           <Text style={styles.heading}>On Click Services</Text>
           <Text style={styles.smallheading}>Change Your Password</Text>
         </View>
-        {press ? (
+        {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
             <Text

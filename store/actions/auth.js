@@ -10,12 +10,15 @@ import {
   CHANGE_PASSWORD_FAILED,
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
+  START_LOADING_LOGIN,
+  LOADING_RESET,
 } from '../constant';
 import AsyncStorage from '@react-native-community/async-storage';
 
 // ------------------------------------------------------------------Register Customer
 
 export const registerCustomer = user => async dispatch => {
+  dispatch({type: START_LOADING_LOGIN});
   try {
     const {email, password, phone, name} = user;
     const authUser = await fetch(
@@ -61,9 +64,29 @@ export const registerCustomer = user => async dispatch => {
   }
 };
 
+//------------------------------------------------------------update locations
+
+export const updateLocation = (userId, location) => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/customers/${userId}.json`,
+      {
+        method: 'patch',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({location}),
+      },
+    );
+  } catch (error) {
+    console.log('location updating error', error);
+  }
+};
+
 //------------------------------------------------------------Register Seller
 
 export const registerSeller = user => async dispatch => {
+  dispatch({type: START_LOADING_LOGIN});
   try {
     const {name, email, phone, service, password} = user;
     const authUser = await fetch(
@@ -110,6 +133,9 @@ export const registerSeller = user => async dispatch => {
 //----------------------------------------- Login Action
 
 export const loginAction = user => async dispatch => {
+  dispatch({
+    type: START_LOADING_LOGIN,
+  });
   try {
     const {email, password} = user;
     const signReq = await fetch(
@@ -150,6 +176,7 @@ export const loginAction = user => async dispatch => {
 //-----------------------------------------  seller Login Action
 
 export const sellerLoginAction = user => async dispatch => {
+  dispatch({type: START_LOADING_LOGIN});
   try {
     const {email, password} = user;
     const signReq = await fetch(
@@ -200,6 +227,7 @@ export const logoutAction = () => async dispatch => {
 //-----------------------------------------------------------------------Change password
 
 export const changePassword = (idToken, password) => async dispatch => {
+  dispatch({type: START_LOADING_LOGIN});
   try {
     const req = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
@@ -232,6 +260,9 @@ export const changePassword = (idToken, password) => async dispatch => {
 //-----------------------------------------------------------------------Reset password
 
 export const resetPassword = email => async dispatch => {
+  dispatch({
+    type: LOADING_RESET,
+  });
   try {
     const requestType = 'PASSWORD_RESET';
     const req = await fetch(

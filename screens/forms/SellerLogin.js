@@ -17,7 +17,6 @@ const Login = ({navigation}) => {
   const [err, seterr] = useState(false);
   const er = useSelector(state => state.register.error.sellerLogin);
   const loading = useSelector(state => state.register.loading);
-  const [press, setpress] = useState(false);
 
   const [user, setuser] = useState({
     email: '',
@@ -25,18 +24,12 @@ const Login = ({navigation}) => {
   });
   const {email, password} = user;
   const loginHandler = () => {
-    setpress(true);
     if (!email || !password) {
       seterr(true);
     } else {
       seterr(false);
-      setuser({
-        email: '',
-        password: '',
-      });
       dispatch(sellerLoginAction(user));
     }
-    setTimeout(() => setpress(false), 1000);
   };
   return (
     <View style={styles.screen}>
@@ -66,7 +59,7 @@ const Login = ({navigation}) => {
           <Text style={styles.heading}>Welcome Back,</Text>
           <Text style={styles.smallheading}>Sign in to start serving</Text>
         </View>
-        {loading && press ? (
+        {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
             <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>

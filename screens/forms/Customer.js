@@ -26,18 +26,16 @@ const Customer = ({navigation}) => {
   const {name, email, password, phone} = user;
   const er = useSelector(state => state.register.error.registerEr);
   const loading = useSelector(state => state.register.loading);
-  const [press, setpress] = useState(false);
+
   const [err, seterr] = useState(false);
 
   const handleRegisteration = async () => {
-    setpress(true);
     if (!name || !email || !password || !phone) {
       seterr(true);
     } else {
       dispatch(registerCustomer(user));
       seterr(false);
     }
-    setTimeout(() => setpress(false), 1000);
   };
 
   return (
@@ -67,7 +65,7 @@ const Customer = ({navigation}) => {
           <Text style={styles.heading}>Register as customer</Text>
           <Text style={styles.smallheading}>on click's Services</Text>
         </View>
-        {loading && press ? (
+        {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
             <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>

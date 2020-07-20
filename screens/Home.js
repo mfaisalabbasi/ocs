@@ -5,16 +5,20 @@ import {
   TouchableNativeFeedback,
   StatusBar,
   Text,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icooon from 'react-native-vector-icons/MaterialIcons';
 import Icoooon from 'react-native-vector-icons/Fontisto';
 import Geolocation from '@react-native-community/geolocation';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import {useDispatch, useSelector} from 'react-redux';
-import {getUser} from '../store/actions/user';
+import {getUser, allSeller} from '../store/actions/user';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-import ModalPop from './ModalPop';
+import ServicesModal from './ServicesModal';
+import {updateLocation} from '../store/actions/auth';
+import ProfileModal from './ProfileModal';
 
 const Home = props => {
   //----------------------------------------------Navigation Setups----------------------------------------
@@ -60,9 +64,11 @@ const Home = props => {
   });
 
   //----------------------------------------------Getting User----------------------------------------
-
+  const [service, setservice] = useState('Choose');
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
+  const sellers = useSelector(state => state.user.sellers);
+  const loading = useSelector(state => state.user.loading);
   useEffect(() => {
     dispatch(getUser(userid));
   }, []);
@@ -70,8 +76,8 @@ const Home = props => {
   //---------------------------------------------Handling custom , select and states -----------------
 
   const [state, setstate] = useState(false);
+  const [openprofile, setopenprofile] = useState(false);
   const [confirm, setconfirm] = useState(false);
-  const [service, setservice] = useState('Choose');
   const [mapbtn, setmapbtn] = useState({
     open: false,
   });
@@ -82,6 +88,11 @@ const Home = props => {
     setservice(src);
   };
 
+  const onConfirm = () => {
+    // alert(`Checking ${service} for you`);
+    dispatch(allSeller(service));
+    setconfirm(false);
+  };
   const mapTypeHandle = () => {
     setmapbtn({
       open: !mapbtn.open,
@@ -113,6 +124,7 @@ const Home = props => {
   const myGeo = () => {
     Geolocation.getCurrentPosition(
       position => {
+        dispatch(updateLocation(userid, position.coords));
         setmapstate({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -141,17 +153,37 @@ const Home = props => {
   return (
     <View style={styles.screen}>
       <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
-      <View style={styles.mapArea}>
-        {mapstate.latitude !== null && (
-          <MapView
-            style={styles.map}
-            region={getMapRegion()}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            mapType={mapbtn.open ? 'satellite' : 'standard'}
-          />
-        )}
-      </View>
+      {loading ? (
+        <View style={styles.indicator}>
+          <ActivityIndicator size="small" color="#2257A9" />
+          <Text style={styles.indicatorTxt}>
+            Looking for {service} service.
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.mapArea}>
+          {mapstate.latitude !== null && (
+            <MapView
+              style={styles.map}
+              region={getMapRegion()}
+              showsUserLocation={true}
+              mapType={mapbtn.open ? 'satellite' : 'standard'}>
+              {sellers.map((seller, index) => (
+                <Marker
+                  coordinate={seller.location}
+                  key={index}
+                  onPress={() => setopenprofile(true)}>
+                  <Image
+                    source={require('../assets/images/avatar.png')}
+                    style={{width: 30, height: 30}}
+                  />
+                </Marker>
+              ))}
+            </MapView>
+          )}
+        </View>
+      )}
+
       <View style={styles.custom}>
         <TouchableNativeFeedback onPress={mapTypeHandle}>
           <View style={styles.custombtn}>
@@ -181,8 +213,7 @@ const Home = props => {
         </View>
       </TouchableNativeFeedback>
       {confirm ? (
-        <TouchableNativeFeedback
-          onPress={() => alert(`Checking ${service} for you`)}>
+        <TouchableNativeFeedback onPress={onConfirm}>
           <View
             style={{
               ...styles.selectOptions,
@@ -199,11 +230,12 @@ const Home = props => {
           </View>
         </TouchableNativeFeedback>
       ) : null}
-      <ModalPop
+      <ServicesModal
         visState={state}
         setvisState={() => setstate(false)}
         selectFunc={onSelect}
       />
+      <ProfileModal openprofile={openprofile} setopenprofile={setopenprofile} />
     </View>
   );
 };
@@ -267,6 +299,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'ebrima',
     fontWeight: '900',
+  },
+  indicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 'auto',
+    marginTop: '40%',
+  },
+  indicatorTxt: {
+    color: '#2257A9',
+    fontFamily: 'ebrima',
+    marginTop: 5,
+    fontSize: 12,
   },
 });
 export default Home;

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,17 +8,14 @@ import {
   TextInput,
   StatusBar,
   ActivityIndicator,
-  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginAction} from '../../store/actions/auth';
-import {ScrollView} from 'react-native-gesture-handler';
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const er = useSelector(state => state.register.error.login);
   const loading = useSelector(state => state.register.loading);
-  const [press, setpress] = useState(false);
   const [err, seterr] = useState(false);
 
   const [user, setuser] = useState({
@@ -27,7 +24,6 @@ const Login = ({navigation}) => {
   });
   const {email, password} = user;
   const loginHandler = () => {
-    setpress(true);
     seterr(false);
     if (!email || !password) {
       seterr(true);
@@ -35,7 +31,6 @@ const Login = ({navigation}) => {
       seterr(false);
       dispatch(loginAction(user));
     }
-    setTimeout(() => setpress(false), 1000);
   };
 
   return (
@@ -66,7 +61,7 @@ const Login = ({navigation}) => {
           <Text style={styles.heading}>Welcome Back,</Text>
           <Text style={styles.smallheading}>Sign in to continue</Text>
         </View>
-        {loading && press ? (
+        {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
             <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>

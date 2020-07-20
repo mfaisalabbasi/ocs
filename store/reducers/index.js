@@ -9,6 +9,7 @@ import resetpassword from './resetpassword';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  blacklist: ['user'],
 };
 
 const rootReducer = combineReducers({

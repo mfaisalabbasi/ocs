@@ -25,18 +25,15 @@ const Register = ({navigation}) => {
   const [err, seterr] = useState(false);
   const er = useSelector(state => state.register.error.sellerRegister);
   const loading = useSelector(state => state.register.loading);
-  const [press, setpress] = useState(false);
 
   const dispatch = useDispatch();
   const handleRegister = async () => {
-    setpress(true);
     if (!name || !email || !password || !phone || service === '') {
       seterr(true);
     } else {
       dispatch(registerSeller(user));
       seterr(false);
     }
-    setTimeout(() => setpress(false), 1000);
   };
   return (
     <View style={styles.screen}>
@@ -65,7 +62,7 @@ const Register = ({navigation}) => {
           <Text style={styles.heading}>Register as a seller,</Text>
           <Text style={styles.smallheading}>Let's serve togather</Text>
         </View>
-        {loading && press ? (
+        {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
             <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>
@@ -129,7 +126,7 @@ const Register = ({navigation}) => {
               });
             }}>
             <Picker.Item label="choose service ..." value="undefined" />
-            <Picker.Item label="Electration" value="eltration" />
+            <Picker.Item label="Electration" value="electration" />
             <Picker.Item label="Plumber" value="plumber" />
             <Picker.Item label="Mechanics" value="Mechanics" />
           </Picker>

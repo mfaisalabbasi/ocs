@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {useDispatch, useSelector} from 'react-redux';
@@ -51,7 +52,7 @@ const Register = ({navigation}) => {
           }}
         />
       </View>
-      <View style={styles.form}>
+      <KeyboardAvoidingView behavior="height" style={styles.form}>
         <View style={styles.head}>
           <Icon
             type="FontAwesome"
@@ -162,7 +163,7 @@ const Register = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
       <View
         style={{
           width: '100%',
@@ -190,7 +191,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   form: {
-    // backgroundColor: '#498DF6',
     width: '95%',
     height: '92%',
     justifyContent: 'center',
@@ -217,11 +217,11 @@ const styles = StyleSheet.create({
   inputs: {
     width: '100%',
     marginVertical: 5,
-    elevation: 5,
+    elevation: 3,
   },
   input: {
     fontSize: 12,
-    paddingVertical: 8,
+    paddingVertical: 3,
     borderTopLeftRadius: 10,
     borderBottomRightRadius: 10,
     fontFamily: 'ebrima',

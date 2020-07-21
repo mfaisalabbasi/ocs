@@ -149,6 +149,13 @@ const Home = props => {
     myGeo();
   }, []);
 
+  //------------------------------------handle profile
+  const [currentuser, setcurrentuser] = useState({});
+  const handleProfile = user => {
+    setopenprofile(true);
+    setcurrentuser(user);
+  };
+
   //---------------------------------------------------------------Return Section
   return (
     <View style={styles.screen}>
@@ -172,7 +179,7 @@ const Home = props => {
                 <Marker
                   coordinate={seller.location}
                   key={index}
-                  onPress={() => setopenprofile(true)}>
+                  onPress={() => handleProfile(seller)}>
                   <Image
                     source={require('../assets/images/avatar.png')}
                     style={{width: 30, height: 30}}
@@ -235,7 +242,11 @@ const Home = props => {
         setvisState={() => setstate(false)}
         selectFunc={onSelect}
       />
-      <ProfileModal openprofile={openprofile} setopenprofile={setopenprofile} />
+      <ProfileModal
+        openprofile={openprofile}
+        setopenprofile={setopenprofile}
+        user={currentuser}
+      />
     </View>
   );
 };

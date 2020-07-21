@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {registerCustomer} from '../../store/actions/auth';
@@ -54,7 +55,7 @@ const Customer = ({navigation}) => {
           }}
         />
       </View>
-      <View style={styles.form}>
+      <KeyboardAvoidingView behavior="height" style={styles.form}>
         <View style={styles.head}>
           <Icon
             type="FontAwesome"
@@ -157,7 +158,7 @@ const Customer = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
       <View
         style={{
           width: '100%',

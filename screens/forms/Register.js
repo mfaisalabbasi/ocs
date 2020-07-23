@@ -152,14 +152,9 @@ const Register = ({navigation}) => {
           </View>
         </TouchableNativeFeedback>
         <View style={styles.regBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>Login here!</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Customer')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>|| Register as customer</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SellerLogin')}>
+            <View style={{paddingVertical: 6, padding: 3}}>
+              <Text style={styles.smallheading}>Login as Partner</Text>
             </View>
           </TouchableOpacity>
         </View>

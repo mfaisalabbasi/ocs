@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 export const registerCustomer = user => async dispatch => {
   dispatch({type: START_LOADING_LOGIN});
   try {
+    const displayName = 'customer';
     const {email, password, phone, name} = user;
     const authUser = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
@@ -28,7 +29,7 @@ export const registerCustomer = user => async dispatch => {
         headers: {
           ContentType: 'application/json',
         },
-        body: JSON.stringify({email, password}),
+        body: JSON.stringify({email, password, displayName}),
       },
     );
     const res = await authUser.json();
@@ -83,53 +84,6 @@ export const updateLocation = (userId, location) => async dispatch => {
   }
 };
 
-//------------------------------------------------------------Register Seller
-
-export const registerSeller = user => async dispatch => {
-  dispatch({type: START_LOADING_LOGIN});
-  try {
-    const {name, email, phone, service, password} = user;
-    const authUser = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
-      {
-        method: 'post',
-        headers: {
-          ContentType: 'application/json',
-        },
-        body: JSON.stringify({email, password}),
-      },
-    );
-
-    const res = await authUser.json();
-    const userId = res.localId;
-    if (!res.error) {
-      await fetch(`https://on-click-s.firebaseio.com/sellers/${userId}.json`, {
-        method: 'put',
-        headers: {
-          ContentType: 'application/json',
-        },
-        body: JSON.stringify({name, email, phone, service}),
-      });
-    }
-    if (res.error) {
-      dispatch({
-        type: SELLER_REGISTER_FAILED,
-        payload: 'error',
-      });
-    } else {
-      dispatch({
-        type: REGISTER_SUCCEED,
-        payload: res,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: SELLER_REGISTER_FAILED,
-      payload: err,
-    });
-  }
-};
-
 //----------------------------------------- Login Action
 
 export const loginAction = user => async dispatch => {
@@ -168,46 +122,6 @@ export const loginAction = user => async dispatch => {
   } catch (error) {
     dispatch({
       type: LOGIN_FAILED,
-      payload: error,
-    });
-  }
-};
-
-//-----------------------------------------  seller Login Action
-
-export const sellerLoginAction = user => async dispatch => {
-  dispatch({type: START_LOADING_LOGIN});
-  try {
-    const {email, password} = user;
-    const signReq = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
-      {
-        method: 'post',
-        headers: {
-          ContentType: 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      },
-    );
-    const res = await signReq.json();
-    const userid = res.localId;
-    if (res.error) {
-      dispatch({
-        type: SELLER_LOGIN_FAILED,
-        payload: 'Error',
-      });
-    } else {
-      dispatch({
-        type: LOGIN_SUCCEED,
-        payload: userid,
-      });
-    }
-  } catch (error) {
-    dispatch({
-      type: SELLER_LOGIN_FAILED,
       payload: error,
     });
   }
@@ -290,6 +204,113 @@ export const resetPassword = email => async dispatch => {
     console.log('fuck', error);
     dispatch({
       type: RESET_PASSWORD_FAILED,
+      payload: error,
+    });
+  }
+};
+
+//------------------------------------Partner Section
+
+//---------------Register Seller
+
+export const registerSeller = user => async dispatch => {
+  dispatch({type: START_LOADING_LOGIN});
+  try {
+    const {name, email, phone, service, password} = user;
+    const authUser = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
+      {
+        method: 'post',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({email, password}),
+      },
+    );
+
+    const res = await authUser.json();
+    const userId = res.localId;
+    if (!res.error) {
+      await fetch(`https://on-click-s.firebaseio.com/sellers/${userId}.json`, {
+        method: 'put',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({name, email, phone, service}),
+      });
+    }
+    if (res.error) {
+      dispatch({
+        type: SELLER_REGISTER_FAILED,
+        payload: 'error',
+      });
+    } else {
+      dispatch({
+        type: REGISTER_SUCCEED,
+        payload: res,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: SELLER_REGISTER_FAILED,
+      payload: err,
+    });
+  }
+};
+
+//---------update partner location
+export const updatePartnerLocation = (userId, location) => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/sellers/${userId}.json`,
+      {
+        method: 'patch',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({location}),
+      },
+    );
+  } catch (error) {
+    console.log('location updating error', error);
+  }
+};
+
+//-----------------------------------------  seller Login Action
+
+export const sellerLoginAction = user => async dispatch => {
+  dispatch({type: START_LOADING_LOGIN});
+  try {
+    const {email, password} = user;
+    const signReq = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
+      {
+        method: 'post',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      },
+    );
+    const res = await signReq.json();
+    const userid = res.localId;
+    if (res.error) {
+      dispatch({
+        type: SELLER_LOGIN_FAILED,
+        payload: 'Error',
+      });
+    } else {
+      dispatch({
+        type: LOGIN_SUCCEED,
+        payload: res,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: SELLER_LOGIN_FAILED,
       payload: error,
     });
   }

@@ -7,6 +7,11 @@ import ChangePassword from '../screens/settings/ChangePassword';
 import UpdateProfile from '../screens/settings/UpdateProfile';
 import About from '../screens/About';
 import Notification from '../screens/Notification';
+import PartnerHome from '../partner/PartnerHome';
+import PartnerNotification from '../partner/PartnerNotification';
+import PartnerSettings from '../partner/settings/PartnerSettings';
+import UpdatePartnerProfile from '../partner/settings/UpdatePartnerProfile';
+import ChangePartnerPassword from '../partner/settings/ChangePartnerPassword';
 
 export const Stacks = () => {
   const Stack = createStackNavigator();
@@ -95,6 +100,84 @@ export const settingStack = () => {
       <Stack.Screen
         name="changepassword"
         component={ChangePassword}
+        options={{title: 'Change Password'}}
+      />
+      <Stack.Screen name="logout" component={Logout} />
+    </Stack.Navigator>
+  );
+};
+
+//--------------------------------stacks for partner
+
+export const PartnerStack = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={PartnerHome} />
+      <Stack.Screen
+        name="Notifications"
+        component={PartnerNotification}
+        options={{
+          headerStyle: {
+            backgroundColor: '#2C7AF2',
+          },
+          headerTintColor: '#FFFFFF',
+          headerTitleStyle: {
+            fontFamily: 'ebrima',
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const NotiStacksPartner = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#2C7AF2',
+        },
+        headerTintColor: '#FFFFFF',
+        headerTitleStyle: {
+          fontFamily: 'ebrima',
+        },
+      }}>
+      <Stack.Screen name="Notifications" component={PartnerNotification} />
+    </Stack.Navigator>
+  );
+};
+
+export const settingStackPartner = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#2C7AF2',
+        },
+        headerTintColor: '#FFFFFF',
+        headerTitleStyle: {
+          fontFamily: 'ebrima',
+        },
+      }}>
+      <Stack.Screen
+        name="setting"
+        component={PartnerSettings}
+        options={{
+          title: 'Profile Settings',
+        }}
+      />
+
+      <Stack.Screen
+        name="updateprofile"
+        component={UpdatePartnerProfile}
+        options={{title: 'Update Profile'}}
+      />
+      <Stack.Screen
+        name="changepassword"
+        component={ChangePartnerPassword}
         options={{title: 'Change Password'}}
       />
       <Stack.Screen name="logout" component={Logout} />

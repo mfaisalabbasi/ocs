@@ -148,13 +148,8 @@ const Customer = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>Login here!</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>|| Register as seller</Text>
+            <View style={{paddingVertical: 6, padding: 3}}>
+              <Text style={styles.smallheading}>Login as Customer</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -204,7 +199,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   smallheading: {
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: 'ebrima',
     color: '#498DF6',
   },

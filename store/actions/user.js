@@ -84,3 +84,51 @@ export const allSeller = service => async dispatch => {
     });
   }
 };
+
+//------------------------------------partner section
+
+export const getPartner = userid => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+    );
+    const res = await req.json();
+    dispatch({
+      type: GET_USER,
+      payload: res,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_USER,
+      payload: error,
+    });
+  }
+};
+
+export const updatePartner = (userid, user) => async dispatch => {
+  dispatch({
+    type: UPDATE_LOADING,
+  });
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+      {
+        method: 'put',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify(user),
+      },
+    );
+    const res = await req.json();
+    dispatch({
+      type: GET_USER,
+      payload: res,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_USER,
+      payload: error,
+    });
+  }
+};

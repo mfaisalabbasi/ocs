@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Icoon from 'react-native-vector-icons/AntDesign';
 
-const Notification = ({navigation}) => {
+const PartnerNotification = ({navigation}) => {
   navigation.setOptions({
     headerLeft: () => {
       return (
@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
     color: '#0140A0',
   },
 });
-export default Notification;
+export default PartnerNotification;

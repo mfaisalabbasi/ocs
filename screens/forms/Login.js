@@ -116,14 +116,9 @@ const Login = ({navigation}) => {
           </View>
         </TouchableNativeFeedback>
         <View style={styles.regBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate('SellerLogin')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>Login as seller!</Text>
-            </View>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Customer')}>
             <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>|| Register as customer</Text>
+              <Text style={styles.smallheading}>Register as customer</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -174,7 +169,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   smallheading: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: 'ebrima',
     color: '#498DF6',
   },

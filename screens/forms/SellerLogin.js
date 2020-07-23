@@ -108,7 +108,7 @@ const Login = ({navigation}) => {
             <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>Login</Text>
           </View>
         </TouchableNativeFeedback>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <View
             style={{
               alignItems: 'center',
@@ -117,7 +117,7 @@ const Login = ({navigation}) => {
 
               padding: 5,
             }}>
-            <Text style={styles.smallheading}>Login as Customer!</Text>
+            <Text style={styles.smallheading}>Register as Partner!</Text>
             {/* <Text> Register</Text> */}
           </View>
         </TouchableOpacity>

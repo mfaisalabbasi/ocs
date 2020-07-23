@@ -8,6 +8,7 @@ import Customer from '../screens/forms/Customer';
 import Drawer from './Drawer';
 import SellerLogin from '../screens/forms/SellerLogin';
 import ResetPassword from '../screens/forms/ResetPassword';
+import Ocs from '../screens/forms/Ocs';
 
 const Navigation = props => {
   const authenticated = useSelector(state => state.register.authentication);
@@ -25,6 +26,7 @@ const Navigation = props => {
           </>
         ) : (
           <>
+            <Stack.Screen name="ocs" component={Ocs} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SellerLogin" component={SellerLogin} />
             <Stack.Screen name="Register" component={Register} />

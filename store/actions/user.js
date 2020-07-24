@@ -33,7 +33,7 @@ export const updateName = (userid, user) => async dispatch => {
     const req = await fetch(
       `https://on-click-s.firebaseio.com/customers/${userid}.json`,
       {
-        method: 'put',
+        method: 'patch',
         headers: {
           ContentType: 'application/json',
         },
@@ -113,7 +113,7 @@ export const updatePartner = (userid, user) => async dispatch => {
     const req = await fetch(
       `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
       {
-        method: 'put',
+        method: 'patch',
         headers: {
           ContentType: 'application/json',
         },

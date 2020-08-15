@@ -23,6 +23,7 @@ const Drawer = ({color}) => {
         backgroundColor: '#FFFFFF',
         width: '90%',
       }}
+      drawerType="back"
       drawerContentOptions={{
         labelStyle: {
           fontFamily: 'ebrima',

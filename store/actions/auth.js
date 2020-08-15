@@ -260,6 +260,7 @@ export const registerSeller = user => async dispatch => {
 
 //---------update partner location
 export const updatePartnerLocation = (userId, location) => async dispatch => {
+  const {latitude, longitude} = location;
   try {
     const req = await fetch(
       `https://on-click-s.firebaseio.com/sellers/${userId}.json`,
@@ -268,7 +269,7 @@ export const updatePartnerLocation = (userId, location) => async dispatch => {
         headers: {
           ContentType: 'application/json',
         },
-        body: JSON.stringify({location}),
+        body: JSON.stringify({latitude, longitude}),
       },
     );
   } catch (error) {

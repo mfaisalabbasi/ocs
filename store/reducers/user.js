@@ -5,6 +5,8 @@ import {
   FAILED_SELLERS,
   START_LOADING,
   UPDATE_LOADING,
+  FAILED_CLOSE,
+  NULL_SELLER,
 } from '../constant';
 
 const initialState = {
@@ -12,6 +14,7 @@ const initialState = {
   user: {},
   error: null,
   sellers: [],
+  closeOne: {},
 };
 
 const user = (state = initialState, action) => {
@@ -36,11 +39,18 @@ const user = (state = initialState, action) => {
         sellers: payload,
         loading: false,
       };
-    case FAILED_USER:
-    case FAILED_SELLERS:
+    case NULL_SELLER:
       return {
         ...state,
-        error: paylaod,
+        sellers: payload,
+        loading: false,
+      };
+    case FAILED_USER:
+    case FAILED_SELLERS:
+    case FAILED_CLOSE:
+      return {
+        ...state,
+        error: payload,
         loading: false,
       };
     default:

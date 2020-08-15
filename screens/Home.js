@@ -12,17 +12,19 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icooon from 'react-native-vector-icons/MaterialIcons';
 import Icoooon from 'react-native-vector-icons/Fontisto';
 import Geolocation from '@react-native-community/geolocation';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker, Callout} from 'react-native-maps';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUser, allSeller} from '../store/actions/user';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import ServicesModal from './ServicesModal';
 import {updateLocation} from '../store/actions/auth';
 import ProfileModal from './ProfileModal';
+import HaversineGeolocation from 'haversine-geolocation';
 
 const Home = props => {
   //----------------------------------------------Navigation Setups----------------------------------------
 
+  let mymap;
   props.navigation.setOptions({
     headerShown: true,
     headerTitleStyle: {
@@ -67,7 +69,7 @@ const Home = props => {
   const [service, setservice] = useState('Choose');
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
-  const sellers = useSelector(state => state.user.sellers);
+  let sellers = useSelector(state => state.user.sellers);
   const loading = useSelector(state => state.user.loading);
   useEffect(() => {
     dispatch(getUser(userid));
@@ -77,6 +79,7 @@ const Home = props => {
 
   const [state, setstate] = useState(false);
   const [openprofile, setopenprofile] = useState(false);
+  const [found, setfound] = useState(false);
   const [confirm, setconfirm] = useState(false);
   const [mapbtn, setmapbtn] = useState({
     open: false,
@@ -88,11 +91,6 @@ const Home = props => {
     setservice(src);
   };
 
-  const onConfirm = () => {
-    // alert(`Checking ${service} for you`);
-    dispatch(allSeller(service));
-    setconfirm(false);
-  };
   const mapTypeHandle = () => {
     setmapbtn({
       open: !mapbtn.open,
@@ -100,17 +98,17 @@ const Home = props => {
   };
 
   //--------------------------------------------------------------- Handling Map ---------------------
-
   const LATITUDE_DELTA = 0.009;
   const LONGITUDE_DELTA = 0.009;
-  const LATITUDE = 18.7934829;
-  const LONGITUDE = 98.9867401;
+  // const LATITUDE = 33.68439;
+  // const LONGITUDE = 73.047554;
 
   const [mapstate, setmapstate] = useState({
-    latitude: LATITUDE,
-    longitude: LONGITUDE,
+    latitude: null,
+    longitude: null,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
+    accuracy: null,
     error: null,
   });
 
@@ -128,6 +126,7 @@ const Home = props => {
         setmapstate({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
           error: null,
         });
       },
@@ -141,7 +140,7 @@ const Home = props => {
           })
           .catch(err => {});
       },
-      {enableHighAccuracy: true, timeout: 200000, maximumAge: 1000},
+      {enableHighAccuracy: true, timeout: 200000},
     );
   };
 
@@ -149,11 +148,34 @@ const Home = props => {
     myGeo();
   }, []);
 
+  const currentLocation = () => {
+    mymap.fitToCoordinates([mapstate], {animated: true});
+  };
+
   //------------------------------------handle profile
-  const [currentuser, setcurrentuser] = useState({});
-  const handleProfile = user => {
+
+  const handleProfile = () => {
     setopenprofile(true);
-    setcurrentuser(user);
+  };
+
+  const currentPoint = {
+    latitude: mapstate.latitude,
+    longitude: mapstate.longitude,
+    accuracy: mapstate.accuracy,
+  };
+  let data = HaversineGeolocation.getClosestPosition(
+    currentPoint,
+    sellers,
+    'mi',
+  );
+
+  const onConfirm = () => {
+    dispatch(allSeller(service));
+    setconfirm(false);
+    setfound(true);
+    if (!loading) {
+      setTimeout(() => setopenprofile(true), 3000);
+    }
   };
 
   //---------------------------------------------------------------Return Section
@@ -171,15 +193,25 @@ const Home = props => {
         <View style={styles.mapArea}>
           {mapstate.latitude !== null && (
             <MapView
+              ref={ref => {
+                mymap = ref;
+              }}
+              loadingEnabled={true}
+              initialRegion={getMapRegion()}
               style={styles.map}
-              region={getMapRegion()}
               showsUserLocation={true}
+              maxZoomLevel={18}
+              showsCompass={false}
+              onMapReady={() =>
+                mymap.fitToSuppliedMarkers(['data'], {animated: true})
+              }
               mapType={mapbtn.open ? 'satellite' : 'standard'}>
               {sellers.map((seller, index) => (
                 <Marker
-                  coordinate={seller.location}
+                  coordinate={data}
                   key={index}
-                  onPress={() => handleProfile(seller)}>
+                  identifier={'data'}
+                  onPress={() => handleProfile(data)}>
                   <Image
                     source={require('../assets/images/avatar.png')}
                     style={{width: 30, height: 30}}
@@ -197,7 +229,7 @@ const Home = props => {
             <Icoooon type="Fontisto" name="earth" color="#2257A9" size={16} />
           </View>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={myGeo}>
+        <TouchableNativeFeedback onPress={currentLocation}>
           <View style={styles.custombtn}>
             <Icooon
               type="MaterialIcons"
@@ -208,17 +240,32 @@ const Home = props => {
           </View>
         </TouchableNativeFeedback>
       </View>
-      <TouchableNativeFeedback onPress={() => setstate(true)}>
-        <View style={styles.selectOptions}>
-          <Text style={styles.chooseBtn}>{service} service</Text>
-          <Icon
-            type="Ionicons"
-            name="ios-arrow-dropdown"
-            size={20}
-            color="#FFFFFF"
-          />
-        </View>
-      </TouchableNativeFeedback>
+      {found ? (
+        <TouchableNativeFeedback onPress={() => handleProfile(data)}>
+          <View style={styles.selectOptions}>
+            <Text style={styles.chooseBtn}>Open Profile</Text>
+            <Icon
+              type="Ionicons"
+              name="ios-arrow-dropdown"
+              size={20}
+              color="#FFFFFF"
+            />
+          </View>
+        </TouchableNativeFeedback>
+      ) : (
+        <TouchableNativeFeedback onPress={() => setstate(true)}>
+          <View style={styles.selectOptions}>
+            <Text style={styles.chooseBtn}>{service} service</Text>
+            <Icon
+              type="Ionicons"
+              name="ios-arrow-dropdown"
+              size={20}
+              color="#FFFFFF"
+            />
+          </View>
+        </TouchableNativeFeedback>
+      )}
+
       {confirm ? (
         <TouchableNativeFeedback onPress={onConfirm}>
           <View
@@ -242,10 +289,14 @@ const Home = props => {
         setvisState={() => setstate(false)}
         selectFunc={onSelect}
       />
+
       <ProfileModal
         openprofile={openprofile}
-        setopenprofile={setopenprofile}
-        user={currentuser}
+        setopenprofile={() => setopenprofile(false)}
+        user={data}
+        curloc={currentLocation}
+        setsrvc={setservice}
+        stfond={setfound}
       />
     </View>
   );
@@ -275,6 +326,7 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+    flex: 1,
   },
   custom: {
     width: 35,

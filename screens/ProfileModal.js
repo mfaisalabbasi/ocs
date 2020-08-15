@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,8 +11,19 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icoon from 'react-native-vector-icons/Entypo';
+import {useDispatch} from 'react-redux';
+import {nullSeller} from '../store/actions/user';
 
 const ProfileModal = props => {
+  const dispatch = useDispatch();
+  const cancelFunc = () => {
+    props.setopenprofile();
+    props.curloc();
+    props.stfond(false);
+    props.setsrvc('Choose');
+    dispatch(nullSeller());
+  };
+
   return (
     <Modal
       transparent={true}
@@ -87,6 +98,18 @@ const ProfileModal = props => {
               </View>
             </View>
             <View style={styles.proView}>
+              <TouchableNativeFeedback onPress={cancelFunc}>
+                <View
+                  style={{
+                    ...styles.btn,
+                    backgroundColor: '#2155A8',
+                    marginRight: 5,
+                  }}>
+                  <Text style={{...styles.titleText, fontSize: 15}}>
+                    Cancel
+                  </Text>
+                </View>
+              </TouchableNativeFeedback>
               <TouchableNativeFeedback>
                 <View style={styles.btn}>
                   <Text style={{...styles.titleText, fontSize: 15}}>
@@ -158,10 +181,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   btn: {
-    width: '80%',
+    width: '45%',
     backgroundColor: '#0342A5',
     padding: 5,
-    height: 45,
+    height: 40,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',

@@ -5,7 +5,11 @@ import {
   FAILED_SELLERS,
   START_LOADING,
   UPDATE_LOADING,
+  FAILED_CLOSE,
+  GET_CLOSE,
+  NULL_SELLER,
 } from '../constant';
+import HaversineGeolocation from 'haversine-geolocation';
 
 export const getUser = userid => async dispatch => {
   try {
@@ -80,6 +84,22 @@ export const allSeller = service => async dispatch => {
   } catch (error) {
     dispatch({
       type: FAILED_SELLERS,
+      payload: error,
+    });
+  }
+};
+
+//------------------------------------nulling seller
+export const nullSeller = () => async dispatch => {
+  try {
+    const nullSell = [];
+    dispatch({
+      type: NULL_SELLER,
+      payload: nullSell,
+    });
+  } catch (error) {
+    dispatch({
+      type: FAILED_CLOSE,
       payload: error,
     });
   }

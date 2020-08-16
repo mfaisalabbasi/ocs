@@ -69,7 +69,7 @@ export const allSeller = service => async dispatch => {
     let loaded = [];
     if (res.error) {
       dispatch({
-        type: FAILED_USER,
+        type: FAILED_SELLERS,
         payload: error,
       });
     } else {
@@ -77,6 +77,7 @@ export const allSeller = service => async dispatch => {
       vl.map(item => loaded.push(res[item]));
     }
     const filterd = loaded.filter(itm => itm.service === service.toLowerCase());
+    console.log('myfelto', filterd.length, 'and filter', filterd);
     dispatch({
       type: GET_SELLERS,
       payload: filterd,

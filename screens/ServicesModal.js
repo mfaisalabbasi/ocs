@@ -20,7 +20,9 @@ const ModalPop = props => {
       animationType="slide">
       <View style={styles.modelContainer}>
         <View style={styles.model}>
-          <Text style={styles.titleText}>Select Service for you</Text>
+          <View style={styles.titleView}>
+            <Text style={styles.titleText}>Select Service for you</Text>
+          </View>
           <ScrollView
             contentContainerStyle={{
               width: Dimensions.get('window').width,
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
   },
   model: {
     backgroundColor: '#FFFFFF',
-    height: 250,
+    height: Dimensions.get('window').height / 2.5,
     width: '100%',
     borderTopEndRadius: 25,
     borderTopLeftRadius: 25,
@@ -77,9 +79,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  titleView: {
+    width: '100%',
+    backgroundColor: '#2257A9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 3,
+  },
   titleText: {
-    padding: 10,
-    fontSize: 15,
+    color: '#FFFFFF',
     fontFamily: 'ebrima',
   },
   item: {

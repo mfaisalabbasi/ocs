@@ -31,95 +31,159 @@ const ProfileModal = props => {
       onRequestClose={props.setopenprofile}
       animationType="slide">
       <View style={styles.modelContainer}>
-        <View style={styles.model}>
-          <View style={styles.titleView}>
-            <Text style={styles.titleText}>
-              Electration is 10km away from you.
-            </Text>
-          </View>
-          <ScrollView
-            contentContainerStyle={{
-              width: Dimensions.get('window').width,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            showsVerticalScrollIndicator={false}>
-            <View style={styles.proView}>
-              <View style={styles.smView}>
-                <Image
-                  source={require('../assets/images/profile.jpg')}
-                  style={{
-                    width: '100%',
-                    height: 100,
-                    resizeMode: 'cover',
-                    borderRadius: 200,
-                  }}
+        {!props.user.email ? (
+          <View style={styles.model}>
+            <View style={styles.titleView}>
+              <Text style={styles.titleText}>oops .!.</Text>
+            </View>
+            <ScrollView
+              contentContainerStyle={{
+                width: Dimensions.get('window').width,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              showsVerticalScrollIndicator={false}>
+              <View
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 30,
+                }}>
+                <Icoon
+                  type="Entypo"
+                  name="emoji-sad"
+                  color="#0340A0"
+                  size={50}
                 />
-                <Text style={styles.infoText}>
-                  <Icoon type="Entypo" name="star" color="#0340A0" size={18} />
-                  <Icoon type="Entypo" name="star" color="#0340A0" size={18} />
-                  <Icoon type="Entypo" name="star" color="#0340A0" size={18} />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    color: '#0342A5',
+                    fontFamily: 'ebrima',
+                    marginVertical: 5,
+                  }}>
+                  Partner Not Available Right Now
                 </Text>
+                <TouchableNativeFeedback onPress={cancelFunc}>
+                  <View
+                    style={{...styles.btn, width: '90%', marginVertical: 10}}>
+                    <Text style={{...styles.titleText, fontSize: 15}}>
+                      Try Again Later
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
               </View>
-              <View style={styles.info}>
-                <View style={styles.titles}>
-                  <Text style={styles.infoText}>
-                    <Icon
-                      type="FontAwesome"
-                      name="user-circle-o"
-                      color="#0340A0"
-                      size={18}
-                    />{' '}
-                    :- {props.user.name}
-                  </Text>
-                </View>
-                <View style={styles.titles}>
+            </ScrollView>
+          </View>
+        ) : (
+          <View style={styles.model}>
+            <View style={styles.titleView}>
+              <Text style={styles.titleText}>
+                Electration is {props.user.haversine.distance} miles away from
+                you.
+              </Text>
+            </View>
+            <ScrollView
+              contentContainerStyle={{
+                width: Dimensions.get('window').width,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              showsVerticalScrollIndicator={false}>
+              <View style={styles.proView}>
+                <View style={styles.smView}>
+                  <Image
+                    source={require('../assets/images/profile.jpg')}
+                    style={{
+                      width: '100%',
+                      height: 100,
+                      resizeMode: 'cover',
+                      borderRadius: 200,
+                    }}
+                  />
                   <Text style={styles.infoText}>
                     <Icoon
                       type="Entypo"
-                      name="email"
+                      name="star"
                       color="#0340A0"
                       size={18}
-                    />{' '}
-                    :- {props.user.email}
+                    />
+                    <Icoon
+                      type="Entypo"
+                      name="star"
+                      color="#0340A0"
+                      size={18}
+                    />
+                    <Icoon
+                      type="Entypo"
+                      name="star"
+                      color="#0340A0"
+                      size={18}
+                    />
                   </Text>
                 </View>
-                <View style={styles.titles}>
-                  <Text style={styles.infoText}>
-                    <Icoon
-                      type="FontAwesome"
-                      name="mobile"
-                      color="#0340A0"
-                      size={18}
-                    />{' '}
-                    :- {props.user.phone}
-                  </Text>
+                <View style={styles.info}>
+                  <View style={styles.titles}>
+                    <Text style={styles.infoText}>
+                      <Icon
+                        type="FontAwesome"
+                        name="user-circle-o"
+                        color="#0340A0"
+                        size={18}
+                      />{' '}
+                      :- {props.user.name}
+                    </Text>
+                  </View>
+                  <View style={styles.titles}>
+                    <Text style={styles.infoText}>
+                      <Icoon
+                        type="Entypo"
+                        name="email"
+                        color="#0340A0"
+                        size={18}
+                      />{' '}
+                      :- {props.user.email}
+                    </Text>
+                  </View>
+                  <View style={styles.titles}>
+                    <Text style={styles.infoText}>
+                      <Icoon
+                        type="FontAwesome"
+                        name="mobile"
+                        color="#0340A0"
+                        size={18}
+                      />{' '}
+                      :- {props.user.phone}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.proView}>
-              <TouchableNativeFeedback onPress={cancelFunc}>
-                <View
-                  style={{
-                    ...styles.btn,
-                    backgroundColor: '#2155A8',
-                    marginRight: 5,
-                  }}>
-                  <Text style={{...styles.titleText, fontSize: 15}}>
-                    Cancel
-                  </Text>
-                </View>
-              </TouchableNativeFeedback>
-              <TouchableNativeFeedback>
-                <View style={styles.btn}>
-                  <Text style={{...styles.titleText, fontSize: 15}}>
-                    Start Contract
-                  </Text>
-                </View>
-              </TouchableNativeFeedback>
-            </View>
-          </ScrollView>
-        </View>
+              <View style={styles.proView}>
+                <TouchableNativeFeedback onPress={cancelFunc}>
+                  <View
+                    style={{
+                      ...styles.btn,
+                      backgroundColor: '#2155A8',
+                      marginRight: 5,
+                    }}>
+                    <Text style={{...styles.titleText, fontSize: 15}}>
+                      Cancel
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
+                <TouchableNativeFeedback>
+                  <View style={styles.btn}>
+                    <Text style={{...styles.titleText, fontSize: 15}}>
+                      Start Contract
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+            </ScrollView>
+          </View>
+        )}
       </View>
     </Modal>
   );

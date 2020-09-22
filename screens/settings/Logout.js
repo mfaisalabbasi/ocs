@@ -2,10 +2,14 @@ import React, {useEffect, useRef} from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {logoutAction} from '../../store/actions/auth';
+import Icoon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const Logout = ({navigation}) => {
   const dispatch = useDispatch();
-
+  navigation.setOptions({
+    title: 'Logout Screen',
+  });
   const handleLogout = () => {
     dispatch(logoutAction());
   };
@@ -13,13 +17,28 @@ const Logout = ({navigation}) => {
   return (
     <View style={styles.screen}>
       <View style={styles.title}>
-        <Text style={{fontFamily: 'ebrima', color: '#DE2F61', fontSize: 10}}>
-          Do you Really want to Logout ?
+        <Text
+          style={{
+            fontFamily: 'ebrima',
+            color: '#DE2F61',
+            fontSize: 12,
+            fontWeight: 'bold',
+          }}>
+          Are you sure, to Logout ?
         </Text>
       </View>
       <TouchableNativeFeedback onPress={handleLogout}>
         <View style={styles.logoutBtn}>
-          <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>Logout</Text>
+          <Text
+            style={{
+              color: '#FFFFFF',
+              fontFamily: 'ebrima',
+              fontWeight: 'bold',
+            }}>
+            <Icon type="AntDesign" name="logout" color="#FFFFFF" size={15} />
+            {'  '}
+            Logout
+          </Text>
         </View>
       </TouchableNativeFeedback>
       <TouchableNativeFeedback onPress={() => navigation.navigate('setting')}>
@@ -28,7 +47,18 @@ const Logout = ({navigation}) => {
             ...styles.logoutBtn,
             backgroundColor: 'lightgray',
           }}>
-          <Text style={{color: '#498DF6', fontFamily: 'ebrima'}}>
+          <Text
+            style={{
+              color: '#1B4F72',
+              fontFamily: 'ebrima',
+              fontWeight: 'bold',
+            }}>
+            <Icoon
+              type="Entypo"
+              name="squared-cross"
+              color="#1B4F72"
+              size={15}
+            />{' '}
             No, Cancel
           </Text>
         </View>

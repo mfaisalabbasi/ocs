@@ -40,7 +40,9 @@ const ResetPassword = ({navigation}) => {
         <View style={styles.head}>
           <Icon type="FontAwesome" name="edit" color="gray" size={40} />
           <Text style={styles.heading}>Enter your Email</Text>
-          <Text style={styles.smallheading}>check your email</Text>
+          <Text style={styles.smallheading}>
+            Reset your password by entering valid email
+          </Text>
         </View>
         {loading ? (
           <View>
@@ -70,14 +72,9 @@ const ResetPassword = ({navigation}) => {
           </View>
         </TouchableNativeFeedback>
         <View style={styles.regBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate('SellerLogin')}>
+          <TouchableOpacity>
             <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>Login as seller!</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Customer')}>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>|| Register as customer</Text>
+              <Text style={styles.smallheading}>Reset Your Password</Text>
             </View>
           </TouchableOpacity>
         </View>

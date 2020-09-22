@@ -60,7 +60,7 @@ const Register = ({navigation}) => {
             color="#498DF6"
             size={30}
           />
-          <Text style={styles.heading}>Register as a seller,</Text>
+          <Text style={styles.heading}>Register as a Partner,</Text>
           <Text style={styles.smallheading}>Let's serve togather</Text>
         </View>
         {loading ? (
@@ -129,7 +129,8 @@ const Register = ({navigation}) => {
             <Picker.Item label="choose service ..." value="undefined" />
             <Picker.Item label="Electration" value="electration" />
             <Picker.Item label="Plumber" value="plumber" />
-            <Picker.Item label="Mechanics" value="Mechanics" />
+            <Picker.Item label="Mechanics" value="mechanics" />
+            <Picker.Item label="Carpentar" value="carpenter" />
           </Picker>
         </View>
 

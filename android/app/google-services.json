@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "793430247391",
+    "firebase_url": "https://on-click-s.firebaseio.com",
+    "project_id": "on-click-s",
+    "storage_bucket": "on-click-s.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793430247391:android:c5283bb2e7543eac9ee66a",
+        "android_client_info": {
+          "package_name": "com.ocs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793430247391-drdrguo4m9l0d875j6gvvavv7r6dkpe5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVlYAVhTDiuLph9nKgwr7LjrDA4Paf-tY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793430247391-drdrguo4m9l0d875j6gvvavv7r6dkpe5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

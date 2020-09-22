@@ -8,8 +8,9 @@ import {
   FAILED_CLOSE,
   GET_CLOSE,
   NULL_SELLER,
+  NOTIFICATION,
+  NOTIFICATION_LOADING,
 } from '../constant';
-import HaversineGeolocation from 'haversine-geolocation';
 
 export const getUser = userid => async dispatch => {
   try {
@@ -76,8 +77,9 @@ export const allSeller = service => async dispatch => {
       const vl = Object.keys(res);
       vl.map(item => loaded.push(res[item]));
     }
-    const filterd = loaded.filter(itm => itm.service === service.toLowerCase());
-    console.log('myfelto', filterd.length, 'and filter', filterd);
+    const filterd = loaded.filter(
+      itm => itm.service === service.toLowerCase() && itm.status === true,
+    );
     dispatch({
       type: GET_SELLERS,
       payload: filterd,
@@ -151,5 +153,77 @@ export const updatePartner = (userid, user) => async dispatch => {
       type: FAILED_USER,
       payload: error,
     });
+  }
+};
+
+export const partnerId = userid => async dispatch => {
+  const req = await fetch(
+    `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+    {
+      method: 'patch',
+      ContentType: 'application/json',
+      body: JSON.stringify({partnerKey: userid}),
+    },
+  );
+  const res = await req.json();
+};
+
+//---------------------------updating status
+
+export const updateStatus = (userid, status) => async dispatch => {
+  const req = await fetch(
+    `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+    {
+      method: 'patch',
+      ContentType: 'application/json',
+      body: JSON.stringify({status: status}),
+    },
+  );
+  const res = await req.json();
+};
+
+export const sendingNotification = (token, customerData) => async dispatch => {
+  dispatch({type: NOTIFICATION_LOADING});
+  try {
+    customerData.date = Date.now();
+    const req = await fetch('https://fcm.googleapis.com/fcm/send', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:
+          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+      },
+      body: JSON.stringify({
+        to: token,
+        direct_book_ok: true,
+        notification: {
+          title: 'Dear Partner,',
+          body: `${customerData.name} is looking for your service !!!`,
+          sound: 'default',
+        },
+        data: customerData,
+      }),
+    });
+    const reso = await req.json();
+    reso.error ? null : dispatch({type: NOTIFICATION, payload: reso});
+    console.log('mynotireso======= >', reso);
+  } catch (error) {
+    console.log('notification sending err ..', error);
+  }
+};
+
+export const jobRequest = (userid, job) => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/sellers/${userid}/jobs.json`,
+      {
+        method: 'post',
+        ContentType: 'application/json',
+        body: JSON.stringify(job),
+      },
+    );
+    const res = await req.json();
+  } catch (error) {
+    console.log('job sendeing err', error);
   }
 };

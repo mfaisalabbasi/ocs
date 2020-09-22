@@ -69,6 +69,7 @@ const Home = props => {
   const [service, setservice] = useState('Choose');
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
+  const customer = useSelector(state => state.user.user);
   let sellers = useSelector(state => state.user.sellers);
   const loading = useSelector(state => state.user.loading);
   useEffect(() => {
@@ -79,7 +80,6 @@ const Home = props => {
 
   const [state, setstate] = useState(false);
   const [openprofile, setopenprofile] = useState(false);
-  const [found, setfound] = useState(false);
   const [confirm, setconfirm] = useState(false);
   const [mapbtn, setmapbtn] = useState({
     open: false,
@@ -172,7 +172,6 @@ const Home = props => {
   const onConfirm = () => {
     dispatch(allSeller(service));
     setconfirm(false);
-    setfound(true);
     if (!loading) {
       setTimeout(() => setopenprofile(true), 3000);
     }
@@ -197,6 +196,7 @@ const Home = props => {
                 mymap = ref;
               }}
               loadingEnabled={true}
+              loadingIndicatorColor="#326ECC"
               initialRegion={getMapRegion()}
               style={styles.map}
               showsUserLocation={true}
@@ -205,6 +205,7 @@ const Home = props => {
               onMapReady={() =>
                 mymap.fitToSuppliedMarkers(['data'], {animated: true})
               }
+              on
               mapType={mapbtn.open ? 'satellite' : 'standard'}>
               {sellers.map((seller, index) => (
                 <Marker
@@ -240,7 +241,7 @@ const Home = props => {
           </View>
         </TouchableNativeFeedback>
       </View>
-      {found ? (
+      {data.email ? (
         <TouchableNativeFeedback onPress={() => handleProfile(data)}>
           <View style={styles.selectOptions}>
             <Text style={styles.chooseBtn}>Open Profile</Text>
@@ -296,7 +297,8 @@ const Home = props => {
         user={data}
         curloc={currentLocation}
         setsrvc={setservice}
-        stfond={setfound}
+        customer={customer}
+        localId={userid}
       />
     </View>
   );

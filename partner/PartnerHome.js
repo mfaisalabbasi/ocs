@@ -1,32 +1,37 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import {
   StyleSheet,
   View,
   TouchableNativeFeedback,
   StatusBar,
+  Dimensions,
+  Text,
+  Switch,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icooon from 'react-native-vector-icons/MaterialIcons';
 import Icoooon from 'react-native-vector-icons/Fontisto';
 import Geolocation from '@react-native-community/geolocation';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Callout, Marker, Polyline} from 'react-native-maps';
 import {useDispatch, useSelector} from 'react-redux';
-import {getPartner} from '../store/actions/user';
+import {getPartner, partnerId, updateStatus} from '../store/actions/user';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-import {updatePartnerLocation} from '../store/actions/auth';
+import {DeviceToken, updatePartnerLocation} from '../store/actions/auth';
+import PushNotification from 'react-native-push-notification';
+import ModalView from './ModalView';
 
 const PartnerHome = props => {
   //----------------------------------------------Navigation Setups----------------------------------------
+  const [isEnabled, setIsEnabled] = useState(true);
 
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  useEffect(() => {
+    dispatch(updateStatus(userid, isEnabled));
+  }, [isEnabled]);
   props.navigation.setOptions({
     headerShown: true,
-    headerTitleStyle: {
-      fontWeight: '100',
-      fontSize: 18,
-    },
-
-    headerTitle: 'Select service',
-    headerTintColor: '#444649',
+    headerTitle: '',
     headerTransparent: true,
     headerLeft: () => {
       return (
@@ -44,13 +49,17 @@ const PartnerHome = props => {
     headerRight: () => {
       return (
         <View style={styles.header}>
-          <View style={styles.icon}>
-            <Icon
-              type="Ionicons"
-              name="ios-notifications-outline"
-              color="#2257A9"
-              size={22}
-              onPress={() => props.navigation.navigate('Notifications')}
+          <View style={{...styles.icon, width: 'auto', flexDirection: 'row'}}>
+            <Text style={{color: '#21618C', fontWeight: '900'}}>
+              {' '}
+              {isEnabled ? 'Active' : 'Offline'}{' '}
+            </Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#D6DBDF'}}
+              thumbColor={isEnabled ? '#2ECC71' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
             />
           </View>
         </View>
@@ -61,6 +70,9 @@ const PartnerHome = props => {
   //----------------------------------------------Getting User----------------------------------------
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
+  const [open, setopen] = useState(false);
+  const [reqcustomer, setreqcustomer] = useState({});
+
   useEffect(() => {
     dispatch(getPartner(userid));
   }, []);
@@ -81,12 +93,10 @@ const PartnerHome = props => {
 
   const LATITUDE_DELTA = 0.009;
   const LONGITUDE_DELTA = 0.009;
-  const LATITUDE = 18.7934829;
-  const LONGITUDE = 98.9867401;
 
   const [mapstate, setmapstate] = useState({
-    latitude: LATITUDE,
-    longitude: LONGITUDE,
+    latitude: null,
+    longitude: null,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
     error: null,
@@ -123,14 +133,92 @@ const PartnerHome = props => {
           })
           .catch(err => {});
       },
-      {enableHighAccuracy: true, timeout: 200000, maximumAge: 1000},
+      {enableHighAccuracy: true, timeout: 200000},
     );
   };
 
   useEffect(() => {
     myGeo();
+    dispatch(partnerId(userid));
   }, []);
+  //---------------------------------------------------------------Device Token
 
+  PushNotification.configure({
+    onRegister: function(token) {
+      // console.log('Seller TOKEN:', token);
+      dispatch(DeviceToken(userid, token));
+    },
+    onNotification: function(notification) {
+      // console.log('Sello NOTIFICATION:', notification);
+      setreqcustomer(notification.data);
+      setopen(true);
+    },
+
+    onAction: function(notification) {
+      console.log('ACTION:', notification.action);
+
+      // process the action
+    },
+    onRegistrationError: function(err) {
+      console.error(err.message, err);
+    },
+    permissions: {
+      alert: true,
+      badge: true,
+      sound: true,
+    },
+    popInitialNotification: true,
+    requestPermissions: true,
+  });
+
+  //------mapref
+  let mapref;
+  const currentLocation = () => {
+    mapref.fitToCoordinates([mapstate], {animated: true});
+  };
+  const [poli, setpoli] = useState(false);
+  const onMapChange = () => {
+    mapref.fitToSuppliedMarkers(['data'], {
+      animated: true,
+      edgePadding: {
+        top: 50,
+        right: 50,
+        bottom: Dimensions.get('window').height / 1.5,
+        left: 50,
+      },
+    });
+    setpoli(true);
+  };
+
+  //------------------Customer Profile || Model View
+  const [found, setfound] = useState(false);
+  const [custLocation, setcustLocation] = useState({
+    latitude: 33.643011,
+    longitude: 73.040394,
+  });
+  const data = props.route.params;
+  const locationArray = [
+    {
+      latitude: mapstate.latitude,
+      longitude: mapstate.longitude,
+    },
+    {
+      latitude: custLocation.latitude,
+      longitude: custLocation.longitude,
+    },
+  ];
+
+  useEffect(() => {
+    if (data) {
+      setopen(true);
+      setreqcustomer(data.data);
+      setcustLocation({
+        latitude: data.data.location.latitude,
+        longitude: data.data.location.longitude,
+      });
+      setfound(true);
+    }
+  }, [data]);
   //---------------------------------------------------------------Return Section
   return (
     <View style={styles.screen}>
@@ -139,11 +227,40 @@ const PartnerHome = props => {
       <View style={styles.mapArea}>
         {mapstate.latitude !== null && (
           <MapView
+            ref={ref => {
+              mapref = ref;
+            }}
+            maxZoomLevel={18}
+            loadingEnabled={true}
+            loadingIndicatorColor="#326ECC"
             style={styles.map}
-            region={getMapRegion()}
+            initialRegion={getMapRegion()}
             showsUserLocation={true}
-            mapType={mapbtn.open ? 'satellite' : 'standard'}
-          />
+            showsCompass={false}
+            mapType={mapbtn.open ? 'satellite' : 'standard'}>
+            {found
+              ? locationArray.map(item => (
+                  <Fragment key={item.latitude}>
+                    {poli ? (
+                      <Polyline
+                        coordinates={locationArray}
+                        strokeWidth={5}
+                        strokeColor="#498DF6"
+                        fillColor="rgba(255,0,0,0.5)"
+                        lineDashPattern={[5]}
+                      />
+                    ) : null}
+
+                    <Marker
+                      coordinate={item}
+                      identifier={'data'}
+                      pinColor="#498DF6"
+                      opacity={0.9}
+                    />
+                  </Fragment>
+                ))
+              : null}
+          </MapView>
         )}
       </View>
 
@@ -153,7 +270,7 @@ const PartnerHome = props => {
             <Icoooon type="Fontisto" name="earth" color="#2257A9" size={16} />
           </View>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={myGeo}>
+        <TouchableNativeFeedback onPress={currentLocation}>
           <View style={styles.custombtn}>
             <Icooon
               type="MaterialIcons"
@@ -164,6 +281,42 @@ const PartnerHome = props => {
           </View>
         </TouchableNativeFeedback>
       </View>
+      {found ? (
+        <TouchableNativeFeedback onPress={() => setopen(true)}>
+          <View style={styles.selectOptions}>
+            <Text style={styles.chooseBtn}> Open Profile </Text>
+            <Icon
+              type="Ionicons"
+              name="ios-arrow-up"
+              size={25}
+              color="#FFFFFF"
+            />
+          </View>
+        </TouchableNativeFeedback>
+      ) : (
+        <TouchableNativeFeedback
+          onPress={() => props.navigation.navigate('Notifications')}>
+          <View style={styles.selectOptions}>
+            <Text style={styles.chooseBtn}> Check Job Requests</Text>
+            <Icooon
+              type="MaterialIcons"
+              name="find-in-page"
+              size={23}
+              color="#FFFFFF"
+            />
+          </View>
+        </TouchableNativeFeedback>
+      )}
+
+      <ModalView
+        job={open}
+        closeProfile={() => setopen(false)}
+        reqCustomer={reqcustomer}
+        getDirection={onMapChange}
+        closeDirect={() => setfound(false)}
+        currentlocation={currentLocation}
+        poli={() => setpoli(false)}
+      />
     </View>
   );
 };
@@ -178,12 +331,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   icon: {
-    width: 30,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 15,
-    padding: 3,
-    elevation: 5,
+    paddingVertical: 3,
+    paddingHorizontal: 3,
   },
   mapArea: {
     ...StyleSheet.absoluteFillObject,
@@ -210,11 +362,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectOptions: {
-    width: '95%',
+    width: '96%',
     backgroundColor: '#326ECC',
-    height: '8.5%',
+    height: '9%',
     zIndex: 1,
-    marginVertical: 10,
+    marginBottom: 8,
+    marginTop: 1,
     borderRadius: 10,
     elevation: 1,
     justifyContent: 'center',
@@ -223,23 +376,10 @@ const styles = StyleSheet.create({
   },
   chooseBtn: {
     color: '#FFFFFF',
-    marginRight: 7,
+    marginRight: 3,
     fontSize: 16,
     fontFamily: 'ebrima',
     fontWeight: '900',
-  },
-  indicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 'auto',
-    marginTop: '40%',
-  },
-  indicatorTxt: {
-    color: '#2257A9',
-    fontFamily: 'ebrima',
-    marginTop: 5,
-    fontSize: 12,
   },
 });
 export default PartnerHome;

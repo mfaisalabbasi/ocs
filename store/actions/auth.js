@@ -84,6 +84,24 @@ export const updateLocation = (userId, location) => async dispatch => {
   }
 };
 
+//---------update customer token
+export const CustomerDeviceToken = (userId, Devicetoken) => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/customers/${userId}.json`,
+      {
+        method: 'patch',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({Devicetoken}),
+      },
+    );
+  } catch (error) {
+    console.log('Token updating', error);
+  }
+};
+
 //----------------------------------------- Login Action
 
 export const loginAction = user => async dispatch => {
@@ -236,7 +254,7 @@ export const registerSeller = user => async dispatch => {
         headers: {
           ContentType: 'application/json',
         },
-        body: JSON.stringify({name, email, phone, service}),
+        body: JSON.stringify({name, email, phone, service, status: true}),
       });
     }
     if (res.error) {
@@ -274,6 +292,24 @@ export const updatePartnerLocation = (userId, location) => async dispatch => {
     );
   } catch (error) {
     console.log('location updating error', error);
+  }
+};
+
+//---------update partner token
+export const DeviceToken = (userId, Devicetoken) => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/sellers/${userId}.json`,
+      {
+        method: 'patch',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({Devicetoken}),
+      },
+    );
+  } catch (error) {
+    console.log('seller updating token', error);
   }
 };
 

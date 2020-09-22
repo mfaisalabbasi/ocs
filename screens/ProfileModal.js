@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {Fragment, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,20 +8,72 @@ import {
   Dimensions,
   ScrollView,
   Image,
+  ActivityIndicator,
+  Linking,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icoon from 'react-native-vector-icons/Entypo';
-import {useDispatch} from 'react-redux';
-import {nullSeller} from '../store/actions/user';
-
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  jobRequest,
+  nullSeller,
+  sendingNotification,
+} from '../store/actions/user';
+import {CustomerDeviceToken} from '../store/actions/auth';
+import PushNotification from 'react-native-push-notification';
 const ProfileModal = props => {
   const dispatch = useDispatch();
+  const loading = useSelector(state => state.notification.loading);
+  const [press, setpress] = useState(false);
   const cancelFunc = () => {
     props.setopenprofile();
     props.curloc();
-    props.stfond(false);
     props.setsrvc('Choose');
     dispatch(nullSeller());
+    setpress(false);
+  };
+
+  PushNotification.configure({
+    onRegister: function(token) {
+      console.log('TOKEN:', token);
+      dispatch(CustomerDeviceToken(props.localId, token));
+    },
+    onNotification: function(notification) {
+      console.log('NOTIFICATION:', notification);
+    },
+
+    onAction: function(notification) {
+      console.log('Action:', notification);
+
+      // process the action
+    },
+    onRegistrationError: function(err) {
+      console.error(err.message, err);
+    },
+    permissions: {
+      alert: true,
+      badge: true,
+      sound: true,
+    },
+    popInitialNotification: true,
+    requestPermissions: true,
+  });
+
+  const onStartContract = async () => {
+    dispatch(sendingNotification(props.user.Devicetoken.token, props.customer));
+    dispatch(jobRequest(props.user.partnerKey, props.customer));
+    setpress(true);
+  };
+
+  const callNow = () => {
+    let number = '';
+    if (Platform.OS === 'ios') {
+      number = `telprompt:${props.user.phone}`;
+    } else {
+      number = `tel:${props.user.phone}`;
+    }
+    Linking.openURL(number);
   };
 
   return (
@@ -92,95 +144,152 @@ const ProfileModal = props => {
                 alignItems: 'center',
               }}
               showsVerticalScrollIndicator={false}>
-              <View style={styles.proView}>
-                <View style={styles.smView}>
-                  <Image
-                    source={require('../assets/images/profile.jpg')}
+              {loading ? (
+                <View
+                  style={{
+                    marginTop: 100,
+                  }}>
+                  <ActivityIndicator size="small" color="#0340A0" />
+                  <Text
                     style={{
-                      width: '100%',
-                      height: 100,
-                      resizeMode: 'cover',
-                      borderRadius: 200,
-                    }}
-                  />
-                  <Text style={styles.infoText}>
-                    <Icoon
-                      type="Entypo"
-                      name="star"
-                      color="#0340A0"
-                      size={18}
-                    />
-                    <Icoon
-                      type="Entypo"
-                      name="star"
-                      color="#0340A0"
-                      size={18}
-                    />
-                    <Icoon
-                      type="Entypo"
-                      name="star"
-                      color="#0340A0"
-                      size={18}
-                    />
+                      color: '#0340A0',
+                      fontFamily: 'ebrima',
+                      fontWeight: 'bold',
+                    }}>
+                    Sending request !!!
                   </Text>
                 </View>
-                <View style={styles.info}>
-                  <View style={styles.titles}>
-                    <Text style={styles.infoText}>
-                      <Icon
-                        type="FontAwesome"
-                        name="user-circle-o"
-                        color="#0340A0"
-                        size={18}
-                      />{' '}
-                      :- {props.user.name}
-                    </Text>
+              ) : (
+                <Fragment>
+                  <View style={styles.proView}>
+                    <View style={styles.smView}>
+                      <Image
+                        source={require('../assets/images/profile.jpg')}
+                        style={{
+                          width: '100%',
+                          height: 100,
+                          resizeMode: 'cover',
+                          borderRadius: 200,
+                        }}
+                      />
+                      <Text style={styles.infoText}>
+                        <Icoon
+                          type="Entypo"
+                          name="star"
+                          color="#0340A0"
+                          size={18}
+                        />
+                        <Icoon
+                          type="Entypo"
+                          name="star"
+                          color="#0340A0"
+                          size={18}
+                        />
+                        <Icoon
+                          type="Entypo"
+                          name="star"
+                          color="#0340A0"
+                          size={18}
+                        />
+                      </Text>
+                    </View>
+                    <View style={styles.info}>
+                      <View style={styles.titles}>
+                        <Text style={styles.infoText}>
+                          <Icon
+                            type="FontAwesome"
+                            name="user-circle-o"
+                            color="#0340A0"
+                            size={18}
+                          />{' '}
+                          :- {props.user.name}
+                        </Text>
+                      </View>
+                      <View style={styles.titles}>
+                        <Text style={styles.infoText}>
+                          <Icoon
+                            type="Entypo"
+                            name="email"
+                            color="#0340A0"
+                            size={18}
+                          />{' '}
+                          :- {props.user.email}
+                        </Text>
+                      </View>
+                      <View style={styles.titles}>
+                        <Text style={styles.infoText}>
+                          <Icoon
+                            type="FontAwesome"
+                            name="mobile"
+                            color="#0340A0"
+                            size={18}
+                          />{' '}
+                          :- {props.user.phone}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                  <View style={styles.titles}>
-                    <Text style={styles.infoText}>
-                      <Icoon
-                        type="Entypo"
-                        name="email"
-                        color="#0340A0"
-                        size={18}
-                      />{' '}
-                      :- {props.user.email}
-                    </Text>
+
+                  <View style={styles.proView}>
+                    <TouchableNativeFeedback onPress={cancelFunc}>
+                      <View
+                        style={{
+                          ...styles.btn,
+                          backgroundColor: '#2155A8',
+                          marginRight: 5,
+                          width: '40%',
+                        }}>
+                        <Text style={{...styles.titleText, fontSize: 15}}>
+                          <Icoon
+                            type="Entypo"
+                            name="squared-cross"
+                            color="#FFFFFF"
+                            size={15}
+                          />{' '}
+                          Cancel
+                        </Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                    {!press ? (
+                      <TouchableNativeFeedback onPress={onStartContract}>
+                        <View style={styles.btn}>
+                          <Text style={{...styles.titleText, fontSize: 15}}>
+                            <Icon
+                              type="FontAwesome"
+                              name="check-square-o"
+                              color="#FFFFFF"
+                              size={16}
+                            />
+                            {'  '}
+                            Start Contract
+                          </Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                    ) : (
+                      <TouchableNativeFeedback onPress={callNow}>
+                        <View
+                          style={{
+                            ...styles.btn,
+                            backgroundColor: '#48A06D',
+                            marginRight: 5,
+                          }}>
+                          <Text style={{...styles.titleText, fontSize: 15}}>
+                            <Icon
+                              type="FontAwesome"
+                              name="phone"
+                              color="#FFFFFF"
+                              size={18}
+                              style={{paddingTop: 5}}
+                            />
+                            {'  '}
+                            Call Now
+                          </Text>
+                        </View>
+                      </TouchableNativeFeedback>
+                    )}
                   </View>
-                  <View style={styles.titles}>
-                    <Text style={styles.infoText}>
-                      <Icoon
-                        type="FontAwesome"
-                        name="mobile"
-                        color="#0340A0"
-                        size={18}
-                      />{' '}
-                      :- {props.user.phone}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.proView}>
-                <TouchableNativeFeedback onPress={cancelFunc}>
-                  <View
-                    style={{
-                      ...styles.btn,
-                      backgroundColor: '#2155A8',
-                      marginRight: 5,
-                    }}>
-                    <Text style={{...styles.titleText, fontSize: 15}}>
-                      Cancel
-                    </Text>
-                  </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback>
-                  <View style={styles.btn}>
-                    <Text style={{...styles.titleText, fontSize: 15}}>
-                      Start Contract
-                    </Text>
-                  </View>
-                </TouchableNativeFeedback>
-              </View>
+                </Fragment>
+              )}
             </ScrollView>
           </View>
         )}
@@ -199,7 +308,7 @@ const styles = StyleSheet.create({
   },
   model: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('window').height / 2.5,
+    height: Dimensions.get('window').height / 2.8,
     width: '100%',
     borderTopEndRadius: 15,
     borderTopLeftRadius: 15,
@@ -213,7 +322,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleText: {
-    padding: 5,
+    padding: 3,
     fontSize: 12,
     fontFamily: 'ebrima',
     color: '#FFFFFF',
@@ -221,7 +330,7 @@ const styles = StyleSheet.create({
   proView: {
     width: '100%',
     marginTop: 3,
-    padding: 10,
+    padding: 5,
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -242,17 +351,17 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: 'ebrima',
     color: '#0340A0',
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
   btn: {
-    width: '45%',
+    width: '50%',
     backgroundColor: '#0342A5',
     padding: 5,
     height: 40,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 2,
+    elevation: 3,
   },
 });
 

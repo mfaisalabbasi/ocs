@@ -1,34 +1,16 @@
 import React from 'react';
 import {
+  TouchableNativeFeedback,
   View,
   Text,
-  StyleSheet,
-  TouchableNativeFeedback,
   Image,
+  StyleSheet,
 } from 'react-native';
-import Icoon from 'react-native-vector-icons/AntDesign';
 import moment from 'moment'
-
-const Notification = ({navigation}) => {
-  navigation.setOptions({
-    headerLeft: () => {
-      return (
-        <View style={styles.header}>
-          <Icoon
-            type="AntDesign"
-            name="arrowleft"
-            color="#FFFFFF"
-            size={25}
-            onPress={() => navigation.navigate('Home')}
-          />
-        </View>
-      );
-    },
-  });
-
+const Box = props => {
   return (
     <View style={styles.screen}>
-      <TouchableNativeFeedback >
+      <TouchableNativeFeedback onPress={props.navigate}>
         <View style={styles.card}>
           <View style={styles.icon}>
             <Image
@@ -39,10 +21,10 @@ const Notification = ({navigation}) => {
           <View style={styles.title}>
             
             <Text style={styles.body}>
-           <Text style={styles.head}>Dear Customer,</Text> Thanks for Signing Here, OCS will try best to serve you.
+           <Text style={styles.head}>{props.dta.name},</Text> is looking for your service, kindly check further details.
            
             </Text>
-            <Text style={{fontWeight:'bold',fontSize:12}}>[ {moment().format('MMMM Do YYYY, h:mm:ss a')} ]</Text>
+            <Text style={{fontWeight:'bold',fontSize:12}}>[ {moment(props.dta.date).fromNow()} ]</Text>
           </View>
         </View>
       </TouchableNativeFeedback>
@@ -50,10 +32,7 @@ const Notification = ({navigation}) => {
   );
 };
 const styles = StyleSheet.create({
-  header: {
-    marginHorizontal: 15,
-  },
- screen: {
+  screen: {
     flex: 1,
     alignItems: 'center',
   },
@@ -93,6 +72,5 @@ const styles = StyleSheet.create({
     
    
   },
-
 });
-export default Notification;
+export default Box;

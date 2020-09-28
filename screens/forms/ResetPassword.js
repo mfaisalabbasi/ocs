@@ -38,7 +38,7 @@ const ResetPassword = ({navigation}) => {
       <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
       <View style={styles.form}>
         <View style={styles.head}>
-          <Icon type="FontAwesome" name="edit" color="gray" size={40} />
+          <Icon type="FontAwesome" name="edit" color="#0A7DC9" size={40} />
           <Text style={styles.heading}>Enter your Email</Text>
           <Text style={styles.smallheading}>
             Reset your password by entering valid email
@@ -68,7 +68,9 @@ const ResetPassword = ({navigation}) => {
         </View>
         <TouchableNativeFeedback onPress={loginHandler}>
           <View style={styles.button}>
-            <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>Login</Text>
+            <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
+              Send Me
+            </Text>
           </View>
         </TouchableNativeFeedback>
         <View style={styles.regBtn}>
@@ -106,12 +108,13 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     fontFamily: 'ebrima',
-    fontWeight: '400',
+    fontWeight: '900',
+    color: '#0A7DC9',
   },
   smallheading: {
     fontSize: 10,
     fontFamily: 'ebrima',
-    color: '#498DF6',
+    color: '#0A7DC9',
   },
 
   inputs: {

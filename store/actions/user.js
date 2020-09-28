@@ -10,6 +10,8 @@ import {
   NULL_SELLER,
   NOTIFICATION,
   NOTIFICATION_LOADING,
+  UPLOAD_PROFILE,
+  UPDATE_PROFILE,
 } from '../constant';
 
 export const getUser = userid => async dispatch => {
@@ -47,10 +49,38 @@ export const updateName = (userid, user) => async dispatch => {
     );
     const res = await req.json();
     dispatch({
-      type: GET_USER,
+      type: UPDATE_PROFILE,
       payload: res,
     });
   } catch (error) {
+    dispatch({
+      type: FAILED_USER,
+      payload: error,
+    });
+  }
+};
+
+//------------------------------customer profile
+export const customerProfile = (userid, profileUrl) => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/customers/${userid}.json`,
+      {
+        method: 'patch',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({profileUrl}),
+      },
+    );
+    const res = await req.json();
+    console.log('resooo', res);
+    dispatch({
+      type: UPLOAD_PROFILE,
+      payload: res.profileUrl,
+    });
+  } catch (error) {
+    console.log('uploading error');
     dispatch({
       type: FAILED_USER,
       payload: error,
@@ -144,11 +174,40 @@ export const updatePartner = (userid, user) => async dispatch => {
       },
     );
     const res = await req.json();
+    console.log('my fucki', res);
     dispatch({
-      type: GET_USER,
+      type: UPDATE_PROFILE,
       payload: res,
     });
   } catch (error) {
+    dispatch({
+      type: FAILED_USER,
+      payload: error,
+    });
+  }
+};
+
+//------------------------------partner profile
+export const partnerProfile = (userid, profileUrl) => async dispatch => {
+  try {
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+      {
+        method: 'patch',
+        headers: {
+          ContentType: 'application/json',
+        },
+        body: JSON.stringify({profileUrl}),
+      },
+    );
+    const res = await req.json();
+    console.log('resooo', res);
+    dispatch({
+      type: UPLOAD_PROFILE,
+      payload: res.profileUrl,
+    });
+  } catch (error) {
+    console.log('uploading error');
     dispatch({
       type: FAILED_USER,
       payload: error,

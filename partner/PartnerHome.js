@@ -236,6 +236,7 @@ const PartnerHome = props => {
             style={styles.map}
             initialRegion={getMapRegion()}
             showsUserLocation={true}
+            showsMyLocationButton={false}
             showsCompass={false}
             mapType={mapbtn.open ? 'satellite' : 'standard'}>
             {found

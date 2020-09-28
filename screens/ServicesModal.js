@@ -7,6 +7,7 @@ import {
   Modal,
   Dimensions,
   ScrollView,
+  Image,
 } from 'react-native';
 import Icoon from 'react-native-vector-icons/FontAwesome';
 
@@ -51,13 +52,27 @@ const ModalPop = props => {
       animationType="slide">
       <View style={styles.modelContainer}>
         <View style={styles.model}>
-          <ScrollView
-            contentContainerStyle={{
-              width: Dimensions.get('window').width,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
+          <View
+            style={{
+              width: '100%',
+              height: '18%',
+              backgroundColor: '#D6EAF8',
               justifyContent: 'center',
-            }}
+              alignItems: 'center',
+              elevation: 1,
+            }}>
+            <Image
+              source={require('../assets/images/choose.png')}
+              style={{
+                width: '90%',
+                height: '60%',
+                resizeMode: 'cover',
+                borderRadius: 50,
+              }}
+            />
+          </View>
+          <ScrollView
+            contentContainerStyle={styles.scrollStyle}
             showsVerticalScrollIndicator={false}>
             {services.map((src, index) => (
               <TouchableNativeFeedback
@@ -69,7 +84,7 @@ const ModalPop = props => {
                       type="FontAwesome"
                       name={src.icon}
                       color={src.color}
-                      size={35}
+                      size={40}
                     />
                   </View>
                   <View style={styles.title}>
@@ -98,9 +113,15 @@ const styles = StyleSheet.create({
     zIndex: -1,
     flexDirection: 'row',
   },
+  scrollStyle: {
+    width: Dimensions.get('window').width,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
   model: {
     backgroundColor: '#F8F9F9',
-    height: Dimensions.get('window').height / 1.07,
+    height: Dimensions.get('window').height,
     width: '100%',
     height: '100%',
     borderRadius: 10,
@@ -121,7 +142,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   item: {
-    width: '43%',
+    width: '45%',
     height: 150,
     margin: 5,
     elevation: 1.2,

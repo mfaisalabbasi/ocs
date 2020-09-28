@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import moment from 'moment'
+import moment from 'moment';
 const Box = props => {
   return (
     <View style={styles.screen}>
@@ -19,12 +19,13 @@ const Box = props => {
             />
           </View>
           <View style={styles.title}>
-            
             <Text style={styles.body}>
-           <Text style={styles.head}>{props.dta.name},</Text> is looking for your service, kindly check further details.
-           
+              <Text style={styles.head}>{props.dta.name},</Text> is looking for
+              your service, kindly check further details.
             </Text>
-            <Text style={{fontWeight:'bold',fontSize:12}}>[ {moment(props.dta.date).fromNow()} ]</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 12}}>
+              [ {moment(props.dta.date).fromNow()} ]
+            </Text>
           </View>
         </View>
       </TouchableNativeFeedback>
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   title: {
     width: '100%',
     height: '65%',
-    padding:5
+    padding: 5,
   },
   head: {
     fontFamily: 'ebrima',
@@ -65,12 +66,9 @@ const styles = StyleSheet.create({
     color: '#0140A0',
   },
   body: {
-   
-    fontWeight:'900',
-    
-    fontFamily:'ebrima'
-    
-   
+    fontWeight: '900',
+
+    fontFamily: 'ebrima',
   },
 });
 export default Box;

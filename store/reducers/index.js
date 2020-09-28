@@ -10,11 +10,15 @@ import notification from './notification';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['register'],
+  blacklist: ['user', 'resetpassword', 'notification', 'register'],
 };
-
+const regPersist = {
+  key: 'register',
+  storage: AsyncStorage,
+  blacklist: ['loading', 'error'],
+};
 const rootReducer = combineReducers({
-  register,
+  register: persistReducer(regPersist, register),
   user,
   resetpassword,
   notification,

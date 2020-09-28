@@ -32,7 +32,7 @@ const Home = props => {
       fontSize: 18,
     },
 
-    headerTitle: 'Select service',
+    headerTitle: '',
     headerTintColor: '#444649',
     headerTransparent: true,
     headerLeft: () => {
@@ -200,6 +200,7 @@ const Home = props => {
               initialRegion={getMapRegion()}
               style={styles.map}
               showsUserLocation={true}
+              showsMyLocationButton={false}
               maxZoomLevel={18}
               showsCompass={false}
               onMapReady={() =>
@@ -347,11 +348,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectOptions: {
-    width: '95%',
+    width: '96%',
     backgroundColor: '#326ECC',
     height: '8.5%',
     zIndex: 1,
-    marginVertical: 10,
+    marginVertical: 6,
     borderRadius: 10,
     elevation: 1,
     justifyContent: 'center',

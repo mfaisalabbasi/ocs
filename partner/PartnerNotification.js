@@ -1,9 +1,16 @@
 import React from 'react';
-import {View, StyleSheet, FlatList,TouchableNativeFeedback,Image,Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableNativeFeedback,
+  Image,
+  Text,
+} from 'react-native';
 import Icoon from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 import Box from './Box';
-import moment from 'moment'
+import moment from 'moment';
 
 const PartnerNotification = ({navigation}) => {
   navigation.setOptions({
@@ -21,34 +28,37 @@ const PartnerNotification = ({navigation}) => {
       );
     },
   });
- const empty =  <TouchableNativeFeedback>
-        <View style={styles.card}>
-          <View style={styles.icon}>
-            <Image
-              source={require('../assets/images/bell.png')}
-              style={{width: '100%', height: '100%', resizeMode: 'contain'}}
-            />
-          </View>
-          <View style={styles.title}>
-            
-            <Text style={styles.body}>
-           <Text style={styles.head}>Dear Customer,</Text> Thanks for Signing Here, OCS will try best to serve you.
-           
-            </Text>
-            <Text style={{fontWeight:'bold',fontSize:12}}>[ {moment().format('MMMM Do YYYY, h:mm:ss a')} ]</Text>
-          </View>
+  const empty = (
+    <TouchableNativeFeedback>
+      <View style={styles.card}>
+        <View style={styles.icon}>
+          <Image
+            source={require('../assets/images/bell.png')}
+            style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+          />
         </View>
-      </TouchableNativeFeedback>
+        <View style={styles.title}>
+          <Text style={styles.body}>
+            <Text style={styles.head}>Dear Partner,</Text> Thanks for Signing
+            Here, OCS will try best to find suitable job for you.
+          </Text>
+          <Text style={{fontWeight: 'bold', fontSize: 12}}>
+            [ {moment().format('MMMM Do YYYY, h:mm:ss a')} ]
+          </Text>
+        </View>
+      </View>
+    </TouchableNativeFeedback>
+  );
   const user = useSelector(state => state.user.user.jobs);
   let loaded = [];
   if (user) {
     const convert = Object.keys(user);
     convert.map(job => loaded.push(user[job]));
   }
-  
+
   return (
     <FlatList
-    ListEmptyComponent={empty}
+      ListEmptyComponent={empty}
       data={loaded.reverse()}
       renderItem={itemData => (
         <Box
@@ -68,9 +78,9 @@ const styles = StyleSheet.create({
   header: {
     marginHorizontal: 15,
   },
-   card: {
-    marginLeft:'auto',
-    marginRight:'auto',
+  card: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
     width: '95%',
     height: 120,
     backgroundColor: '#FFFFFF',
@@ -90,7 +100,7 @@ const styles = StyleSheet.create({
   title: {
     width: '100%',
     height: '65%',
-    padding:5
+    padding: 5,
   },
   head: {
     fontFamily: 'ebrima',
@@ -99,12 +109,9 @@ const styles = StyleSheet.create({
     color: '#0140A0',
   },
   body: {
-   
-    fontWeight:'900',
-    
-    fontFamily:'ebrima'
-    
-   
+    fontWeight: '900',
+
+    fontFamily: 'ebrima',
   },
 });
 export default PartnerNotification;

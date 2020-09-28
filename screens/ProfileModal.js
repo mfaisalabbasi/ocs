@@ -22,6 +22,9 @@ import {
 } from '../store/actions/user';
 import {CustomerDeviceToken} from '../store/actions/auth';
 import PushNotification from 'react-native-push-notification';
+import Icooon from 'react-native-vector-icons/MaterialIcons';
+import AvailblePartner from './AvailblePartner';
+
 const ProfileModal = props => {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.notification.loading);
@@ -74,6 +77,12 @@ const ProfileModal = props => {
       number = `tel:${props.user.phone}`;
     }
     Linking.openURL(number);
+  };
+
+  //-------------------Available Partners
+  const [openprofile, setopenprofile] = useState(false);
+  const checkAvailble = () => {
+    setopenprofile(true);
   };
 
   return (
@@ -133,8 +142,9 @@ const ProfileModal = props => {
           <View style={styles.model}>
             <View style={styles.titleView}>
               <Text style={styles.titleText}>
-                Electration is {props.user.haversine.distance} miles away from
-                you.
+                {props.user.service} is{' '}
+                {(props.user.haversine.distance * 1.60934).toFixed(2)} Km away
+                from you.
               </Text>
             </View>
             <ScrollView
@@ -164,9 +174,13 @@ const ProfileModal = props => {
                   <View style={styles.proView}>
                     <View style={styles.smView}>
                       <Image
-                        source={require('../assets/images/profile.jpg')}
+                        source={
+                          props.user.profileUrl
+                            ? {uri: props.user.profileUrl}
+                            : require('../assets/images/profile.png')
+                        }
                         style={{
-                          width: '100%',
+                          width: '90%',
                           height: 100,
                           resizeMode: 'cover',
                           borderRadius: 200,
@@ -239,7 +253,7 @@ const ProfileModal = props => {
                           marginRight: 5,
                           width: '40%',
                         }}>
-                        <Text style={{...styles.titleText, fontSize: 15}}>
+                        <Text style={{...styles.titleText, fontSize: 14}}>
                           <Icoon
                             type="Entypo"
                             name="squared-cross"
@@ -253,7 +267,7 @@ const ProfileModal = props => {
                     {!press ? (
                       <TouchableNativeFeedback onPress={onStartContract}>
                         <View style={styles.btn}>
-                          <Text style={{...styles.titleText, fontSize: 15}}>
+                          <Text style={{...styles.titleText, fontSize: 14}}>
                             <Icon
                               type="FontAwesome"
                               name="check-square-o"
@@ -273,7 +287,7 @@ const ProfileModal = props => {
                             backgroundColor: '#48A06D',
                             marginRight: 5,
                           }}>
-                          <Text style={{...styles.titleText, fontSize: 15}}>
+                          <Text style={{...styles.titleText, fontSize: 14}}>
                             <Icon
                               type="FontAwesome"
                               name="phone"
@@ -288,9 +302,34 @@ const ProfileModal = props => {
                       </TouchableNativeFeedback>
                     )}
                   </View>
+                  <TouchableNativeFeedback onPress={checkAvailble}>
+                    <View
+                      style={{
+                        ...styles.btn,
+                        width: '90%',
+                        marginTop: 4,
+                        height: 43,
+                        backgroundColor: '#138D75',
+                        borderRadius: 20,
+                      }}>
+                      <Text style={{...styles.titleText, fontSize: 14}}>
+                        <Icooon
+                          type="MaterialIcons"
+                          name="find-in-page"
+                          size={15}
+                          color="#FFFFFF"
+                        />{' '}
+                        Check other Available {props.user.service}
+                      </Text>
+                    </View>
+                  </TouchableNativeFeedback>
                 </Fragment>
               )}
             </ScrollView>
+            <AvailblePartner
+              openprofile={openprofile}
+              setopenprofile={() => setopenprofile(false)}
+            />
           </View>
         )}
       </View>
@@ -308,7 +347,7 @@ const styles = StyleSheet.create({
   },
   model: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('window').height / 2.8,
+    height: Dimensions.get('window').height / 2.5,
     width: '100%',
     borderTopEndRadius: 15,
     borderTopLeftRadius: 15,
@@ -329,22 +368,22 @@ const styles = StyleSheet.create({
   },
   proView: {
     width: '100%',
-    marginTop: 3,
-    padding: 5,
+    marginTop: 2,
+    padding: 3,
     flexDirection: 'row',
     justifyContent: 'center',
   },
   smView: {
     width: '40%',
-    padding: 5,
+    padding: 3,
     alignItems: 'center',
   },
   info: {
     width: '60%',
-    padding: 5,
+    padding: 3,
   },
   titles: {
-    marginTop: 5,
+    marginTop: 3,
     paddingVertical: 5,
     justifyContent: 'center',
   },
@@ -357,11 +396,11 @@ const styles = StyleSheet.create({
     width: '50%',
     backgroundColor: '#0342A5',
     padding: 5,
-    height: 40,
+    height: 37,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 3,
+    elevation: 1,
   },
 });
 

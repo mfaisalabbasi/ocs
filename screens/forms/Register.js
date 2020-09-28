@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  KeyboardAvoidingView,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {registerSeller} from '../../store/actions/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 const Register = ({navigation}) => {
   const [user, setuser] = useState({
     name: '',
@@ -24,18 +24,35 @@ const Register = ({navigation}) => {
   const {name, email, phone, password, service} = user;
   //handling Registration
   const [err, seterr] = useState(false);
+  const [next, setnext] = useState(false);
   const er = useSelector(state => state.register.error.sellerRegister);
   const loading = useSelector(state => state.register.loading);
 
   const dispatch = useDispatch();
   const handleRegister = async () => {
-    if (!name || !email || !password || !phone || service === '') {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !phone ||
+      service === '' ||
+      password.length < 6
+    ) {
       seterr(true);
     } else {
       dispatch(registerSeller(user));
       seterr(false);
     }
   };
+  const handleNext = () => {
+    if (!name || !phone || isNaN(phone) || phone.length < 10) {
+      seterr(true);
+    } else {
+      setnext(true);
+      seterr(false);
+    }
+  };
+
   return (
     <View style={styles.screen}>
       <View
@@ -52,7 +69,7 @@ const Register = ({navigation}) => {
           }}
         />
       </View>
-      <KeyboardAvoidingView behavior="height" style={styles.form}>
+      <View style={styles.form}>
         <View style={styles.head}>
           <Icon
             type="FontAwesome"
@@ -60,7 +77,7 @@ const Register = ({navigation}) => {
             color="#498DF6"
             size={30}
           />
-          <Text style={styles.heading}>Register as a Partner,</Text>
+          <Text style={styles.heading}>Register as Partner,</Text>
           <Text style={styles.smallheading}>Let's serve togather</Text>
         </View>
         {loading ? (
@@ -83,83 +100,128 @@ const Register = ({navigation}) => {
             </Text>
           </View>
         ) : null}
-        <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your name ..."
-            placeholderTextColor="lightgray"
-            value={name}
-            onChangeText={text => setuser({...user, name: text})}
-          />
-        </View>
-        <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your email ..."
-            placeholderTextColor="lightgray"
-            value={email}
-            onChangeText={text => setuser({...user, email: text})}
-          />
-        </View>
-        <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your phone ..."
-            placeholderTextColor="lightgray"
-            keyboardType="phone-pad"
-            value={phone}
-            onChangeText={text => setuser({...user, phone: text})}
-          />
-        </View>
-        <View style={styles.picker}>
-          <Picker
-            style={{
-              width: '100%',
-              color: 'lightgray',
-              fontFamily: 'ebrima',
-              height: '100%',
-            }}
-            selectedValue={service}
-            onValueChange={(itemValue, itemIndex) => {
-              return setuser({
-                ...user,
-                service: itemValue,
-              });
-            }}>
-            <Picker.Item label="choose service ..." value="undefined" />
-            <Picker.Item label="Electration" value="electration" />
-            <Picker.Item label="Plumber" value="plumber" />
-            <Picker.Item label="Mechanics" value="mechanics" />
-            <Picker.Item label="Carpentar" value="carpenter" />
-          </Picker>
-        </View>
-
-        <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your password ..."
-            placeholderTextColor="lightgray"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={text => setuser({...user, password: text})}
-          />
-        </View>
-
-        <TouchableNativeFeedback onPress={handleRegister}>
-          <View style={styles.button}>
-            <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
-              Register
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
-        <View style={styles.regBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate('SellerLogin')}>
-            <View style={{paddingVertical: 6, padding: 3}}>
-              <Text style={styles.smallheading}>Login as Partner</Text>
+        {next ? (
+          <Fragment>
+            <View style={styles.inputs}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your email ..."
+                placeholderTextColor="lightgray"
+                value={email}
+                onChangeText={text => setuser({...user, email: text})}
+              />
+            </View>
+            <View style={styles.inputs}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your password ..."
+                placeholderTextColor="lightgray"
+                secureTextEntry={true}
+                value={password}
+                onChangeText={text => setuser({...user, password: text})}
+              />
+            </View>
+            <View style={styles.picker}>
+              <Picker
+                style={{
+                  width: '100%',
+                  color: '#7FB3D5',
+                  fontFamily: 'ebrima',
+                  height: '100%',
+                  fontSize: 12,
+                }}
+                selectedValue={service}
+                onValueChange={(itemValue, itemIndex) => {
+                  return setuser({
+                    ...user,
+                    service: itemValue,
+                  });
+                }}>
+                <Picker.Item label="Choose service" value="undefined" />
+                <Picker.Item label="Electration" value="electration" />
+                <Picker.Item label="Plumber" value="plumber" />
+                <Picker.Item label="Mechanics" value="mechanics" />
+                <Picker.Item label="Carpentar" value="carpenter" />
+              </Picker>
+            </View>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <View style={styles.inputs}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your name ..."
+                placeholderTextColor="lightgray"
+                value={name}
+                onChangeText={text => setuser({...user, name: text})}
+              />
+            </View>
+            <View style={styles.inputs}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your Number ..."
+                placeholderTextColor="lightgray"
+                value={phone}
+                onChangeText={text => setuser({...user, phone: text})}
+              />
+            </View>
+          </Fragment>
+        )}
+        {next ? (
+          <TouchableNativeFeedback onPress={handleRegister}>
+            <View style={styles.button}>
+              <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
+                Register
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+        ) : (
+          <TouchableNativeFeedback onPress={handleNext}>
+            <View style={styles.button}>
+              <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
+                Next{' '}
+                <Icon
+                  type="FontAwesome"
+                  name="angle-double-right"
+                  color="#FFFFFF"
+                  size={15}
+                />
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+        )}
+        {next ? (
+          <TouchableOpacity onPress={() => setnext(false)}>
+            <View
+              style={{
+                paddingVertical: 6,
+                padding: 3,
+                backgroundColor: '#EBF5FB',
+                width: 100,
+                height: 30,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 20,
+              }}>
+              <Icon
+                type="FontAwesome"
+                name="angle-double-left"
+                color="#498DF6"
+                size={20}
+              />
             </View>
           </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+        ) : (
+          <View style={styles.regBtn}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('SellerLogin')}>
+              <View>
+                <Text style={styles.smallheading}>Login as Partner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
       <View
         style={{
           width: '100%',
@@ -199,9 +261,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   heading: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'ebrima',
-    fontWeight: '400',
+    fontWeight: '900',
+    color: '#0A7DC9',
   },
   smallheading: {
     fontSize: 12,
@@ -213,29 +276,34 @@ const styles = StyleSheet.create({
   inputs: {
     width: '100%',
     marginVertical: 5,
-    elevation: 3,
   },
   input: {
+    padding: 8,
     fontSize: 12,
-    paddingVertical: 3,
-    borderTopLeftRadius: 10,
-    borderBottomRightRadius: 10,
     fontFamily: 'ebrima',
     width: '90%',
-    borderWidth: 0.4,
-    borderColor: 'lightgray',
+    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
+    borderLeftWidth: 0.5,
+    borderRightWidth: 0.5,
+    borderBottomColor: 'lightgray',
+    borderTopColor: 'lightgray',
+    borderRightColor: 'lightgray',
+    borderLeftColor: 'lightgray',
+    borderBottomLeftRadius: 10,
+    borderTopRightRadius: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
   },
   picker: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EBF5FB',
+    elevation: 0,
+    overflow: 'hidden',
     width: '90%',
+    borderRadius: 20,
     height: 40,
-    borderWidth: 0.5,
-    borderColor: 'lightgray',
-    borderTopLeftRadius: 10,
-    borderBottomRightRadius: 10,
-
-    marginVertical: 5,
   },
   button: {
     width: '60%',

@@ -35,7 +35,7 @@ const ChangePartnerPassword = ({navigation}) => {
     <View style={styles.screen}>
       <View style={styles.form}>
         <View style={styles.head}>
-          <Icon type="FontAwesome" name="edit" color="gray" size={30} />
+          <Icon type="FontAwesome" name="edit" color="#0A7DC9" size={30} />
           <Text style={styles.heading}>On Click Services</Text>
           <Text style={styles.smallheading}>Change Your Password</Text>
         </View>
@@ -107,9 +107,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   heading: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'ebrima',
-    fontWeight: '400',
+    fontWeight: '900',
+    color: '#0A7DC9',
   },
   smallheading: {
     fontSize: 8,

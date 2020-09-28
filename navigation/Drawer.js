@@ -11,13 +11,20 @@ import {
   settingStackPartner,
 } from './Stacks';
 import CustomLogo from './CustomLogo';
+import PartnerLogo from './PartnerLogo';
 import {useSelector} from 'react-redux';
 const Drawer = ({color}) => {
   const Drawer = createDrawerNavigator();
   const loggedUser = useSelector(state => state.register.user);
   return (
     <Drawer.Navigator
-      drawerContent={props => <CustomLogo {...props} />}
+      drawerContent={props =>
+        loggedUser.displayName === 'customer' ? (
+          <CustomLogo {...props} />
+        ) : (
+          <PartnerLogo {...props} />
+        )
+      }
       initialRouteName="Home"
       drawerStyle={{
         backgroundColor: '#FFFFFF',

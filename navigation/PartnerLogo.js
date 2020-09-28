@@ -15,9 +15,9 @@ import ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {customerProfile} from '../store/actions/user';
+import {partnerProfile} from '../store/actions/user';
 
-const CustomLogo = props => {
+const PartnerLogo = props => {
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
   const user = useSelector(state => state.user.user);
@@ -34,7 +34,7 @@ const CustomLogo = props => {
     const {uri} = image;
     const uploadtask = storage()
       .ref()
-      .child('customers')
+      .child('partners')
       .child(user.email)
       .putFile(uri);
 
@@ -50,13 +50,12 @@ const CustomLogo = props => {
 
     const url = await storage()
       .ref()
-      .child(`customers/${user.email}`)
+      .child(`partners/${user.email}`)
       .getDownloadURL();
-    // setUser({...user, imgUrl: url});
     setfilename(null);
     setprogress(false);
     setpress(false);
-    dispatch(customerProfile(userid, url));
+    dispatch(partnerProfile(userid, url));
   };
   const options = {
     title: 'Choose profile Picture',
@@ -67,8 +66,6 @@ const CustomLogo = props => {
   };
   const imgPicker = () => {
     ImagePicker.showImagePicker(options, response => {
-      // console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -115,7 +112,6 @@ const CustomLogo = props => {
                   fontSize: 16,
                   fontWeight: '900',
                   fontFamily: 'ebrima',
-                  marginVertical: 1,
                 }}>
                 {user === null ? ocs : user.name}
               </Text>
@@ -219,4 +215,4 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
 });
-export default CustomLogo;
+export default PartnerLogo;

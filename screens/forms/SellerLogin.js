@@ -56,7 +56,7 @@ const Login = ({navigation}) => {
             color="#498DF6"
             size={35}
           />
-          <Text style={styles.heading}>Welcome Back,</Text>
+          <Text style={styles.heading}>Welcome To OCS,</Text>
           <Text style={styles.smallheading}>Sign in to start serving</Text>
         </View>
         {loading ? (
@@ -164,7 +164,8 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 18,
     fontFamily: 'ebrima',
-    fontWeight: '400',
+    fontWeight: '900',
+    color: '#0A7DC9',
   },
   smallheading: {
     fontSize: 10,

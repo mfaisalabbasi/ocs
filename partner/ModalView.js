@@ -59,10 +59,14 @@ const ModalView = props => {
             <View style={styles.proView}>
               <View style={styles.smView}>
                 <Image
-                  source={require('../assets/images/profile.jpg')}
+                  source={
+                    props.reqCustomer.profileUrl
+                      ? {uri: props.reqCustomer.profileUrl}
+                      : require('../assets/images/profile.png')
+                  }
                   style={{
                     width: '100%',
-                    height: 100,
+                    height: 105,
                     resizeMode: 'cover',
                     borderRadius: 200,
                   }}

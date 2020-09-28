@@ -7,6 +7,8 @@ import {
   UPDATE_LOADING,
   FAILED_CLOSE,
   NULL_SELLER,
+  UPLOAD_PROFILE,
+  UPDATE_PROFILE,
 } from '../constant';
 
 const initialState = {
@@ -37,6 +39,23 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         sellers: payload,
+        loading: false,
+      };
+    case UPLOAD_PROFILE:
+      return {
+        ...state,
+        user: {...state.user, profileUrl: payload},
+        loading: false,
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name: payload.name,
+          email: payload.email,
+          phone: payload.phone,
+        },
         loading: false,
       };
     case NULL_SELLER:

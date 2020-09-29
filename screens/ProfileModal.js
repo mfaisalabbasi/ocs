@@ -309,7 +309,7 @@ const ProfileModal = props => {
                         width: '90%',
                         marginTop: 4,
                         height: 43,
-                        backgroundColor: '#138D75',
+                        backgroundColor: '#17A589',
                         borderRadius: 20,
                       }}>
                       <Text style={{...styles.titleText, fontSize: 14}}>
@@ -329,6 +329,8 @@ const ProfileModal = props => {
             <AvailblePartner
               openprofile={openprofile}
               setopenprofile={() => setopenprofile(false)}
+              sellers={props.sellers}
+              mypoint={props.user}
             />
           </View>
         )}

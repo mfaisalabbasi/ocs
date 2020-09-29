@@ -300,6 +300,7 @@ const Home = props => {
         setsrvc={setservice}
         customer={customer}
         localId={userid}
+        sellers={sellers}
       />
     </View>
   );

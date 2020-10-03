@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icooon from 'react-native-vector-icons/MaterialIcons';
 import Icoooon from 'react-native-vector-icons/Fontisto';
 import Geolocation from '@react-native-community/geolocation';
-import MapView, {Callout, Marker, Polyline} from 'react-native-maps';
+import MapView, {Circle, Marker, Polyline} from 'react-native-maps';
 import {useDispatch, useSelector} from 'react-redux';
 import {getPartner, partnerId, updateStatus} from '../store/actions/user';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
@@ -191,12 +191,13 @@ const PartnerHome = props => {
   };
 
   //------------------Customer Profile || Model View
+  const data = useSelector(state => state.user.requestcustomer);
   const [found, setfound] = useState(false);
   const [custLocation, setcustLocation] = useState({
     latitude: 33.643011,
     longitude: 73.040394,
   });
-  const data = props.route.params;
+  // const data = props.route.params;
   const locationArray = [
     {
       latitude: mapstate.latitude,
@@ -209,12 +210,12 @@ const PartnerHome = props => {
   ];
 
   useEffect(() => {
-    if (data) {
+    if (data.email) {
       setopen(true);
-      setreqcustomer(data.data);
+      setreqcustomer(data);
       setcustLocation({
-        latitude: data.data.location.latitude,
-        longitude: data.data.location.longitude,
+        latitude: data.location.latitude,
+        longitude: data.location.longitude,
       });
       setfound(true);
     }

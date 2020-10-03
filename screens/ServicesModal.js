@@ -8,6 +8,7 @@ import {
   Dimensions,
   ScrollView,
   Image,
+  StatusBar,
 } from 'react-native';
 import Icoon from 'react-native-vector-icons/FontAwesome';
 
@@ -51,22 +52,23 @@ const ModalPop = props => {
       onRequestClose={props.setvisState}
       animationType="slide">
       <View style={styles.modelContainer}>
+        <StatusBar backgroundColor="#34495E" barStyle="light-content" />
         <View style={styles.model}>
           <View
             style={{
               width: '100%',
-              height: '18%',
-              backgroundColor: '#D6EAF8',
+              height: '17%',
+              backgroundColor: '#3498DB',
               justifyContent: 'center',
               alignItems: 'center',
-              elevation: 1,
+              elevation: 5,
             }}>
             <Image
               source={require('../assets/images/choose.png')}
               style={{
                 width: '90%',
-                height: '60%',
-                resizeMode: 'cover',
+                height: '100%',
+                resizeMode: 'contain',
                 borderRadius: 50,
               }}
             />

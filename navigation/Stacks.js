@@ -12,6 +12,7 @@ import PartnerNotification from '../partner/PartnerNotification';
 import PartnerSettings from '../partner/settings/PartnerSettings';
 import UpdatePartnerProfile from '../partner/settings/UpdatePartnerProfile';
 import ChangePartnerPassword from '../partner/settings/ChangePartnerPassword';
+import Radius from '../partner/settings/Radius';
 
 export const Stacks = () => {
   const Stack = createStackNavigator();
@@ -179,6 +180,11 @@ export const settingStackPartner = () => {
         name="changepassword"
         component={ChangePartnerPassword}
         options={{title: 'Change Password'}}
+      />
+      <Stack.Screen
+        name="Radius"
+        component={Radius}
+        options={{title: 'Update Radius'}}
       />
       <Stack.Screen name="logout" component={Logout} />
     </Stack.Navigator>

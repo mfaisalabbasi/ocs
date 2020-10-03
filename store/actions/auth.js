@@ -254,7 +254,15 @@ export const registerSeller = user => async dispatch => {
         headers: {
           ContentType: 'application/json',
         },
-        body: JSON.stringify({name, email, phone, service, status: true}),
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          service,
+          status: true,
+          radius: 50,
+          DeviceToken: {},
+        }),
       });
     }
     if (res.error) {

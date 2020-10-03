@@ -9,6 +9,11 @@ import {
   NULL_SELLER,
   UPLOAD_PROFILE,
   UPDATE_PROFILE,
+  GET_NEAREST,
+  GET_NEARBY,
+  NULL_NEAREST,
+  REQUEST_CUSTOMER,
+  NULL_CUSTOMER,
 } from '../constant';
 
 const initialState = {
@@ -17,6 +22,9 @@ const initialState = {
   error: null,
   sellers: [],
   closeOne: {},
+  nearestUser: {},
+  nearestPartners: [],
+  requestcustomer: {},
 };
 
 const user = (state = initialState, action) => {
@@ -63,6 +71,26 @@ const user = (state = initialState, action) => {
         ...state,
         sellers: payload,
         loading: false,
+      };
+    case GET_NEAREST:
+    case NULL_NEAREST:
+      return {
+        ...state,
+        loading: false,
+        nearestUser: payload,
+      };
+    case GET_NEARBY:
+      return {
+        ...state,
+        loading: false,
+        nearestPartners: payload,
+      };
+    case REQUEST_CUSTOMER:
+    case NULL_CUSTOMER:
+      return {
+        ...state,
+        loading: false,
+        requestcustomer: payload,
       };
     case FAILED_USER:
     case FAILED_SELLERS:

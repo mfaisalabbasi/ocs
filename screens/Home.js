@@ -12,15 +12,20 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icooon from 'react-native-vector-icons/MaterialIcons';
 import Icoooon from 'react-native-vector-icons/Fontisto';
 import Geolocation from '@react-native-community/geolocation';
-import MapView, {Marker, Callout} from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import {useDispatch, useSelector} from 'react-redux';
-import {getUser, allSeller} from '../store/actions/user';
+import {
+  getUser,
+  allSeller,
+  getNear,
+  nearbyPartners,
+} from '../store/actions/user';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import ServicesModal from './ServicesModal';
 import {updateLocation} from '../store/actions/auth';
 import ProfileModal from './ProfileModal';
 import HaversineGeolocation from 'haversine-geolocation';
-
+import {findNearest, orderByDistance} from 'geolib';
 const Home = props => {
   //----------------------------------------------Navigation Setups----------------------------------------
 
@@ -69,9 +74,12 @@ const Home = props => {
   const [service, setservice] = useState('Choose');
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
+  const myloc = useSelector(state => state.user.user.location);
   const customer = useSelector(state => state.user.user);
   let sellers = useSelector(state => state.user.sellers);
   const loading = useSelector(state => state.user.loading);
+  const nearest = useSelector(state => state.user.nearestUser);
+
   useEffect(() => {
     dispatch(getUser(userid));
   }, []);
@@ -163,19 +171,27 @@ const Home = props => {
     longitude: mapstate.longitude,
     accuracy: mapstate.accuracy,
   };
-  let data = HaversineGeolocation.getClosestPosition(
-    currentPoint,
-    sellers,
-    'mi',
-  );
+
+  useEffect(() => {
+    const data = HaversineGeolocation.getClosestPosition(currentPoint, sellers);
+    let nearby = orderByDistance(myloc, sellers);
+    dispatch(nearbyPartners(nearby));
+    nearest.email ? null : dispatch(getNear(data));
+  }, [sellers]);
 
   const onConfirm = () => {
-    dispatch(allSeller(service));
+    dispatch(allSeller(mapstate, service));
+
     setconfirm(false);
     if (!loading) {
-      setTimeout(() => setopenprofile(true), 3000);
+      setTimeout(() => setopenprofile(true), 2500);
     }
   };
+
+  const mapReady = () => {
+    mymap.fitToSuppliedMarkers(['data'], {animated: true});
+  };
+  const uniqueid = nearest.email + Date.now();
 
   //---------------------------------------------------------------Return Section
   return (
@@ -203,23 +219,33 @@ const Home = props => {
               showsMyLocationButton={false}
               maxZoomLevel={18}
               showsCompass={false}
-              onMapReady={() =>
-                mymap.fitToSuppliedMarkers(['data'], {animated: true})
-              }
+              onMapReady={mapReady}
               on
               mapType={mapbtn.open ? 'satellite' : 'standard'}>
-              {sellers.map((seller, index) => (
+              {nearest.email ? (
                 <Marker
-                  coordinate={data}
-                  key={index}
+                  key={uniqueid}
+                  coordinate={nearest}
                   identifier={'data'}
-                  onPress={() => handleProfile(data)}>
+                  onPress={() => handleProfile(nearest)}>
                   <Image
-                    source={require('../assets/images/avatar.png')}
-                    style={{width: 30, height: 30}}
+                    onLoad={mapReady}
+                    source={
+                      nearest.profileUrl
+                        ? {uri: nearest.profileUrl}
+                        : require('../assets/images/avatar.png')
+                    }
+                    style={{
+                      flex: 1,
+                      width: 30,
+                      height: 30,
+                      resizeMode: 'cover',
+                      aspectRatio: 1,
+                      borderRadius: 100,
+                    }}
                   />
                 </Marker>
-              ))}
+              ) : null}
             </MapView>
           )}
         </View>
@@ -242,8 +268,8 @@ const Home = props => {
           </View>
         </TouchableNativeFeedback>
       </View>
-      {data.email ? (
-        <TouchableNativeFeedback onPress={() => handleProfile(data)}>
+      {nearest.email ? (
+        <TouchableNativeFeedback onPress={() => handleProfile(nearest)}>
           <View style={styles.selectOptions}>
             <Text style={styles.chooseBtn}>Open Profile</Text>
             <Icon
@@ -291,16 +317,14 @@ const Home = props => {
         setvisState={() => setstate(false)}
         selectFunc={onSelect}
       />
-
       <ProfileModal
         openprofile={openprofile}
         setopenprofile={() => setopenprofile(false)}
-        user={data}
+        user={nearest}
         curloc={currentLocation}
         setsrvc={setservice}
         customer={customer}
         localId={userid}
-        sellers={sellers}
       />
     </View>
   );

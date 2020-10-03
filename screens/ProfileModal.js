@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -17,6 +17,7 @@ import Icoon from 'react-native-vector-icons/Entypo';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   jobRequest,
+  nullNear,
   nullSeller,
   sendingNotification,
 } from '../store/actions/user';
@@ -35,6 +36,7 @@ const ProfileModal = props => {
     props.setsrvc('Choose');
     dispatch(nullSeller());
     setpress(false);
+    dispatch(nullNear());
   };
 
   PushNotification.configure({
@@ -142,9 +144,7 @@ const ProfileModal = props => {
           <View style={styles.model}>
             <View style={styles.titleView}>
               <Text style={styles.titleText}>
-                {props.user.service} is{' '}
-                {(props.user.haversine.distance * 1.60934).toFixed(2)} Km away
-                from you.
+                {props.user.service} is just away from you
               </Text>
             </View>
             <ScrollView
@@ -180,10 +180,12 @@ const ProfileModal = props => {
                             : require('../assets/images/profile.png')
                         }
                         style={{
-                          width: '90%',
-                          height: 100,
+                          flex: 1,
                           resizeMode: 'cover',
-                          borderRadius: 200,
+                          width: '100%',
+                          height: 100,
+                          aspectRatio: 1,
+                          borderRadius: 50,
                         }}
                       />
                       <Text style={styles.infoText}>
@@ -329,8 +331,6 @@ const ProfileModal = props => {
             <AvailblePartner
               openprofile={openprofile}
               setopenprofile={() => setopenprofile(false)}
-              sellers={props.sellers}
-              mypoint={props.user}
             />
           </View>
         )}

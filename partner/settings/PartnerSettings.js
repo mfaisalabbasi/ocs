@@ -53,7 +53,7 @@ const PartnerSettings = ({navigation}) => {
                 />
               </View>
               <View style={styles.input}>
-                <Text style={styles.txt}>Your Name:-</Text>
+                <Text style={styles.txt}>Update Account Info :-</Text>
                 <Text style={styles.txt}>
                   {user === null ? ocs : user.name}
                 </Text>
@@ -85,27 +85,23 @@ const PartnerSettings = ({navigation}) => {
               </View>
             </View>
           </TouchableNativeFeedback>
+
           <TouchableNativeFeedback
-            onPress={() =>
-              navigation.navigate('updateprofile', {
-                upname: user.name,
-                upemail: user.email,
-                upphone: user.phone,
-              })
-            }>
-            <View style={styles.inputs}>
+            onPress={() => navigation.navigate('Radius')}>
+            <View
+              style={{...styles.inputs, marginBottom: 5, marginVertical: -10}}>
               <View style={styles.icon}>
                 <Icon
                   type="FontAwesome"
-                  name="mobile-phone"
-                  color="gray"
-                  size={35}
+                  name="map-marker"
+                  color="#0A7DC9"
+                  size={25}
                 />
               </View>
               <View style={styles.input}>
-                <Text style={styles.txt}>Your Mobile:-</Text>
-                <Text style={styles.txt}>
-                  {user === null ? ocs : user.phone}
+                <Text
+                  style={{...styles.txt, color: '#0A7DC9', fontWeight: 'bold'}}>
+                  Choose Radius
                 </Text>
               </View>
             </View>
@@ -122,6 +118,7 @@ const PartnerSettings = ({navigation}) => {
               </View>
             </View>
           </TouchableNativeFeedback>
+
           <TouchableNativeFeedback
             onPress={() => navigation.navigate('logout')}>
             <View style={styles.inputs}>

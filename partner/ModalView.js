@@ -13,8 +13,11 @@ import {
 } from 'react-native';
 import Icoon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useDispatch} from 'react-redux';
+import {nullCustomer} from '../store/actions/user';
 
 const ModalView = props => {
+  const dispatch = useDispatch();
   const [press, setpress] = useState(false);
   const onCancel = () => {
     props.closeProfile();
@@ -22,6 +25,7 @@ const ModalView = props => {
     props.closeDirect();
     props.currentlocation();
     props.poli();
+    dispatch(nullCustomer());
   };
   const getDirect = () => {
     props.getDirection();
@@ -65,9 +69,11 @@ const ModalView = props => {
                       : require('../assets/images/profile.png')
                   }
                   style={{
+                    resizeMode: 'cover',
+                    aspectRatio: 1,
                     width: '100%',
                     height: 105,
-                    resizeMode: 'cover',
+
                     borderRadius: 200,
                   }}
                 />

@@ -17,6 +17,7 @@ const regPersist = {
   storage: AsyncStorage,
   blacklist: ['loading', 'error'],
 };
+
 const rootReducer = combineReducers({
   register: persistReducer(regPersist, register),
   user,

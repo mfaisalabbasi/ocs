@@ -1,3 +1,4 @@
+import {isPointWithinRadius} from 'geolib';
 import {
   GET_USER,
   FAILED_USER,
@@ -5,13 +6,16 @@ import {
   FAILED_SELLERS,
   START_LOADING,
   UPDATE_LOADING,
-  FAILED_CLOSE,
-  GET_CLOSE,
   NULL_SELLER,
   NOTIFICATION,
   NOTIFICATION_LOADING,
   UPLOAD_PROFILE,
   UPDATE_PROFILE,
+  GET_NEAREST,
+  GET_NEARBY,
+  NULL_NEAREST,
+  REQUEST_CUSTOMER,
+  NULL_CUSTOMER,
 } from '../constant';
 
 export const getUser = userid => async dispatch => {
@@ -90,10 +94,11 @@ export const customerProfile = (userid, profileUrl) => async dispatch => {
 
 //------------------------Getting Sellers
 
-export const allSeller = service => async dispatch => {
+export const allSeller = (custLocation, service) => async dispatch => {
   dispatch({
     type: START_LOADING,
   });
+  console.log('custooooooo loc====', custLocation);
   try {
     const req = await fetch(`https://on-click-s.firebaseio.com/sellers.json`);
     const res = await req.json();
@@ -107,9 +112,20 @@ export const allSeller = service => async dispatch => {
       const vl = Object.keys(res);
       vl.map(item => loaded.push(res[item]));
     }
-    const filterd = loaded.filter(
-      itm => itm.service === service.toLowerCase() && itm.status === true,
+    const filterd = await loaded.filter(
+      itm =>
+        itm.service === service.toLowerCase() &&
+        itm.status === true &&
+        isPointWithinRadius(
+          {latitude: custLocation.latitude, longitude: custLocation.longitude},
+          {
+            latitude: itm.latitude,
+            longitude: itm.longitude,
+          },
+          itm.radius * 1000,
+        ),
     );
+    console.log('filto =============================>', filterd);
     dispatch({
       type: GET_SELLERS,
       payload: filterd,
@@ -131,10 +147,44 @@ export const nullSeller = () => async dispatch => {
       payload: nullSell,
     });
   } catch (error) {
+    console.log('null seller', error);
+  }
+};
+
+//------------------------------------nulling seller
+export const nullNear = () => async dispatch => {
+  try {
+    const nullSell = {};
     dispatch({
-      type: FAILED_CLOSE,
-      payload: error,
+      type: NULL_NEAREST,
+      payload: nullSell,
     });
+  } catch (error) {
+    console.log('nnulling near', error);
+  }
+};
+
+//---------------------------------Nearest partner
+
+export const getNear = nearest => async dispatch => {
+  try {
+    dispatch({
+      type: GET_NEAREST,
+      payload: nearest,
+    });
+  } catch (error) {
+    console.log('nearest partner ', error);
+  }
+};
+//--------------------------------NearBy Partners List
+export const nearbyPartners = nearby => async dispatch => {
+  try {
+    dispatch({
+      type: GET_NEARBY,
+      payload: nearby,
+    });
+  } catch (error) {
+    console.log('nearby partners', error);
   }
 };
 
@@ -241,6 +291,21 @@ export const updateStatus = (userid, status) => async dispatch => {
   const res = await req.json();
 };
 
+//---------------------------updating status
+
+export const updateRadius = (userid, radius) => async dispatch => {
+  const req = await fetch(
+    `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+    {
+      method: 'patch',
+      ContentType: 'application/json',
+      body: JSON.stringify({radius: radius.toFixed()}),
+    },
+  );
+  const res = await req.json();
+};
+
+//----------------------sending Notification
 export const sendingNotification = (token, customerData) => async dispatch => {
   dispatch({type: NOTIFICATION_LOADING});
   try {
@@ -284,5 +349,31 @@ export const jobRequest = (userid, job) => async dispatch => {
     const res = await req.json();
   } catch (error) {
     console.log('job sendeing err', error);
+  }
+};
+
+//---------------------------Request customer data
+
+export const requestCustomer = customer => async dispatch => {
+  try {
+    dispatch({
+      type: REQUEST_CUSTOMER,
+      payload: customer,
+    });
+  } catch (error) {
+    console.log('req customer', error);
+  }
+};
+
+//------------------------------------nulling request customer
+export const nullCustomer = () => async dispatch => {
+  try {
+    const nullCust = {};
+    dispatch({
+      type: NULL_CUSTOMER,
+      payload: nullCust,
+    });
+  } catch (error) {
+    console.log('null customer', error);
   }
 };

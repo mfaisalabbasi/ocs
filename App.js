@@ -4,7 +4,6 @@ import Navigation from './navigation/Navigation';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './store/reducers/index';
-
 function App() {
   return (
     <Provider store={store}>

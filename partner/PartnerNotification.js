@@ -61,14 +61,7 @@ const PartnerNotification = ({navigation}) => {
       ListEmptyComponent={empty}
       data={loaded.reverse()}
       renderItem={itemData => (
-        <Box
-          dta={itemData.item}
-          navigate={() =>
-            navigation.navigate('Home', {
-              data: itemData.item,
-            })
-          }
-        />
+        <Box dta={itemData.item} navigate={() => navigation.navigate('Home')} />
       )}
       keyExtractor={(item, index) => 'key' + index}
     />

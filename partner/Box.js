@@ -7,15 +7,27 @@ import {
   StyleSheet,
 } from 'react-native';
 import moment from 'moment';
+import {useDispatch} from 'react-redux';
+import {requestCustomer} from '../store/actions/user';
 const Box = props => {
+  const dispatch = useDispatch();
+  const handlePress = () => {
+    dispatch(requestCustomer(props.dta));
+    props.navigate();
+  };
   return (
     <View style={styles.screen}>
-      <TouchableNativeFeedback onPress={props.navigate}>
+      <TouchableNativeFeedback onPress={handlePress}>
         <View style={styles.card}>
           <View style={styles.icon}>
             <Image
               source={require('../assets/images/bell.png')}
-              style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+              style={{
+                flex: 1,
+                width: '100%',
+                height: '100%',
+                resizeMode: 'contain',
+              }}
             />
           </View>
           <View style={styles.title}>

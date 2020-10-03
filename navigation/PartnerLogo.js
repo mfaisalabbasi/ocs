@@ -98,8 +98,11 @@ const PartnerLogo = props => {
                   : require('../assets/images/profile.png')
               }
               style={{
+                flex: 1,
                 width: '60%',
                 height: '100%',
+                resizeMode: 'cover',
+                aspectRatio: 1,
                 borderRadius: 100,
                 backgroundColor: '#EBF5FB',
               }}

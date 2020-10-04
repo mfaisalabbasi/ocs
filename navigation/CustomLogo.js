@@ -15,12 +15,14 @@ import ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {customerProfile} from '../store/actions/user';
+import {customerProfile, nullProfile} from '../store/actions/user';
 
 const CustomLogo = props => {
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
   const user = useSelector(state => state.user.user);
+  const er = useSelector(state => state.user.profileImgError);
+
   useEffect(() => {}, [user]);
   const ocs = 'On Click Services';
   const [filename, setfilename] = useState(null);
@@ -67,8 +69,6 @@ const CustomLogo = props => {
   };
   const imgPicker = () => {
     ImagePicker.showImagePicker(options, response => {
-      // console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -81,6 +81,7 @@ const CustomLogo = props => {
         setimage(source);
       }
     });
+    dispatch(nullProfile());
   };
 
   return (
@@ -110,6 +111,11 @@ const CustomLogo = props => {
                 backgroundColor: '#EBF5FB',
               }}
             />
+            {er ? (
+              <Text style={{fontFamily: 'ebrima', color: 'red', fontSize: 8}}>
+                Something went wrong try later
+              </Text>
+            ) : null}
           </View>
           <View style={styles.nameContainer}>
             <View style={styles.nameText}>

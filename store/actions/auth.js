@@ -124,8 +124,6 @@ export const loginAction = user => async dispatch => {
       },
     );
     const res = await signReq.json();
-    console.log('cust res', res);
-    const userid = res.localId;
     if (res.error) {
       dispatch({
         type: LOGIN_FAILED,
@@ -206,7 +204,6 @@ export const resetPassword = email => async dispatch => {
       },
     );
     const res = await req.json();
-    console.log('this is res of rest', res);
     if (res.error) {
       dispatch({
         type: RESET_PASSWORD_FAILED,
@@ -219,7 +216,6 @@ export const resetPassword = email => async dispatch => {
       });
     }
   } catch (error) {
-    console.log('fuck', error);
     dispatch({
       type: RESET_PASSWORD_FAILED,
       payload: error,
@@ -341,7 +337,6 @@ export const sellerLoginAction = user => async dispatch => {
       },
     );
     const res = await signReq.json();
-    const userid = res.localId;
     if (res.error) {
       dispatch({
         type: SELLER_LOGIN_FAILED,

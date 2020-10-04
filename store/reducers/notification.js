@@ -1,8 +1,13 @@
-import {NOTIFICATION, NOTIFICATION_LOADING} from '../constant';
+import {
+  NOTIFICATION,
+  NOTIFICATION_ERROR,
+  NOTIFICATION_LOADING,
+} from '../constant';
 
 const initialState = {
   loading: false,
   notification: null,
+  error: null,
 };
 
 const notification = (state = initialState, action) => {
@@ -18,6 +23,12 @@ const notification = (state = initialState, action) => {
         ...state,
         loading: false,
         notification: payload,
+      };
+    case NOTIFICATION_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
       };
     default:
       return state;

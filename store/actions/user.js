@@ -16,6 +16,10 @@ import {
   NULL_NEAREST,
   REQUEST_CUSTOMER,
   NULL_CUSTOMER,
+  NOTIFICATION_ERROR,
+  FAILED_UPDATE,
+  FAILED_PROFILE,
+  NULL_PROFILE,
 } from '../constant';
 
 export const getUser = userid => async dispatch => {
@@ -24,10 +28,12 @@ export const getUser = userid => async dispatch => {
       `https://on-click-s.firebaseio.com/customers/${userid}.json`,
     );
     const res = await req.json();
-    dispatch({
-      type: GET_USER,
-      payload: res,
-    });
+    res.error
+      ? dispatch({type: FAILED_USER, payload: res.error})
+      : dispatch({
+          type: GET_USER,
+          payload: res,
+        });
   } catch (error) {
     dispatch({
       type: FAILED_USER,
@@ -52,14 +58,19 @@ export const updateName = (userid, user) => async dispatch => {
       },
     );
     const res = await req.json();
-    dispatch({
-      type: UPDATE_PROFILE,
-      payload: res,
-    });
+    res.error
+      ? {
+          type: FAILED_UPDATE,
+          payload: 'res.error',
+        }
+      : dispatch({
+          type: UPDATE_PROFILE,
+          payload: res,
+        });
   } catch (error) {
     dispatch({
-      type: FAILED_USER,
-      payload: error,
+      type: FAILED_UPDATE,
+      payload: 'error',
     });
   }
 };
@@ -78,27 +89,35 @@ export const customerProfile = (userid, profileUrl) => async dispatch => {
       },
     );
     const res = await req.json();
-    console.log('resooo', res);
-    dispatch({
-      type: UPLOAD_PROFILE,
-      payload: res.profileUrl,
-    });
+    res.error
+      ? dispatch({
+          type: FAILED_PROFILE,
+          payload: res.error,
+        })
+      : dispatch({
+          type: UPLOAD_PROFILE,
+          payload: res.profileUrl,
+        });
   } catch (error) {
-    console.log('uploading error');
     dispatch({
-      type: FAILED_USER,
+      type: FAILED_PROFILE,
       payload: error,
     });
   }
 };
 
+export const nullProfile = () => dispatch => {
+  dispatch({
+    type: NULL_PROFILE,
+    payload: null,
+  });
+};
 //------------------------Getting Sellers
 
 export const allSeller = (custLocation, service) => async dispatch => {
   dispatch({
     type: START_LOADING,
   });
-  console.log('custooooooo loc====', custLocation);
   try {
     const req = await fetch(`https://on-click-s.firebaseio.com/sellers.json`);
     const res = await req.json();
@@ -111,25 +130,32 @@ export const allSeller = (custLocation, service) => async dispatch => {
     } else {
       const vl = Object.keys(res);
       vl.map(item => loaded.push(res[item]));
+      const filterd = loaded.filter(
+        itm =>
+          itm.service === service.toLowerCase() &&
+          itm.status === true &&
+          isPointWithinRadius(
+            {
+              latitude: custLocation.latitude,
+              longitude: custLocation.longitude,
+            },
+            {
+              latitude: itm.latitude,
+              longitude: itm.longitude,
+            },
+            itm.radius * 1000,
+          ),
+      );
+      filterd.length < 1
+        ? dispatch({
+            type: FAILED_SELLERS,
+            payload: error,
+          })
+        : dispatch({
+            type: GET_SELLERS,
+            payload: filterd,
+          });
     }
-    const filterd = await loaded.filter(
-      itm =>
-        itm.service === service.toLowerCase() &&
-        itm.status === true &&
-        isPointWithinRadius(
-          {latitude: custLocation.latitude, longitude: custLocation.longitude},
-          {
-            latitude: itm.latitude,
-            longitude: itm.longitude,
-          },
-          itm.radius * 1000,
-        ),
-    );
-    console.log('filto =============================>', filterd);
-    dispatch({
-      type: GET_SELLERS,
-      payload: filterd,
-    });
   } catch (error) {
     dispatch({
       type: FAILED_SELLERS,
@@ -196,10 +222,15 @@ export const getPartner = userid => async dispatch => {
       `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
     );
     const res = await req.json();
-    dispatch({
-      type: GET_USER,
-      payload: res,
-    });
+    res.error
+      ? dispatch({
+          type: FAILED_USER,
+          payload: res.error,
+        })
+      : dispatch({
+          type: GET_USER,
+          payload: res,
+        });
   } catch (error) {
     dispatch({
       type: FAILED_USER,
@@ -224,15 +255,19 @@ export const updatePartner = (userid, user) => async dispatch => {
       },
     );
     const res = await req.json();
-    console.log('my fucki', res);
-    dispatch({
-      type: UPDATE_PROFILE,
-      payload: res,
-    });
+    res.error
+      ? dispatch({
+          type: FAILED_UPDATE,
+          payload: 'res.error',
+        })
+      : dispatch({
+          type: UPDATE_PROFILE,
+          payload: res,
+        });
   } catch (error) {
     dispatch({
-      type: FAILED_USER,
-      payload: error,
+      type: FAILED_UPDATE,
+      payload: 'res.error',
     });
   }
 };
@@ -251,15 +286,18 @@ export const partnerProfile = (userid, profileUrl) => async dispatch => {
       },
     );
     const res = await req.json();
-    console.log('resooo', res);
-    dispatch({
-      type: UPLOAD_PROFILE,
-      payload: res.profileUrl,
-    });
+    res.error
+      ? dispatch({
+          type: FAILED_PROFILE,
+          payload: res.error,
+        })
+      : dispatch({
+          type: UPLOAD_PROFILE,
+          payload: res.profileUrl,
+        });
   } catch (error) {
-    console.log('uploading error');
     dispatch({
-      type: FAILED_USER,
+      type: FAILED_PROFILE,
       payload: error,
     });
   }
@@ -322,18 +360,33 @@ export const sendingNotification = (token, customerData) => async dispatch => {
         direct_book_ok: true,
         notification: {
           title: 'Dear Partner,',
-          body: `${customerData.name} is looking for your service !!!`,
+          body: `${
+            customerData.name
+          } is looking for your service, check details !!!`,
           sound: 'default',
         },
         data: customerData,
       }),
     });
     const reso = await req.json();
-    reso.error ? null : dispatch({type: NOTIFICATION, payload: reso});
-    console.log('mynotireso======= >', reso);
+    reso.error
+      ? dispatch({type: NOTIFICATION_ERROR, payload: 'failed notification'})
+      : dispatch({type: NOTIFICATION, payload: reso});
   } catch (error) {
-    console.log('notification sending err ..', error);
+    dispatch({
+      type: NOTIFICATION_ERROR,
+      payload: 'failed notification',
+    });
   }
+};
+
+//-------------------null noti
+export const nullNotification = () => dispatch => {
+  const error = null;
+  dispatch({
+    type: NOTIFICATION_ERROR,
+    payload: error,
+  });
 };
 
 export const jobRequest = (userid, job) => async dispatch => {

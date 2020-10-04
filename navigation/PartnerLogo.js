@@ -15,12 +15,13 @@ import ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {partnerProfile} from '../store/actions/user';
+import {nullProfile, partnerProfile} from '../store/actions/user';
 
 const PartnerLogo = props => {
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
   const user = useSelector(state => state.user.user);
+  const er = useSelector(state => state.user.profileImgError);
   useEffect(() => {}, [user]);
   const ocs = 'On Click Services';
   const [filename, setfilename] = useState(null);
@@ -78,6 +79,7 @@ const PartnerLogo = props => {
         setimage(source);
       }
     });
+    dispatch(nullProfile());
   };
 
   return (
@@ -107,6 +109,11 @@ const PartnerLogo = props => {
                 backgroundColor: '#EBF5FB',
               }}
             />
+            {er ? (
+              <Text style={{fontFamily: 'ebrima', color: 'red', fontSize: 8}}>
+                Something went wrong try later.
+              </Text>
+            ) : null}
           </View>
           <View style={styles.nameContainer}>
             <View style={styles.nameText}>

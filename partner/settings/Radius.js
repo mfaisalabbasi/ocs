@@ -21,6 +21,9 @@ const Radius = () => {
     setcheck(false);
     setvalue(props);
   };
+  useEffect(() => {
+    setvalue(parseInt(current, 10));
+  }, []);
   return (
     <View style={styles.screen}>
       <View style={styles.top}>

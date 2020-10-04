@@ -14,13 +14,19 @@ import {
   NULL_NEAREST,
   REQUEST_CUSTOMER,
   NULL_CUSTOMER,
+  FAILED_UPDATE,
+  FAILED_PROFILE,
+  NULL_PROFILE,
 } from '../constant';
 
 const initialState = {
   loading: false,
   user: {},
   error: null,
+  updateError: null,
+  profileImgError: null,
   sellers: [],
+  sellersError: null,
   closeOne: {},
   nearestUser: {},
   nearestPartners: [],
@@ -71,6 +77,7 @@ const user = (state = initialState, action) => {
         ...state,
         sellers: payload,
         loading: false,
+        sellersError: null,
       };
     case GET_NEAREST:
     case NULL_NEAREST:
@@ -92,8 +99,31 @@ const user = (state = initialState, action) => {
         loading: false,
         requestcustomer: payload,
       };
-    case FAILED_USER:
+    case FAILED_UPDATE:
+      return {
+        ...state,
+        updateError: payload,
+        loading: false,
+      };
+    case FAILED_PROFILE:
+      return {
+        ...state,
+        loading: false,
+        profileImgError: payload,
+      };
+    case NULL_PROFILE:
+      return {
+        ...state,
+        loading: false,
+        profileImgError: payload,
+      };
     case FAILED_SELLERS:
+      return {
+        ...state,
+        sellersError: payload,
+        loading: false,
+      };
+    case FAILED_USER:
     case FAILED_CLOSE:
       return {
         ...state,

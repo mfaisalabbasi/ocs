@@ -183,9 +183,9 @@ const Home = props => {
     dispatch(allSeller(mapstate, service));
 
     setconfirm(false);
-    if (!loading) {
-      setTimeout(() => setopenprofile(true), 2500);
-    }
+    // if (!loading) {
+    //   setopenprofile(true);
+    // }
   };
 
   const mapReady = () => {
@@ -325,6 +325,8 @@ const Home = props => {
         setsrvc={setservice}
         customer={customer}
         localId={userid}
+        stprofile={() => setopenprofile(true)}
+        sellers={sellers}
       />
     </View>
   );

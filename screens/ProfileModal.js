@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   jobRequest,
   nullNear,
+  nullNotification,
   nullSeller,
   sendingNotification,
 } from '../store/actions/user';
@@ -29,6 +30,18 @@ import AvailblePartner from './AvailblePartner';
 const ProfileModal = props => {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.notification.loading);
+  const err = useSelector(state => state.notification.error);
+  const er = useSelector(state => state.user.sellersError);
+  useEffect(() => {
+    props.user.email && props.stprofile();
+  }, [props.user]);
+  useEffect(() => {
+    err && props.stprofile();
+  }, [err]);
+  useEffect(() => {
+    er && props.stprofile();
+  }, [er]);
+
   const [press, setpress] = useState(false);
   const cancelFunc = () => {
     props.setopenprofile();
@@ -37,6 +50,10 @@ const ProfileModal = props => {
     dispatch(nullSeller());
     setpress(false);
     dispatch(nullNear());
+  };
+  const clearNotification = () => {
+    setpress(true);
+    dispatch(nullNotification());
   };
 
   PushNotification.configure({
@@ -94,10 +111,12 @@ const ProfileModal = props => {
       onRequestClose={props.setopenprofile}
       animationType="slide">
       <View style={styles.modelContainer}>
-        {!props.user.email ? (
+        {!props.user.email || er || err ? (
           <View style={styles.model}>
             <View style={styles.titleView}>
-              <Text style={styles.titleText}>oops .!.</Text>
+              <Text style={styles.titleText}>
+                {er ? 'oops check your connection .!.' : 'oops .!.'}
+              </Text>
             </View>
             <ScrollView
               contentContainerStyle={{
@@ -119,21 +138,23 @@ const ProfileModal = props => {
                   color="#0340A0"
                   size={50}
                 />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: '#0342A5',
-                    fontFamily: 'ebrima',
-                    marginVertical: 5,
-                  }}>
-                  Partner Not Available Right Now
+                <Text style={{...styles.errorText, marginBottom: -5}}>
+                  {err && 'Something went wrong '}
                 </Text>
-                <TouchableNativeFeedback onPress={cancelFunc}>
+                <Text style={{...styles.errorText, fontSize: 12}}>
+                  {er && 'Something went wrong, Partner not Found !!!'}
+                </Text>
+                <TouchableNativeFeedback
+                  onPress={err ? clearNotification : cancelFunc}>
                   <View
-                    style={{...styles.btn, width: '90%', marginVertical: 10}}>
+                    style={{
+                      ...styles.btn,
+                      width: '90%',
+                      marginVertical: 5,
+                      padding: 10,
+                    }}>
                     <Text style={{...styles.titleText, fontSize: 15}}>
-                      Try Again Later
+                      {err ? 'Call him Directly' : 'Try Again Later'}
                     </Text>
                   </View>
                 </TouchableNativeFeedback>
@@ -403,6 +424,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 1,
+  },
+  errorText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0342A5',
+    fontFamily: 'ebrima',
+    marginVertical: 5,
   },
 });
 

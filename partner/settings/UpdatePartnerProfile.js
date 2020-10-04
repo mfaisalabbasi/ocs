@@ -24,6 +24,7 @@ const UpdatePartnerProfile = ({route, navigation}) => {
   const dispatch = useDispatch();
   const userid = useSelector(state => state.register.user.localId);
   const loading = useSelector(state => state.user.loading);
+  const er = useSelector(state => state.user.updateError);
 
   const handleUpdate = () => {
     if (!name || !phone) {
@@ -51,9 +52,11 @@ const UpdatePartnerProfile = ({route, navigation}) => {
           </View>
         ) : null}
 
-        {err ? (
+        {err || er ? (
           <Text style={styles.redText}>
-            Error :- You can't update Profile without adding valid Value
+            {er
+              ? ` Error :- Something went wrong try later `
+              : ` Error :- You can't update Profile without adding valid Value`}
           </Text>
         ) : null}
         <View style={styles.inputs}>

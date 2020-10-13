@@ -25,7 +25,10 @@ import {
 export const getUser = userid => async dispatch => {
   try {
     const req = await fetch(
-      `https://on-click-s.firebaseio.com/customers/${userid}.json`,
+      `https://on-click-s.firebaseio.com/customers/${userid}.json`,{headers:{
+        Authorization:
+        'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+      }}
     );
     const res = await req.json();
     res.error
@@ -53,6 +56,9 @@ export const updateName = (userid, user) => async dispatch => {
         method: 'patch',
         headers: {
           ContentType: 'application/json',
+          Authorization:
+          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+        
         },
         body: JSON.stringify(user),
       },
@@ -84,6 +90,9 @@ export const customerProfile = (userid, profileUrl) => async dispatch => {
         method: 'patch',
         headers: {
           ContentType: 'application/json',
+          Authorization:
+          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+        
         },
         body: JSON.stringify({profileUrl}),
       },
@@ -219,7 +228,13 @@ export const nearbyPartners = nearby => async dispatch => {
 export const getPartner = userid => async dispatch => {
   try {
     const req = await fetch(
-      `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+      `https://on-click-s.firebaseio.com/sellers/${userid}.json`,{
+        headers:{
+          Authorization:
+          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+        
+        }
+      }
     );
     const res = await req.json();
     res.error
@@ -250,6 +265,9 @@ export const updatePartner = (userid, user) => async dispatch => {
         method: 'patch',
         headers: {
           ContentType: 'application/json',
+          Authorization:
+          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+        
         },
         body: JSON.stringify(user),
       },
@@ -281,6 +299,9 @@ export const partnerProfile = (userid, profileUrl) => async dispatch => {
         method: 'patch',
         headers: {
           ContentType: 'application/json',
+          Authorization:
+          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+        
         },
         body: JSON.stringify({profileUrl}),
       },
@@ -308,7 +329,12 @@ export const partnerId = userid => async dispatch => {
     `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
     {
       method: 'patch',
-      ContentType: 'application/json',
+      headers:{
+
+      
+      ContentType: 'application/json', Authorization:
+      'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+    },
       body: JSON.stringify({partnerKey: userid}),
     },
   );
@@ -322,7 +348,12 @@ export const updateStatus = (userid, status) => async dispatch => {
     `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
     {
       method: 'patch',
-      ContentType: 'application/json',
+      headers:{
+
+      
+        ContentType: 'application/json', Authorization:
+        'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+      },
       body: JSON.stringify({status: status}),
     },
   );
@@ -336,7 +367,12 @@ export const updateRadius = (userid, radius) => async dispatch => {
     `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
     {
       method: 'patch',
-      ContentType: 'application/json',
+      headers:{
+
+      
+        ContentType: 'application/json', Authorization:
+        'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+      },
       body: JSON.stringify({radius: radius.toFixed()}),
     },
   );
@@ -395,7 +431,12 @@ export const jobRequest = (userid, job) => async dispatch => {
       `https://on-click-s.firebaseio.com/sellers/${userid}/jobs.json`,
       {
         method: 'post',
-        ContentType: 'application/json',
+        headers:{
+
+      
+          ContentType: 'application/json', Authorization:
+          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
+        },
         body: JSON.stringify(job),
       },
     );

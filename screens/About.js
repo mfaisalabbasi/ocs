@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  StatusBar,
   ScrollView,
   Image,
 } from 'react-native';
@@ -30,25 +29,21 @@ const About = props => {
       <View style={styles.container}>
         <View style={styles.img}>
           <Image
-            source={require('../assets/images/about.png')}
-            style={{width: '100%', height: '100%'}}
+            source={require('../assets/images/logo.png')}
+            style={{width: '80%',resizeMode:'center', marginHorizontal:10}}
           />
         </View>
         <View style={styles.content}>
           <Text style={{lineHeight: 20, fontFamily: 'ebrima'}}>
-            <Text style={{fontWeight: 'bold', fontFamily: 'ebrima'}}>
+            <Text style={{fontWeight: 'bold', fontFamily: 'ebrima', color:'#498DF6'}}>
               On{'  '} Click{'  '} Services{'  '} (OCS)
             </Text>
             {'  '}
-            is non-partisan, non-political and non-governmental reasearch
-            orgnization based in islamabad. The SRI endeavors to create better
-            understanding about security , counter terrorism, Strategic and
-            social issues, and ongoing conflicts in the region among the
-            conserned stackholder through undertaking independent, impartial and
-            objective research and analysis. The SRI aspires to create awareness
-            among all segments of the pakistani society and government to
-            jointly strive for peaceful, tolerant and progressive Pakistan with
-            the help of short videos and documenttaries.
+            is is a platform that help needy people to get doorstep services by just using some smart phone clicks, and OCS also
+            help skillful person that are looking for job nearby.
+            it's free free of cost you just need to choose service that you are looking for and ocs will show you
+            providers profile nearby you in just few seconds.
+            Or if You want to be a OCS partner, you just need to signing into Partner section with your specific skill and OCS will take care of you for comfort and nearby job.
           </Text>
         </View>
       </View>
@@ -73,7 +68,9 @@ const styles = StyleSheet.create({
   },
   img: {
     width: '100%',
-    height: 200,
+    height: 120,
+    justifyContent:'center',
+    
   },
   content: {
     width: '100%',

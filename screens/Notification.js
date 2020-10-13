@@ -39,7 +39,7 @@ const Notification = ({navigation}) => {
           <View style={styles.title}>
             
             <Text style={styles.body}>
-           <Text style={styles.head}>Dear Customer,</Text> Thanks for Signing Here, OCS will try best to serve you!.
+           <Text style={styles.head}>Dear Customer,</Text> Thanks for Signing Here, OCS will try best to serve you.
            
             </Text>
             <Text style={{fontWeight:'bold',fontSize:12}}>[ {moment().format('MMMM Do YYYY, h:mm:ss a')} ]</Text>

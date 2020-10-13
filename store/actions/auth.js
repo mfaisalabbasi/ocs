@@ -21,6 +21,10 @@ export const registerCustomer = user => async dispatch => {
   dispatch({type: START_LOADING_LOGIN});
   try {
     const displayName = 'customer';
+    const verification = 'unverified';
+    const date = Date.now()
+    const AccountStatus = 'open'
+    const Devicetoken = {os: 'default', token: 'not defined'};
     const {email, password, phone, name} = user;
     const authUser = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
@@ -29,7 +33,12 @@ export const registerCustomer = user => async dispatch => {
         headers: {
           ContentType: 'application/json',
         },
-        body: JSON.stringify({email, password, displayName}),
+        body: JSON.stringify({
+          email,
+          password,
+          displayName,
+          
+        }),
       },
     );
     const res = await authUser.json();
@@ -42,7 +51,8 @@ export const registerCustomer = user => async dispatch => {
           headers: {
             ContentType: 'application/json',
           },
-          body: JSON.stringify({name, email, phone}),
+          body: JSON.stringify({name, email, phone,verification,
+            Devicetoken,date,AccountStatus}),
         },
       );
     }
@@ -231,6 +241,10 @@ export const registerSeller = user => async dispatch => {
   dispatch({type: START_LOADING_LOGIN});
   try {
     const {name, email, phone, service, password} = user;
+    const verification = 'unverified';
+    const AccountStatus = 'open'
+    const date = Date.now()
+    const Devicetoken = {os: 'default', token: 'not defined'};
     const authUser = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfVRLKqj_hBKc9HSuji_ujl0NEW-opQVE',
       {
@@ -257,7 +271,10 @@ export const registerSeller = user => async dispatch => {
           service,
           status: true,
           radius: 50,
-          DeviceToken: {},
+          Devicetoken,
+          verification,
+          date,
+          AccountStatus
         }),
       });
     }

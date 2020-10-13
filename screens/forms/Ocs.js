@@ -18,10 +18,9 @@ const Ocs = ({navigation}) => {
         <View style={styles.imgView}>
           <Image
             source={require('../../assets/images/logo.png')}
-            style={{width: 150, height: 100}}
+            style={{width: '50%', height: '100%', resizeMode: 'center'}}
           />
         </View>
-        <Text style={styles.title}>Welcome to ocs</Text>
         <TouchableNativeFeedback onPress={() => navigation.navigate('Login')}>
           <View style={styles.btn}>
             <Text style={styles.btnText}>Become OCS Customer</Text>
@@ -53,24 +52,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imgView: {
-    width: 160,
+    width: '90%',
     height: 110,
-    marginVertical: 5,
+    marginVertical: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-    fontFamily: 'ebrima',
-    marginVertical: 5,
-    fontSize: 12,
-    color: '#2C7AF2',
-  },
-
   btn: {
     width: '90%',
     height: 50,
     backgroundColor: '#2C7AF2',
-    marginVertical: 5,
+    marginBottom: 8,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomRightRadius: 20,

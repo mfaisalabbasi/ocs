@@ -139,10 +139,24 @@ const Register = ({navigation}) => {
                 }}>
                 <Picker.Item label="Choose service" value="undefined" />
                 <Picker.Item label="Electration" value="electration" />
+                <Picker.Item label="Car Mechanic" value="car mechanic" />
                 <Picker.Item label="Plumber" value="plumber" />
-                <Picker.Item label="Mechanics" value="mechanics" />
                 <Picker.Item label="Carpentar" value="carpenter" />
-              </Picker>
+                <Picker.Item label="Ac Technician" value="ac technician" />
+                <Picker.Item label="Construction" value="construction" />
+                <Picker.Item label="Welding Service" value="welding service" />
+                <Picker.Item label="Light Decoration" value="light decoration" />
+                <Picker.Item label="Interior Design" value="interior design" />
+                <Picker.Item label="Teacher/Tutor" value="teacher/tutor" />
+                <Picker.Item label="Water Tanker" value="water tanker" />
+                <Picker.Item label="Saloon" value="saloon" />
+                <Picker.Item label="First Aid" value="first aid" />
+                <Picker.Item label="Pick & Drop" value="pick & drop" />
+                <Picker.Item label="Maids" value="maids" />
+                <Picker.Item label="Painter" value="painter" />
+                <Picker.Item label="Marbel/Tile Fixer" value="marbel/tile fixer" />
+                <Picker.Item label="Drivers" value="drivers" />
+</Picker>
             </View>
           </Fragment>
         ) : (

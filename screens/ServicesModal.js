@@ -1,50 +1,41 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import {
   StyleSheet,
   View,
-  TouchableNativeFeedback,
-  Text,
   Modal,
   Dimensions,
-  ScrollView,
+  TextInput,
   Image,
   StatusBar,
+  FlatList
 } from 'react-native';
-import Icoon from 'react-native-vector-icons/FontAwesome';
-
+import Box from './Box'
+import Icon from 'react-native-vector-icons/AntDesign';
 const ModalPop = props => {
-  const services = [
-    {
-      name: 'Mechanics',
-      color: 'blue',
-      icon: 'gears',
-    },
-    {
-      name: 'Electration',
-      color: '#E67E22',
-      icon: 'lightbulb-o',
-    },
-    {
-      name: 'Plumber',
-      color: '#B401A7',
-      icon: 'wrench',
-    },
-    {
-      name: 'First Aid',
-      color: 'red',
-      icon: 'heartbeat',
-    },
-    {
-      name: 'Carpenter',
-      color: 'green',
-      icon: 'tree',
-    },
-    {
-      name: 'Saloon',
-      color: '#321C31',
-      icon: 'cut',
-    },
-  ];
+  const [services, setservices] = useState([])
+  const [filterServices,setfilterServices] = useState([])
+  const fetchServices =  async () => {
+    const req = await fetch(`https://on-click-s.firebaseio.com/services.json`)
+    const res = await req.json()
+    let loaded = [];
+    const vl = Object.keys(res);
+    vl.map(item => loaded.push(res[item]));
+    setservices(loaded)
+    setfilterServices(loaded)
+  }
+  useEffect(() => {
+   
+    fetchServices()
+  }, [])
+
+const handleSearch = event =>{
+ const filterData = filterServices.filter(item=>{
+   return item.name.toLowerCase().includes(event.toLowerCase())
+ })
+
+ setservices(filterData)
+}
+  
   return (
     <Modal
       transparent={true}
@@ -55,51 +46,35 @@ const ModalPop = props => {
         <StatusBar backgroundColor="#34495E" barStyle="light-content" />
         <View style={styles.model}>
           <View
-            style={{
-              width: '100%',
-              height: '17%',
-              backgroundColor: '#3498DB',
-              justifyContent: 'center',
-              alignItems: 'center',
-              elevation: 5,
-            }}>
-            <Image
-              source={require('../assets/images/choose.png')}
-              style={{
-                width: '90%',
-                height: '100%',
-                resizeMode: 'contain',
-                borderRadius: 50,
-              }}
-            />
+            style={styles.header}>
+            <View style={styles.outer}>
+            <View style={styles.inner}>
+            <Icon
+            type="AntDesign"
+            name="search1"
+            color='#3498DB'
+            size={20}
+          />
           </View>
-          <ScrollView
-            contentContainerStyle={styles.scrollStyle}
-            showsVerticalScrollIndicator={false}>
-            {services.map((src, index) => (
-              <TouchableNativeFeedback
-                onPress={() => props.selectFunc(src.name)}
-                key={index}>
-                <View style={styles.item}>
-                  <View style={styles.icon2}>
-                    <Icoon
-                      type="FontAwesome"
-                      name={src.icon}
-                      color={src.color}
-                      size={40}
-                    />
-                  </View>
-                  <View style={styles.title}>
-                    <Text style={styles.titTxt}>{src.name}</Text>
-                    <Text style={styles.smTxt}>
-                      Looking for {src.name} ? it's just one click away from you
-                      now !!!
-                    </Text>
-                  </View>
-                </View>
-              </TouchableNativeFeedback>
-            ))}
-          </ScrollView>
+            <TextInput
+            title='Search'
+            placeholder='Type service here ...'
+            placeholderTextColor='#3498DB'
+            onChangeText={handleSearch}
+            style={{width:'85%',paddingHorizontal:2,marginLeft:2}}
+          />
+        
+            </View>
+            
+          </View>
+        
+            <FlatList data={services}   renderItem={itemData => (
+            <Box src={itemData.item} func={props.selectFunc} key={itemData.item.name} />
+      )}
+      keyExtractor={(item, index) => 'key' + index} numColumns={3} showsVerticalScrollIndicator={false} />
+     
+            
+          
         </View>
       </View>
     </Modal>
@@ -115,12 +90,6 @@ const styles = StyleSheet.create({
     zIndex: -1,
     flexDirection: 'row',
   },
-  scrollStyle: {
-    width: Dimensions.get('window').width,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
   model: {
     backgroundColor: '#F8F9F9',
     height: Dimensions.get('window').height,
@@ -128,54 +97,41 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
     elevation: 2,
+    justifyContent:'center',
+    alignItems:'center'
+    
   },
-  titleView: {
+  header:{
     width: '100%',
+    height: 75,
+    backgroundColor: '#3498DB',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 3,
+    elevation: 5,
   },
-  titleText: {
-    color: '#2257A9',
-    fontFamily: 'ebrima',
-    fontWeight: 'bold',
+  img:{
+    width: '90%',
+    height:'40%',
+    borderRadius: 50,
+    marginVertical:5
+  }, 
+  inner:{
+    width:'15%'
+    ,height:'100%',
+    justifyContent:'center',
+    alignItems:'flex-end'
   },
-  item: {
-    width: '45%',
-    height: 150,
-    margin: 5,
-    elevation: 1.2,
-    marginTop: 15,
-    borderRadius: 10,
-    overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
-  },
-  icon2: {
-    width: '100%',
-    height: '40%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    width: '100%',
-    height: '60%',
-    margin: 2,
-    alignItems: 'center',
-  },
-  titTxt: {
-    fontFamily: 'ebrima',
-    fontWeight: 'bold',
-    color: '#2257A9',
-  },
-  smTxt: {
-    fontFamily: 'ebrima',
-    fontSize: 10,
-    padding: 5,
-    color: 'gray',
-  },
+  outer:{width:'80%',
+   flexDirection:'row',
+   justifyContent:'space-around',
+   alignItems:'center', 
+   backgroundColor:'#FFFFFF', 
+   height:'50%',
+   borderRadius:20, 
+   marginVertical:2,
+   overflow:'hidden'}
+  
+  
 });
 
 export default ModalPop;

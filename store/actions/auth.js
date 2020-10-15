@@ -52,7 +52,7 @@ export const registerCustomer = user => async dispatch => {
             ContentType: 'application/json',
           },
           body: JSON.stringify({name, email, phone,verification,
-            Devicetoken,date,AccountStatus}),
+            Devicetoken,date,AccountStatus,customerId:userId}),
         },
       );
     }

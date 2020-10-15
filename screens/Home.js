@@ -199,7 +199,7 @@ const Home = props => {
       <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
       {loading ? (
         <View style={styles.indicator}>
-         <Image source={require('../assets/images/spinner2.gif')} style={{width:100,height:100}} />
+         <Image source={require('../assets/images/spinner2.gif')} style={{width:50,height:50}} />
           <Text style={styles.indicatorTxt}>
             Looking for {service} service.
           </Text>

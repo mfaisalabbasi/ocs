@@ -32,8 +32,7 @@ const Box = props => {
           </View>
           <View style={styles.title}>
             <Text style={styles.body}>
-              <Text style={styles.head}>{props.dta.name},</Text> is looking for
-              your service, kindly check further details.
+              <Text style={styles.head}>{props.dta.name},</Text> {props.dta.msg ? props.dta.msg :'is looking for your service, kindly check further details.'}
             </Text>
             <Text style={{fontWeight: 'bold', fontSize: 12}}>
               [ {moment(props.dta.date).fromNow()} ]

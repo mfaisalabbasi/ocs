@@ -18,9 +18,9 @@ function App() {
     
       isLoaded={loading}
       logoImage={require('./assets/images/icon.png')}
-      backgroundColor={'#498DF6'}
-      logoHeight={150}
-      logoWidth={Dimensions.get('screen').width / 1.5}>
+      backgroundColor={'#006AFF'}
+      logoHeight={300}
+      logoWidth={Dimensions.get('screen').width / 1}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Navigation />

@@ -427,16 +427,12 @@ export const nullNotification = () => dispatch => {
 
 export const jobRequest = (userid, job) => async dispatch => {
   try {
+    
     const req = await fetch(
       `https://on-click-s.firebaseio.com/sellers/${userid}/jobs.json`,
       {
         method: 'post',
-        headers:{
-
-      
-          ContentType: 'application/json', Authorization:
-          'key=AAAAuLwgx98:APA91bEHs_XI72VjkoOYNXrERce2paTgLcc0_xDic60YQMSWOkKSJ2DoEJBUm4IATBuVCA2ft81bIFbj6legdM-KjwQmDUnhbSQAjfvPlGpPQ6x_LbGQKI0D0UtNKrdUeCi88ug-lD1f',
-        },
+        ContentType: 'application/json', 
         body: JSON.stringify(job),
       },
     );

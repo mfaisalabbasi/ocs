@@ -138,7 +138,7 @@ const Register = ({navigation}) => {
                   });
                 }}>
                 <Picker.Item label="Choose service" value="undefined" />
-                <Picker.Item label="Electration" value="electration" />
+                <Picker.Item label="Electrician" value="electrician" />
                 <Picker.Item label="Car Mechanic" value="car mechanic" />
                 <Picker.Item label="Plumber" value="plumber" />
                 <Picker.Item label="Carpentar" value="carpenter" />

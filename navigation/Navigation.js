@@ -10,6 +10,7 @@ import SellerLogin from '../screens/forms/SellerLogin';
 import ResetPassword from '../screens/forms/ResetPassword';
 import Ocs from '../screens/forms/Ocs';
 
+
 const Navigation = props => {
   const authenticated = useSelector(state => state.register.authentication);
 
@@ -22,10 +23,12 @@ const Navigation = props => {
         }}>
         {authenticated ? (
           <>
+          
             <Stack.Screen name="draw" component={Drawer} />
           </>
         ) : (
           <>
+          
             <Stack.Screen name="ocs" component={Ocs} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SellerLogin" component={SellerLogin} />

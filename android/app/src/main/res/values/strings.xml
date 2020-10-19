@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ocs</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">YpkanC-SojhIWgiMuUFDDume9haRn8tVx9qT4</string>
 </resources>

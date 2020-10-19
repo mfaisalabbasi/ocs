@@ -102,8 +102,20 @@ const ProfileModal = props => {
   const [openprofile, setopenprofile] = useState(false);
   const checkAvailble = () => {
     setopenprofile(true);
+    setpress(false)
   };
+//---------Reverse geocode
+const [address, setaddress] = useState(null)
+const fetchNearby = async () => {
+  const req = await fetch(`https://us1.locationiq.com/v1/reverse.php?key=pk.6ae5458d22712d8adf1548f4610d6784&lat=${props.user.latitude}&lon=${props.user.longitude}&format=json`)
 
+ const res = await req.json()
+ setaddress(res.display_name)
+}
+useEffect(() => {
+fetchNearby()
+ 
+}, [props.user.email])
   return (
     <Modal
       transparent={true}
@@ -245,23 +257,23 @@ const ProfileModal = props => {
                       <View style={styles.titles}>
                         <Text style={styles.infoText}>
                           <Icoon
-                            type="Entypo"
-                            name="email"
-                            color="#0340A0"
-                            size={18}
-                          />{' '}
-                          :- {props.user.email}
-                        </Text>
-                      </View>
-                      <View style={styles.titles}>
-                        <Text style={styles.infoText}>
-                          <Icoon
                             type="FontAwesome"
                             name="mobile"
                             color="#0340A0"
                             size={18}
                           />{' '}
                           :- {props.user.phone}
+                        </Text>
+                      </View>
+                      <View style={{...styles.titles, paddingVertical:1}}>
+                        <Text style={{...styles.infoText,fontSize:11}}>
+                        <Icoon
+                            type="FontAwesome"
+                            name="location"
+                            color="#0340A0"
+                            size={18}
+                          />{' '}
+                        :- {address ? `Nr, ${address.substring(0,65)}` : props.user.email}
                         </Text>
                       </View>
                     </View>
@@ -406,7 +418,7 @@ const styles = StyleSheet.create({
     padding: 3,
   },
   titles: {
-    marginTop: 3,
+    marginTop: 2,
     paddingVertical: 5,
     justifyContent: 'center',
   },

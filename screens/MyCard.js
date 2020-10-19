@@ -32,7 +32,7 @@ const MyCard = props => {
         <View style={styles.address}>
           <Text style={styles.name}>{props.dta.name}</Text>
           <Text style={styles.txt}>
-            khyaban e sir syed Rwp secter 4/B Muhammadi Chowk
+            {`${props.dta.name} is Availble near your location, click to get more info.!`}
           </Text>
         </View>
         <View style={styles.onBtn}>

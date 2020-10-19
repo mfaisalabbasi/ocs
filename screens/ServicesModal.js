@@ -121,13 +121,13 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'flex-end'
   },
-  outer:{width:'80%',
+  outer:{width:'90%',
    flexDirection:'row',
    justifyContent:'space-around',
    alignItems:'center', 
-   backgroundColor:'#FFFFFF', 
-   height:'50%',
-   borderRadius:20, 
+   backgroundColor:'#ffffff', 
+   height:'55%',
+   borderRadius:50, 
    marginVertical:2,
    overflow:'hidden'}
   

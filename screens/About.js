@@ -66,8 +66,7 @@ const styles = StyleSheet.create({
     height: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: 10,
-    marginTop: 2,
+    padding: 5,
   },
   img: {
     width: '100%',
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    padding: 10,
+    padding: 5,
   },
 });
 export default About;

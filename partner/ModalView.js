@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   Modal,
   View,
@@ -40,6 +40,19 @@ const ModalView = props => {
     }
     Linking.openURL(number);
   };
+
+  //---------Reverse geocode
+const [address, setaddress] = useState(null)
+const fetchNearby = async () => {
+  const req = await fetch(`https://us1.locationiq.com/v1/reverse.php?key=pk.6ae5458d22712d8adf1548f4610d6784&lat=${props.reqCustomer.location.latitude}&lon=${props.reqCustomer.location.longitude}&format=json`)
+
+ const res = await req.json()
+ setaddress(res.display_name)
+}
+useEffect(() => {
+props.reqCustomer.email && fetchNearby()
+ 
+}, [props.reqCustomer.email])
   return (
     <Modal
       transparent={true}
@@ -93,17 +106,6 @@ const ModalView = props => {
                 <View style={styles.titles}>
                   <Text style={styles.infoText}>
                     <Icoon
-                      type="Entypo"
-                      name="email"
-                      color="#0340A0"
-                      size={18}
-                    />{' '}
-                    :- {props.reqCustomer.email}
-                  </Text>
-                </View>
-                <View style={styles.titles}>
-                  <Text style={styles.infoText}>
-                    <Icoon
                       type="FontAwesome"
                       name="mobile"
                       color="#0340A0"
@@ -112,6 +114,18 @@ const ModalView = props => {
                     :- {props.reqCustomer.phone}
                   </Text>
                 </View>
+                <View style={{...styles.titles, paddingVertical:1}}>
+                  <Text style={{...styles.infoText,fontSize:11}}>
+                    <Icoon
+                      type="FontAwesome"
+                      name="location"
+                      color="#0340A0"
+                      size={18}
+                    />{' '}
+                    :- {address ? `Nr, ${address.substring(0,50)}` : props.reqCustomer.email}
+                  </Text>
+                </View>
+                
               </View>
             </View>
             <View style={styles.proView}>
@@ -188,7 +202,7 @@ const styles = StyleSheet.create({
   },
   model: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('window').height / 3,
+    height: Dimensions.get('window').height / 2.8,
     width: '100%',
     borderTopEndRadius: 15,
     borderTopLeftRadius: 15,

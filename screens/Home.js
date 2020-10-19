@@ -183,9 +183,8 @@ const Home = props => {
     dispatch(allSeller(mapstate, service));
 
     setconfirm(false);
-    // if (!loading) {
-    //   setopenprofile(true);
-    // }
+    
+   
   };
 
   const mapReady = () => {

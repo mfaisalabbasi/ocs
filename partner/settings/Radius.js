@@ -7,7 +7,7 @@ import {updateRadius} from '../../store/actions/user';
 
 const Radius = () => {
   const userid = useSelector(state => state.register.user.localId);
-  const current = useSelector(state => state.user.user.radius);
+  
   const [check, setcheck] = useState(true);
 
   const dispatch = useDispatch();
@@ -22,14 +22,19 @@ const Radius = () => {
     setvalue(props);
   };
   useEffect(() => {
-    setvalue(parseInt(current, 10));
-  }, []);
+    const fetchRadius = async () =>{
+    const req = await fetch(`https://on-click-s.firebaseio.com/sellers/${userid}.json`)
+    const res = await req.json()
+    setvalue(parseInt(res.radius,10) )
+    }
+    fetchRadius()
+  }, [value]);
   return (
     <View style={styles.screen}>
       <View style={styles.top}>
         <Icon type="FontAwesome" name="map-marker" color="#0A7DC9" size={30} />
         <Text style={styles.title}>
-          Your Radius :- {check ? current : value.toFixed()}km
+          Your Radius :- {check ? value : value.toFixed()}km
         </Text>
         <Text style={{...styles.title, fontSize: 10, marginVertical: 3}}>
           Choose Radius in which you would like to serve clients

@@ -30,45 +30,48 @@ const Home = props => {
   //----------------------------------------------Navigation Setups----------------------------------------
 
   let mymap;
-  props.navigation.setOptions({
-    headerShown: true,
-    headerTitleStyle: {
-      fontWeight: '100',
-      fontSize: 18,
-    },
-
-    headerTitle: '',
-    headerTintColor: '#444649',
-    headerTransparent: true,
-    headerLeft: () => {
-      return (
-        <View style={styles.header}>
-          <Icon
-            type="Ionicons"
-            name="ios-menu"
-            color="#333333"
-            size={33}
-            onPress={() => props.navigation.toggleDrawer()}
-          />
-        </View>
-      );
-    },
-    headerRight: () => {
-      return (
-        <View style={styles.header}>
-          <View style={styles.icon}>
+  useEffect(() => {
+    props.navigation.setOptions({
+      headerShown: true,
+      headerTitleStyle: {
+        fontWeight: '100',
+        fontSize: 18,
+      },
+  
+      headerTitle: '',
+      headerTintColor: '#444649',
+      headerTransparent: true,
+      headerLeft: () => {
+        return (
+          <View style={styles.header}>
             <Icon
               type="Ionicons"
-              name="ios-notifications-outline"
-              color="#2257A9"
-              size={22}
-              onPress={() => props.navigation.navigate('Notifications')}
+              name="ios-menu"
+              color="#333333"
+              size={33}
+              onPress={() => props.navigation.toggleDrawer()}
             />
           </View>
-        </View>
-      );
-    },
-  });
+        );
+      },
+      headerRight: () => {
+        return (
+          <View style={styles.header}>
+            <View style={styles.icon}>
+              <Icon
+                type="Ionicons"
+                name="ios-notifications-outline"
+                color="#2257A9"
+                size={22}
+                onPress={() => props.navigation.navigate('Notifications')}
+              />
+            </View>
+          </View>
+        );
+      },
+    });
+  }, [])
+
 
   //----------------------------------------------Getting User----------------------------------------
   const [service, setservice] = useState('Choose');

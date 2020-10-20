@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,21 +13,24 @@ import Box from './Box';
 import moment from 'moment';
 
 const PartnerNotification = ({navigation}) => {
-  navigation.setOptions({
-    headerLeft: () => {
-      return (
-        <View style={styles.header}>
-          <Icoon
-            type="AntDesign"
-            name="arrowleft"
-            color="#FFFFFF"
-            size={25}
-            onPress={() => navigation.navigate('Home')}
-          />
-        </View>
-      );
-    },
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <View style={styles.header}>
+            <Icoon
+              type="AntDesign"
+              name="arrowleft"
+              color="#FFFFFF"
+              size={25}
+              onPress={() => navigation.navigate('Home')}
+            />
+          </View>
+        );
+      },
+    });
+  }, [])
+  
   const empty = (
     <TouchableNativeFeedback>
       <View style={styles.card}>

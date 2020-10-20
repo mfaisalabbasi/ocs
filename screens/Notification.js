@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,21 +13,24 @@ import { useSelector } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
 
 const Notification = ({navigation}) => {
-  navigation.setOptions({
-    headerLeft: () => {
-      return (
-        <View style={styles.header}>
-          <Icoon
-            type="AntDesign"
-            name="arrowleft"
-            color="#FFFFFF"
-            size={25}
-            onPress={() => navigation.navigate('Home')}
-          />
-        </View>
-      );
-    },
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <View style={styles.header}>
+            <Icoon
+              type="AntDesign"
+              name="arrowleft"
+              color="#FFFFFF"
+              size={25}
+              onPress={() => navigation.navigate('Home')}
+            />
+          </View>
+        );
+      },
+    });
+  }, [])
+
   const empty =  <TouchableNativeFeedback >
   <View style={styles.card}>
     <View style={styles.icon}>

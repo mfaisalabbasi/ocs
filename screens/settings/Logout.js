@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {logoutAction} from '../../store/actions/auth';
@@ -7,9 +7,12 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 const Logout = ({navigation}) => {
   const dispatch = useDispatch();
-  navigation.setOptions({
-    title: 'Logout Screen',
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Logout Screen',
+    });
+  }, [])
+ 
   const handleLogout = () => {
     dispatch(logoutAction());
   };

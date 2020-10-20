@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,21 +9,24 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const About = props => {
-  props.navigation.setOptions({
-    headerLeft: () => {
-      return (
-        <View style={styles.header}>
-          <Icon
-            type="Ionicons"
-            name="ios-menu"
-            color="#FFFFFF"
-            size={33}
-            onPress={() => props.navigation.toggleDrawer()}
-          />
-        </View>
-      );
-    },
-  });
+  useEffect(() => {
+    props.navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <View style={styles.header}>
+            <Icon
+              type="Ionicons"
+              name="ios-menu"
+              color="#FFFFFF"
+              size={33}
+              onPress={() => props.navigation.toggleDrawer()}
+            />
+          </View>
+        );
+      },
+    });
+  }, [])
+ 
   return (
     <ScrollView style={styles.scrn}>
       <View style={styles.container}>

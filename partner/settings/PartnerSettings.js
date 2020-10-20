@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icoon from 'react-native-vector-icons/Ionicons';
@@ -6,23 +6,26 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 
 const PartnerSettings = ({navigation}) => {
-  navigation.setOptions({
-    headerLeft: () => {
-      return (
-        <TouchableNativeFeedback>
-          <View style={styles.header}>
-            <Icoon
-              type="Ionicons"
-              name="ios-menu"
-              color="#FFFFFF"
-              size={32}
-              onPress={() => navigation.toggleDrawer()}
-            />
-          </View>
-        </TouchableNativeFeedback>
-      );
-    },
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <TouchableNativeFeedback>
+            <View style={styles.header}>
+              <Icoon
+                type="Ionicons"
+                name="ios-menu"
+                color="#FFFFFF"
+                size={32}
+                onPress={() => navigation.toggleDrawer()}
+              />
+            </View>
+          </TouchableNativeFeedback>
+        );
+      },
+    });
+  }, [])
+  
   const user = useSelector(state => state.user.user);
   const email = useSelector(state => state.user.email);
   const ocs = 'On Click Services';

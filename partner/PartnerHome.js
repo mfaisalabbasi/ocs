@@ -28,44 +28,45 @@ const PartnerHome = props => {
 
   useEffect(() => {
     dispatch(updateStatus(userid, isEnabled));
-  }, [isEnabled]);
-  props.navigation.setOptions({
-    headerShown: true,
-    headerTitle: '',
-    headerTransparent: true,
-    headerLeft: () => {
-      return (
-        <View style={styles.header}>
-          <Icon
-            type="Ionicons"
-            name="ios-menu"
-            color="#333333"
-            size={33}
-            onPress={() => props.navigation.toggleDrawer()}
-          />
-        </View>
-      );
-    },
-    headerRight: () => {
-      return (
-        <View style={styles.header}>
-          <View style={{...styles.icon, width: 'auto', flexDirection: 'row'}}>
-            <Text style={{color: '#21618C', fontWeight: '900'}}>
-              {' '}
-              {isEnabled ? 'Active' : 'Offline'}{' '}
-            </Text>
-            <Switch
-              trackColor={{false: '#767577', true: '#D6DBDF'}}
-              thumbColor={isEnabled ? '#2ECC71' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
+    props.navigation.setOptions({
+      headerShown: true,
+      headerTitle: '',
+      headerTransparent: true,
+      headerLeft: () => {
+        return (
+          <View style={styles.header}>
+            <Icon
+              type="Ionicons"
+              name="ios-menu"
+              color="#333333"
+              size={33}
+              onPress={() => props.navigation.toggleDrawer()}
             />
           </View>
-        </View>
-      );
-    },
-  });
+        );
+      },
+      headerRight: () => {
+        return (
+          <View style={styles.header}>
+            <View style={{...styles.icon, width: 'auto', flexDirection: 'row'}}>
+              <Text style={{color: '#21618C', fontWeight: '900'}}>
+                {' '}
+                {isEnabled ? 'Active' : 'Offline'}{' '}
+              </Text>
+              <Switch
+                trackColor={{false: '#767577', true: '#D6DBDF'}}
+                thumbColor={isEnabled ? '#2ECC71' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
+          </View>
+        );
+      },
+    });
+  }, [isEnabled]);
+ 
 
   //----------------------------------------------Getting User----------------------------------------
   const dispatch = useDispatch();

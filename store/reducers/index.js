@@ -6,6 +6,7 @@ import register from './register';
 import user from './user';
 import resetpassword from './resetpassword';
 import notification from './notification';
+import services from './services'
 
 const persistConfig = {
   key: 'root',
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   user,
   resetpassword,
   notification,
+  services
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

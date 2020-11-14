@@ -111,12 +111,12 @@ const Home = props => {
   //--------------------------------------------------------------- Handling Map ---------------------
   const LATITUDE_DELTA = 0.009;
   const LONGITUDE_DELTA = 0.009;
-  // const LATITUDE = 33.68439;
-  // const LONGITUDE = 73.047554;
+  const LATITUDE = 33.68439;
+  const LONGITUDE = 73.047554;
 
   const [mapstate, setmapstate] = useState({
-    latitude: null,
-    longitude: null,
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
     accuracy: null,
@@ -216,6 +216,7 @@ const Home = props => {
               loadingEnabled={true}
               loadingIndicatorColor="#326ECC"
               initialRegion={getMapRegion()}
+              region={getMapRegion()}
               style={styles.map}
               showsUserLocation={true}
               showsMyLocationButton={false}

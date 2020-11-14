@@ -7,25 +7,24 @@ import {
   TextInput,
   Image,
   StatusBar,
-  FlatList
+  FlatList,
+  Text,
+  ActivityIndicator
 } from 'react-native';
 import Box from './Box'
 import Icon from 'react-native-vector-icons/AntDesign';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchServices } from '../store/actions/services';
 const ModalPop = props => {
-  const [services, setservices] = useState([])
-  const [filterServices,setfilterServices] = useState([])
-  const fetchServices =  async () => {
-    const req = await fetch(`https://on-click-s.firebaseio.com/services.json`)
-    const res = await req.json()
-    let loaded = [];
-    const vl = Object.keys(res);
-    vl.map(item => loaded.push(res[item]));
-    setservices(loaded)
-    setfilterServices(loaded)
-  }
-  useEffect(() => {
+  const serv = useSelector(state => state.services.services)
+  const loading = useSelector(state => state.services.loading)
+  const [services, setservices] = useState(serv)
+  const [filterServices,setfilterServices] = useState(serv)
+ 
+  const dispatch = useDispatch()
    
-    fetchServices()
+  useEffect(() => {
+    dispatch(fetchServices())
   }, [])
 
 const handleSearch = event =>{
@@ -43,7 +42,7 @@ const handleSearch = event =>{
       onRequestClose={props.setvisState}
       animationType="slide">
       <View style={styles.modelContainer}>
-        <StatusBar backgroundColor="#34495E" barStyle="light-content" />
+        <StatusBar backgroundColor="#2E8FD0" barStyle="light-content" />
         <View style={styles.model}>
           <View
             style={styles.header}>
@@ -68,10 +67,10 @@ const handleSearch = event =>{
             
           </View>
         
-            <FlatList data={services}   renderItem={itemData => (
+          {loading ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><ActivityIndicator size="large" color="#3498DB" /></View> : <FlatList data={services}   renderItem={itemData => (
             <Box src={itemData.item} func={props.selectFunc} key={itemData.item.name} />
       )}
-      keyExtractor={(item, index) => 'key' + index} numColumns={3} showsVerticalScrollIndicator={false} />
+      keyExtractor={(item, index) => 'key' + index} numColumns={3} showsVerticalScrollIndicator={false} />}  
      
             
           

@@ -9,7 +9,8 @@ import {
   StatusBar,
   FlatList,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  Button
 } from 'react-native';
 import Box from './Box'
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -18,15 +19,20 @@ import { fetchServices } from '../store/actions/services';
 const ModalPop = props => {
   const serv = useSelector(state => state.services.services)
   const loading = useSelector(state => state.services.loading)
-  const [services, setservices] = useState(serv)
-  const [filterServices,setfilterServices] = useState(serv)
+  const [services, setservices] = useState([])
+  const [filterServices,setfilterServices] = useState([])
  
   const dispatch = useDispatch()
    
   useEffect(() => {
     dispatch(fetchServices())
+    setservices(serv)
+    setfilterServices(serv)
   }, [])
-
+ 
+  const ReloadServices = ()=>{
+    dispatch(fetchServices())
+  }
 const handleSearch = event =>{
  const filterData = filterServices.filter(item=>{
    return item.name.toLowerCase().includes(event.toLowerCase())
@@ -67,7 +73,8 @@ const handleSearch = event =>{
             
           </View>
         
-          {loading ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><ActivityIndicator size="large" color="#3498DB" /></View> : <FlatList data={services}   renderItem={itemData => (
+          {loading ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><ActivityIndicator size="large" color="#3498DB" /></View> 
+          :  <FlatList data={serv}   renderItem={itemData => (
             <Box src={itemData.item} func={props.selectFunc} key={itemData.item.name} />
       )}
       keyExtractor={(item, index) => 'key' + index} numColumns={3} showsVerticalScrollIndicator={false} />}  

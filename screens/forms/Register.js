@@ -157,6 +157,7 @@ const Register = ({navigation}) => {
                 <Picker.Item label="Painter" value="painter" />
                 <Picker.Item label="Marble & Tile Fixer" value="marbel & tile fixer" />
                 <Picker.Item label="Drivers" value="drivers" />
+                <Picker.Item label="Catering Services" value="catering services" />
 </Picker>
             </View>
           </Fragment>

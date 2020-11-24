@@ -58,7 +58,7 @@ const Login = ({navigation}) => {
             color="#498DF6"
             size={35}
           />
-          <Text style={styles.heading}>Welcome To OCS,</Text>
+          <Text style={styles.heading}>Welcome to OCS,</Text>
           <Text style={styles.smallheading}>Sign in to continue</Text>
         </View>
         {loading ? (
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'ebrima',
     fontWeight: '900',
-    color: '#0A7DC9',
+    color: '#498DF6',
   },
   smallheading: {
     fontSize: 11,
@@ -198,15 +198,15 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
   },
   button: {
-    width: '85%',
+    width: '87%',
     backgroundColor: '#498DF6',
     marginVertical: 9,
     paddingHorizontal: 5,
-    paddingVertical: 12,
+    paddingVertical: 9,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
-    elevation: 2,
+   borderRadius:20,
+    elevation: 1.5,
   },
   redText: {
     fontSize: 10,
@@ -216,8 +216,13 @@ const styles = StyleSheet.create({
   regBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '90%',
+    width: '87%',
     justifyContent: 'center',
+    backgroundColor:'#F4F6F6',
+    borderRadius:20,
+    paddingVertical: 3,
+    elevation: 0.3,
+
   },
 });
 

@@ -8,6 +8,7 @@ import {
   TextInput,
   StatusBar,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
@@ -109,14 +110,7 @@ const Login = ({navigation}) => {
           </View>
         </TouchableNativeFeedback>
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <View
-            style={{
-              alignItems: 'center',
-              width: '90%',
-              justifyContent: 'center',
-
-              padding: 5,
-            }}>
+        <View style={styles.regBtn}>
             <Text style={styles.smallheading}>Register as Partner / نیا اکاؤنٹ بنائیں</Text>
             {/* <Text> Register</Text> */}
           </View>
@@ -165,7 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'ebrima',
     fontWeight: '900',
-    color: '#0A7DC9',
+    color: '#498DF6',
   },
   smallheading: {
     fontSize: 10,
@@ -196,21 +190,31 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
   },
   button: {
-    width: '85%',
+    width:Dimensions.get('window').width/1.20,
     backgroundColor: '#498DF6',
     marginVertical: 9,
     paddingHorizontal: 5,
-    paddingVertical: 12,
+    paddingVertical: 9,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
-    elevation: 2,
+    borderRadius:20,
+    elevation: 1.5,
   },
   redText: {
     fontSize: 10,
     color: 'red',
     fontFamily: 'ebrima',
   },
+  regBtn:{
+    width:Dimensions.get('window').width/1.20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#F4F6F6',
+   borderRadius:20,
+    paddingVertical: 11,
+    elevation: 0.3,
+  }
 });
 
 export default Login;

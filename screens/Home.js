@@ -6,7 +6,7 @@ import {
   StatusBar,
   Text,
   Image,
-  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icooon from 'react-native-vector-icons/MaterialIcons';
@@ -25,7 +25,7 @@ import ServicesModal from './ServicesModal';
 import {updateLocation} from '../store/actions/auth';
 import ProfileModal from './ProfileModal';
 import HaversineGeolocation from 'haversine-geolocation';
-import {findNearest, orderByDistance} from 'geolib';
+import { orderByDistance} from 'geolib';
 const Home = props => {
   //----------------------------------------------Navigation Setups----------------------------------------
 
@@ -133,7 +133,7 @@ const Home = props => {
   const myGeo = () => {
     Geolocation.getCurrentPosition(
       position => {
-        dispatch(updateLocation(userid, position.coords));
+       userid && dispatch(updateLocation(userid, position.coords));
         setmapstate({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -153,10 +153,32 @@ const Home = props => {
       },
       {enableHighAccuracy: true, timeout: 200000},
     );
+    
   };
 
   useEffect(() => {
     myGeo();
+    const watchId = Geolocation.watchPosition(
+      position => {
+        userid && dispatch(updateLocation(userid, position.coords));
+        setmapstate({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          error: null,
+        });
+      },
+      error => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true, timeout: 200000},
+    );
+
+    return () => {
+      if (watchId) {
+        Geolocation.clearWatch(watchId);
+      }
+    };
   }, []);
 
   const currentLocation = () => {
@@ -191,7 +213,9 @@ const Home = props => {
   };
 
   const mapReady = () => {
-    mymap.fitToSuppliedMarkers(['data'], {animated: true});
+    mymap.fitToSuppliedMarkers(['data'], {animated: true,
+      edgePadding: {top: 0, bottom: Dimensions.get('screen').height/0.3, left: 70, right: 70}
+     });
   };
   const uniqueid = nearest.email + Date.now();
 

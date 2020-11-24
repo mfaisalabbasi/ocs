@@ -20,8 +20,9 @@ const Register = ({navigation}) => {
     phone: '',
     service: '',
     password: '',
+    expertise:''
   });
-  const {name, email, phone, password, service} = user;
+  const {name, email, phone, password, service,expertise} = user;
   //handling Registration
   const [err, seterr] = useState(false);
   const [next, setnext] = useState(false);
@@ -33,6 +34,7 @@ const Register = ({navigation}) => {
     if (
       !name ||
       !email ||
+      !expertise ||
       !password ||
       !phone ||
       service === '' ||
@@ -78,7 +80,7 @@ const Register = ({navigation}) => {
             size={30}
           />
           <Text style={styles.heading}>Register as Partner,</Text>
-          <Text style={styles.smallheading}>Let's serve togather</Text>
+          <Text style={styles.smallheading}>معلومات درج کریں</Text>
         </View>
         {loading ? (
           <View>
@@ -105,7 +107,7 @@ const Register = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your email ..."
+                placeholder="Enter your email - ای میل لکھیں"
                 placeholderTextColor="lightgray"
                 value={email}
                 onChangeText={text => setuser({...user, email: text})}
@@ -114,7 +116,7 @@ const Register = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your password ..."
+                placeholder="Enter your password - پاسورڈ لکھیں"
                 placeholderTextColor="lightgray"
                 secureTextEntry={true}
                 value={password}
@@ -137,28 +139,39 @@ const Register = ({navigation}) => {
                     service: itemValue,
                   });
                 }}>
-                <Picker.Item label="Choose service" value="undefined" />
-                <Picker.Item label="Electrician" value="electrician" />
-                <Picker.Item label="Car Mechanic" value="car mechanic" />
-                <Picker.Item label="Bike Mechanic" value="bike mechanic" />
-                <Picker.Item label="Plumber" value="plumber" />
-                <Picker.Item label="Carpentar" value="carpenter" />
-                <Picker.Item label="Ac Technician" value="ac technician" />
-                <Picker.Item label="Construction" value="construction" />
-                <Picker.Item label="Welding Service" value="welding service" />
-                <Picker.Item label="Light Decoration" value="light decoration" />
-                <Picker.Item label="Interior Design" value="interior design" />
-                <Picker.Item label="Teacher & Tutor" value="teacher & tutor" />
-                <Picker.Item label="Water Tanker" value="water tanker" />
-                <Picker.Item label="Saloon" value="saloon" />
-                <Picker.Item label="First Aid" value="first aid" />
-                <Picker.Item label="Pick & Drop" value="pick & drop" />
-                <Picker.Item label="Maids" value="maids" />
-                <Picker.Item label="Painter" value="painter" />
-                <Picker.Item label="Marble & Tile Fixer" value="marbel & tile fixer" />
-                <Picker.Item label="Drivers" value="drivers" />
-                <Picker.Item label="Catering Services" value="catering services" />
+                <Picker.Item label="Choose service - کام کا انتخاب" value="undefined" />
+                <Picker.Item label="Electrician - الیکٹریشن" value="electrician" />
+                <Picker.Item label="Car Mechanic - کار مکینک" value="car mechanic" />
+                <Picker.Item label="Bike Mechanic - بائیک مکینک" value="bike mechanic" />
+                <Picker.Item label="Plumber - پلمبر" value="plumber" />
+                <Picker.Item label="Carpentar - کارپینٹر" value="carpenter" />
+                <Picker.Item label="Ac Technician - اےسی ٹییکنیشن" value="ac technician" />
+                <Picker.Item label="Construction - کنسٹرکشن" value="construction" />
+                <Picker.Item label="Welding Service - ویلڈنگ سروس" value="welding service" />
+                <Picker.Item label="Light Decoration - لائٹ ڈیکوریشن" value="light decoration" />
+                <Picker.Item label="Interior Design - انٹیرئیر ڈیزائن" value="interior design" />
+                <Picker.Item label="Teacher & Tutor - ٹیچرز/ٹیوٹرز" value="teacher & tutor" />
+                <Picker.Item label="Water Tanker - واٹر ٹینکر" value="water tanker" />
+                <Picker.Item label="Saloon - سیلون" value="saloon" />
+                <Picker.Item label="First Aid - فرسٹ ایڈ" value="first aid" />
+                <Picker.Item label="Pick & Drop - پک اینڈ ڈراپ" value="pick & drop" />
+                <Picker.Item label="Maids - نوکر/نوکرانی" value="maids" />
+                <Picker.Item label="Painter - پینٹر" value="painter" />
+                <Picker.Item label="Marble & Tile Fixer - ماربل ٭ ٹائل فکسر" value="marble & tile fixer" />
+                <Picker.Item label="Drivers - ڈرائیورز" value="drivers" />
+                <Picker.Item label="Catering Service - کیٹرنگ سروس" value="catering service" />
 </Picker>
+            </View>
+            <View style={styles.inputs}>
+              <TextInput
+              multiline = {true}
+              numberOfLines = {3}
+                style={styles.input}
+                placeholder="Describe job expertise in 200 characters - اپنے کام کے بارے میں تھوڑی معلومات لکھیں"
+                placeholderTextColor="lightgray"
+                value={expertise}
+                onChangeText={text => setuser({...user, expertise: text})}
+              />
             </View>
           </Fragment>
         ) : (
@@ -166,7 +179,7 @@ const Register = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your name ..."
+                placeholder="Enter your name - نام لکھیں"
                 placeholderTextColor="lightgray"
                 value={name}
                 onChangeText={text => setuser({...user, name: text})}
@@ -175,7 +188,7 @@ const Register = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your Number ..."
+                placeholder="Enter your Number - نمبر لکھیں"
                 placeholderTextColor="lightgray"
                 value={phone}
                 onChangeText={text => setuser({...user, phone: text})}
@@ -187,7 +200,7 @@ const Register = ({navigation}) => {
           <TouchableNativeFeedback onPress={handleRegister}>
             <View style={styles.button}>
               <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
-                Register
+            Register/رجسٹر
               </Text>
             </View>
           </TouchableNativeFeedback>

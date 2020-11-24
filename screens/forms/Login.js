@@ -78,7 +78,7 @@ const Login = ({navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Email ..."
+            placeholder="Enter Email - ای میل لکھیں"
             placeholderTextColor="lightgray"
             value={email}
             onChangeText={text => setuser({...user, email: text})}
@@ -87,7 +87,7 @@ const Login = ({navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Password ..."
+            placeholder="Enter Password - پاسورڈ لکھیں"
             placeholderTextColor="lightgray"
             secureTextEntry={true}
             value={password}
@@ -118,7 +118,7 @@ const Login = ({navigation}) => {
         <View style={styles.regBtn}>
           <TouchableOpacity onPress={() => navigation.navigate('Customer')}>
             <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>Register as customer</Text>
+              <Text style={styles.smallheading}>Register as customer / نیا اکاؤنٹ بنائیں</Text>
             </View>
           </TouchableOpacity>
         </View>

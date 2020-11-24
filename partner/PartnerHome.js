@@ -119,7 +119,7 @@ const PartnerHome = props => {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         };
-        dispatch(updatePartnerLocation(userid, location));
+      userid &&  dispatch(updatePartnerLocation(userid, location));
         setmapstate({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -143,6 +143,31 @@ const PartnerHome = props => {
   useEffect(() => {
     myGeo();
     dispatch(partnerId(userid));
+    const watchId = Geolocation.watchPosition(
+      position => {
+        const location = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+      userid &&  dispatch(updatePartnerLocation(userid, location));
+        setmapstate({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      error => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true, timeout: 200000},
+    );
+
+    return () => {
+      if (watchId) {
+        Geolocation.clearWatch(watchId);
+      }
+    };
+    
   }, []);
   //---------------------------------------------------------------Device Token
 

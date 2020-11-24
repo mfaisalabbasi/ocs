@@ -70,7 +70,7 @@ const Customer = ({navigation}) => {
             size={30}
           />
           <Text style={styles.heading}>Register as Customer</Text>
-          <Text style={styles.smallheading}>on click's Services</Text>
+          <Text style={styles.smallheading}>معلومات درج کریں</Text>
         </View>
         {loading ? (
           <View>
@@ -98,7 +98,7 @@ const Customer = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your email ..."
+                placeholder="Enter your email - ای میل لکھیں"
                 placeholderTextColor="lightgray"
                 value={email}
                 name="email"
@@ -108,7 +108,7 @@ const Customer = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your password ..."
+                placeholder="Enter your password - پاسورڈ لکھیں"
                 placeholderTextColor="lightgray"
                 secureTextEntry={true}
                 value={password}
@@ -122,7 +122,7 @@ const Customer = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your name ..."
+                placeholder="Enter your name - نام لکھیں"
                 placeholderTextColor="lightgray"
                 name="name"
                 value={name}
@@ -132,7 +132,7 @@ const Customer = ({navigation}) => {
             <View style={styles.inputs}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your Number ..."
+                placeholder="Enter your Number - نمبر لکھیں"
                 placeholderTextColor="lightgray"
                 value={phone}
                 name="phone"
@@ -145,7 +145,7 @@ const Customer = ({navigation}) => {
           <TouchableNativeFeedback onPress={handleRegisteration}>
             <View style={styles.button}>
               <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
-                Register
+                Register/رجسٹر
               </Text>
             </View>
           </TouchableNativeFeedback>

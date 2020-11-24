@@ -13,7 +13,6 @@ import {
   START_LOADING_LOGIN,
   LOADING_RESET,
 } from '../constant';
-import AsyncStorage from '@react-native-community/async-storage';
 
 // ------------------------------------------------------------------Register Customer
 
@@ -240,7 +239,7 @@ export const resetPassword = email => async dispatch => {
 export const registerSeller = user => async dispatch => {
   dispatch({type: START_LOADING_LOGIN});
   try {
-    const {name, email, phone, service, password} = user;
+    const {name, email, phone, service, password,expertise} = user;
     const verification = 'unverified';
     const AccountStatus = 'open'
     const date = Date.now()
@@ -274,7 +273,8 @@ export const registerSeller = user => async dispatch => {
           Devicetoken,
           verification,
           date,
-          AccountStatus
+          AccountStatus,
+          expertise
         }),
       });
     }

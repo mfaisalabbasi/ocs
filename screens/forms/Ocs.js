@@ -23,13 +23,13 @@ const Ocs = ({navigation}) => {
         </View>
         <TouchableNativeFeedback onPress={() => navigation.navigate('Login')}>
           <View style={styles.btn}>
-            <Text style={styles.btnText}>Become OCS Customer</Text>
+            <Text style={styles.btnText}>Become OCS Customer / کسٹمر اکاؤنٹ</Text>
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
           onPress={() => navigation.navigate('SellerLogin')}>
           <View style={{...styles.btn, backgroundColor: '#F2C229'}}>
-            <Text style={styles.btnText}>Become OCS Partner</Text>
+            <Text style={styles.btnText}>Become OCS Partner / پارٹنر اکاؤنٹ</Text>
           </View>
         </TouchableNativeFeedback>
       </View>

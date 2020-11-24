@@ -58,8 +58,7 @@ const ProfileModal = props => {
 
   PushNotification.configure({
     onRegister: function(token) {
-      console.log('TOKEN:', token);
-      dispatch(CustomerDeviceToken(props.localId, token));
+   props.localId &&  dispatch(CustomerDeviceToken(props.localId, token));
     },
     onNotification: function(notification) {
       console.log('NOTIFICATION:', notification);
@@ -278,7 +277,10 @@ fetchNearby()
                       </View>
                     </View>
                   </View>
-
+                 <View style={{width:'90%',height:70,overflow:'hidden',padding:4}}>
+                 <Text style={{...styles.infoText, color:'#17A589'}}>Expertise:-<Text style={{...styles.infoText,fontSize:11}}>{'  '}{props.user.expertise ? props.user.expertise.substring(0,190) : 'Partner is expert In his job, for Detail you can directly call partner!'}</Text></Text>
+                 
+                 </View>
                   <View style={styles.proView}>
                     <TouchableNativeFeedback onPress={cancelFunc}>
                       <View
@@ -382,7 +384,7 @@ const styles = StyleSheet.create({
   },
   model: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('window').height / 2.5,
+    height: Dimensions.get('window').height / 1.9,
     width: '100%',
     borderTopEndRadius: 15,
     borderTopLeftRadius: 15,

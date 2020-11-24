@@ -121,14 +121,14 @@ export const allSeller = (custLocation, service) => async dispatch => {
     if (res.error) {
       dispatch({
         type: FAILED_SELLERS,
-        payload: error,
+        payload: 'error',
       });
     } else {
       const vl = Object.keys(res);
       vl.map(item => loaded.push(res[item]));
       const filterd = loaded.filter(
         itm =>
-          itm.service === service.toLowerCase() &&
+         itm.service === service.toLowerCase() &&
           itm.status === true &&
           isPointWithinRadius(
             {
@@ -145,13 +145,14 @@ export const allSeller = (custLocation, service) => async dispatch => {
       filterd.length < 1
         ? dispatch({
             type: FAILED_SELLERS,
-            payload: error,
+            payload: 'jeen da error',
           })
         : dispatch({
             type: GET_SELLERS,
             payload: filterd,
           });
     }
+    
   } catch (error) {
     dispatch({
       type: FAILED_SELLERS,

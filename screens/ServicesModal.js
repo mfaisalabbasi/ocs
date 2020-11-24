@@ -5,34 +5,28 @@ import {
   Modal,
   Dimensions,
   TextInput,
-  Image,
   StatusBar,
-  FlatList,
-  Text,
   ActivityIndicator,
-  Button
 } from 'react-native';
 import Box from './Box'
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchServices } from '../store/actions/services';
+import { ScrollView } from 'react-native-gesture-handler';
+import {servicesData} from './services'
 const ModalPop = props => {
-  const serv = useSelector(state => state.services.services)
   const loading = useSelector(state => state.services.loading)
-  const [services, setservices] = useState([])
-  const [filterServices,setfilterServices] = useState([])
+  const [services, setservices] = useState(servicesData)
+  const [filterServices,setfilterServices] = useState(servicesData)
  
   const dispatch = useDispatch()
-   
   useEffect(() => {
     dispatch(fetchServices())
-    setservices(serv)
-    setfilterServices(serv)
+    
   }, [])
  
-  const ReloadServices = ()=>{
-    dispatch(fetchServices())
-  }
+  
+
 const handleSearch = event =>{
  const filterData = filterServices.filter(item=>{
    return item.name.toLowerCase().includes(event.toLowerCase())
@@ -41,6 +35,7 @@ const handleSearch = event =>{
  setservices(filterData)
 }
   
+
   return (
     <Modal
       transparent={true}
@@ -72,14 +67,12 @@ const handleSearch = event =>{
             </View>
             
           </View>
-        
-          {loading ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><ActivityIndicator size="large" color="#3498DB" /></View> 
-          :  <FlatList data={serv}   renderItem={itemData => (
-            <Box src={itemData.item} func={props.selectFunc} key={itemData.item.name} />
-      )}
-      keyExtractor={(item, index) => 'key' + index} numColumns={3} showsVerticalScrollIndicator={false} />}  
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{width:'100%', flexDirection:'row', flexWrap:'wrap'}}>
+          {loading  ? <ActivityIndicator size="large" color="#3498DB"  style={{marginTop:Dimensions.get('window').height/2.6}}/>
+          : services.map(item =><Box src={item} func={props.selectFunc} key={item.name}/>)
+       }</ScrollView>
      
-            
+      
           
         </View>
       </View>

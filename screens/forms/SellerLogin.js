@@ -75,7 +75,7 @@ const Login = ({navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Email ..."
+            placeholder="Enter Email - ای میل لکھیں"
             placeholderTextColor="lightgray"
             value={email}
             onChangeText={text => setuser({...user, email: text})}
@@ -84,7 +84,7 @@ const Login = ({navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Password ..."
+            placeholder="Enter Password - پاسورڈ لکھیں"
             placeholderTextColor="lightgray"
             secureTextEntry={true}
             value={password}
@@ -117,7 +117,7 @@ const Login = ({navigation}) => {
 
               padding: 5,
             }}>
-            <Text style={styles.smallheading}>Register as Partner!</Text>
+            <Text style={styles.smallheading}>Register as Partner / نیا اکاؤنٹ بنائیں</Text>
             {/* <Text> Register</Text> */}
           </View>
         </TouchableOpacity>

@@ -10,7 +10,8 @@ const Box = ({src,func}) => {
       <View style={styles.item}>
         <View style={styles.icon2}>
         <Image
-    source={{uri:src.icon}}
+    source={src.icon}
+    
     style={styles.img}
   />
         </View>

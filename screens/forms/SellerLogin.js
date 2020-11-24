@@ -76,7 +76,7 @@ const Login = ({navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Enter Email - ای میل لکھیں"
+            placeholder="Enter your Email ..."
             placeholderTextColor="lightgray"
             value={email}
             onChangeText={text => setuser({...user, email: text})}
@@ -85,7 +85,7 @@ const Login = ({navigation}) => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder="Enter Password - پاسورڈ لکھیں"
+            placeholder="Enter your Password ..."
             placeholderTextColor="lightgray"
             secureTextEntry={true}
             value={password}

@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react';
-import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableNativeFeedback,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icoon from 'react-native-vector-icons/Ionicons';
-import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 
 const Settings = ({navigation}) => {
@@ -24,10 +29,9 @@ const Settings = ({navigation}) => {
         );
       },
     });
-  }, [])
- 
-  const user = useSelector(state => state.user.user);
-  const email = useSelector(state => state.register.user.email);
+  }, []);
+
+  const user = useSelector((state) => state.user.user);
   const ocs = 'On Click Services';
   return (
     <View style={styles.screen}>
@@ -42,7 +46,6 @@ const Settings = ({navigation}) => {
             onPress={() =>
               navigation.navigate('updateprofile', {
                 upname: user.name,
-                upemail: user.email,
                 upphone: user.phone,
               })
             }>
@@ -56,33 +59,10 @@ const Settings = ({navigation}) => {
                 />
               </View>
               <View style={styles.input}>
-                <Text style={styles.txt}>Your Name:-</Text>
+                <Text style={styles.txt}>Update Profile:-</Text>
                 <Text style={styles.txt}>
                   {user === null ? ocs : user.name}
                 </Text>
-              </View>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback
-            onPress={() =>
-              navigation.navigate('updateprofile', {
-                upname: user.name,
-                upemail: user.email,
-                upphone: user.phone,
-              })
-            }>
-            <View style={styles.inputs}>
-              <View style={styles.icon}>
-                <Icoon
-                  type="Ionicons"
-                  name="ios-mail-unread"
-                  color="gray"
-                  size={27}
-                />
-              </View>
-              <View style={styles.input}>
-                <Text style={styles.txt}>Your Email:-</Text>
-                <Text style={styles.txt}>{!email ? ocs : email}</Text>
               </View>
             </View>
           </TouchableNativeFeedback>
@@ -104,7 +84,7 @@ const Settings = ({navigation}) => {
                 />
               </View>
               <View style={styles.input}>
-                <Text style={styles.txt}>Your Mobile:-</Text>
+                <Text style={styles.txt}>Your Contact:-</Text>
                 <Text style={styles.txt}>
                   {user === null ? ocs : user.phone}
                 </Text>
@@ -112,30 +92,39 @@ const Settings = ({navigation}) => {
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
-            onPress={() => navigation.navigate('changepassword')}>
-            <View
-              style={{...styles.inputs, marginBottom: 5, marginVertical: -10}}>
-              <View style={styles.icon}>
-                <Icon type="FontAwesome" name="lock" color="gray" size={25} />
-              </View>
-              <View style={styles.input}>
-                <Text style={styles.txt}>Change Password</Text>
-              </View>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback
             onPress={() => navigation.navigate('logout')}>
-            <View style={styles.inputs}>
-              <View style={styles.icon}>
-                <Icoon
-                  type="Ionicons"
-                  name="ios-log-out"
-                  color="gray"
-                  size={27}
-                />
-              </View>
-              <View style={styles.input}>
-                <Text style={styles.txt}>Logout Here</Text>
+            <View
+              style={{
+                ...styles.inputs,
+                backgroundColor: '#EAEDED',
+                width: '80%',
+                height: 40,
+                borderRadius: 50,
+              }}>
+              <View
+                style={{
+                  ...styles.input,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={{...styles.icon, alignItems: 'flex-end'}}>
+                  <Icoon
+                    type="Ionicons"
+                    name="ios-log-out"
+                    color="#195A9B"
+                    size={25}
+                  />
+                </View>
+                <Text
+                  style={{
+                    ...styles.txt,
+                    color: '#195A9B',
+                    fontSize: 16,
+                    fontWeight: '500',
+                  }}>
+                  Logout Here
+                </Text>
               </View>
             </View>
           </TouchableNativeFeedback>

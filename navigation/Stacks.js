@@ -1,17 +1,15 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Home from '../screens/Home';
-import Logout from '../screens/settings/Logout';
-import Settings from '../screens/settings/Settings';
-import ChangePassword from '../screens/settings/ChangePassword';
-import UpdateProfile from '../screens/settings/UpdateProfile';
+import Home from '../customer/Home';
+import Logout from '../customer/settings/Logout';
+import Settings from '../customer/settings/Settings';
+import UpdateProfile from '../customer/settings/UpdateProfile';
 import About from '../screens/About';
 import Notification from '../screens/Notification';
 import PartnerHome from '../partner/PartnerHome';
 import PartnerNotification from '../partner/PartnerNotification';
 import PartnerSettings from '../partner/settings/PartnerSettings';
 import UpdatePartnerProfile from '../partner/settings/UpdatePartnerProfile';
-import ChangePartnerPassword from '../partner/settings/ChangePartnerPassword';
 import Radius from '../partner/settings/Radius';
 
 export const Stacks = () => {
@@ -98,11 +96,6 @@ export const settingStack = () => {
         component={UpdateProfile}
         options={{title: 'Update Profile'}}
       />
-      <Stack.Screen
-        name="changepassword"
-        component={ChangePassword}
-        options={{title: 'Change Password'}}
-      />
       <Stack.Screen name="logout" component={Logout} />
     </Stack.Navigator>
   );
@@ -175,11 +168,6 @@ export const settingStackPartner = () => {
         name="updateprofile"
         component={UpdatePartnerProfile}
         options={{title: 'Update Profile'}}
-      />
-      <Stack.Screen
-        name="changepassword"
-        component={ChangePartnerPassword}
-        options={{title: 'Change Password'}}
       />
       <Stack.Screen
         name="Radius"

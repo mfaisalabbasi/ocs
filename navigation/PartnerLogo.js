@@ -17,11 +17,11 @@ import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {nullProfile, partnerProfile} from '../store/actions/user';
 
-const PartnerLogo = props => {
+const PartnerLogo = (props) => {
   const dispatch = useDispatch();
-  const userid = useSelector(state => state.register.user.localId);
-  const user = useSelector(state => state.user.user);
-  const er = useSelector(state => state.user.profileImgError);
+  const userid = useSelector((state) => state.otp.user.uid);
+  const user = useSelector((state) => state.user.user);
+  const er = useSelector((state) => state.user.profileImgError);
   useEffect(() => {}, [user]);
   const ocs = 'On Click Services';
   const [filename, setfilename] = useState(null);
@@ -36,10 +36,10 @@ const PartnerLogo = props => {
     const uploadtask = storage()
       .ref()
       .child('partners')
-      .child(user.email)
+      .child(user.phone)
       .putFile(uri);
 
-    uploadtask.on('state_changed', taskSnapshot => {
+    uploadtask.on('state_changed', (taskSnapshot) => {
       setprogress(true);
 
       const uploading =
@@ -51,12 +51,12 @@ const PartnerLogo = props => {
 
     const url = await storage()
       .ref()
-      .child(`partners/${user.email}`)
+      .child(`partners/${user.phone}`)
       .getDownloadURL();
     setfilename(null);
     setprogress(false);
     setpress(false);
-    dispatch(partnerProfile(userid, url));
+    dispatch(partnerProfile(userid, url, user.service));
   };
   const options = {
     title: 'Choose profile Picture',
@@ -66,7 +66,7 @@ const PartnerLogo = props => {
     },
   };
   const imgPicker = () => {
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {

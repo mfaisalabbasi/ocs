@@ -6,28 +6,31 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updateRadius} from '../../store/actions/user';
 
 const Radius = () => {
-  const userid = useSelector(state => state.register.user.localId);
-  
+  const userid = useSelector((state) => state.otp.user.uid);
+  const service = useSelector((state) => state.user.user.service);
+  let serviceName = service.replace(/ /g, '');
   const [check, setcheck] = useState(true);
 
   const dispatch = useDispatch();
   const [value, setvalue] = useState(50);
 
   const handleSlide = () => {
-    dispatch(updateRadius(userid, value));
+    dispatch(updateRadius(userid, value, serviceName));
   };
 
-  const valChange = props => {
+  const valChange = (props) => {
     setcheck(false);
     setvalue(props);
   };
   useEffect(() => {
-    const fetchRadius = async () =>{
-    const req = await fetch(`https://on-click-s.firebaseio.com/sellers/${userid}.json`)
-    const res = await req.json()
-    setvalue(parseInt(res.radius,10) )
-    }
-    fetchRadius()
+    const fetchRadius = async () => {
+      const req = await fetch(
+        `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userid}.json`,
+      );
+      const res = await req.json();
+      setvalue(parseInt(res.radius, 10));
+    };
+    fetchRadius();
   }, [value]);
   return (
     <View style={styles.screen}>

@@ -7,87 +7,73 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateName} from '../../store/actions/user';
-
-const UpdateProfile = ({route}) => {
-  const {upname, upemail, upphone} = route.params;
-  const [err, seterr] = useState(false);
-  const [user, setuser] = useState({
-    name: upname,
-    email: upemail,
-    phone: upphone,
-  });
-  const {name, email, phone} = user;
-
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {otpCustomer} from '../store/actions/otp';
+const Customer = ({navigation}) => {
+  const userData = useSelector((state) => state.otp.user);
+  const {phoneNumber, uid} = userData;
   const dispatch = useDispatch();
-  const userid = useSelector(state => state.register.user.localId);
-  const loading = useSelector(state => state.user.loading);
-  const er = useSelector(state => state.user.updateError);
 
-  const handleUpdate = () => {
-    if (!name || !phone) {
+  // user registration
+  const [user, setUser] = useState({
+    name: '',
+    phone: phoneNumber,
+    userId: uid,
+  });
+  const {name} = user;
+  const er = useSelector((state) => state.otpredu.error);
+  const loading = useSelector((state) => state.otpredu.loading);
+  const [err, seterr] = useState(false);
+  const handleRegisteration = async () => {
+    if (!name) {
       seterr(true);
     } else {
+      dispatch(otpCustomer(user));
       seterr(false);
-      dispatch(updateName(userid, user));
     }
   };
+
   return (
     <View style={styles.screen}>
       <View style={styles.form}>
         <View style={styles.head}>
-          <Icon type="FontAwesome" name="edit" color="#0A7DC9" size={30} />
-          <Text style={styles.heading}>On Click Services</Text>
-          <Text style={styles.smallheading}>Update Your Profile Info</Text>
+          <Icon
+            type="FontAwesome"
+            name="check-circle-o"
+            color="green"
+            size={27}
+          />
+          <Text style={styles.heading}>Congratulation</Text>
+          <Text style={{...styles.heading, fontSize: 15, fontWeight: '500'}}>
+            Registration Succeed!
+          </Text>
         </View>
         {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
-            <Text
-              style={{fontFamily: 'ebrima', color: '#498DF6', fontSize: 12}}>
+            <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>
               Updating profile
             </Text>
           </View>
         ) : null}
-
         {err || er ? (
-          <Text style={styles.redText}>
-            {er
-              ? `Error :- Something went wrong try later `
-              : `Error :- You can't update Profile without adding valid Value`}
-          </Text>
+          <Text style={styles.redText}>Error:- Enter your Name</Text>
         ) : null}
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
+            placeholder="Enter your name - نام لکھیں"
             placeholderTextColor="lightgray"
+            name="name"
             value={name}
-            onChangeText={text => setuser({...user, name: text})}
+            onChangeText={(text) => setUser({...user, name: text})}
           />
         </View>
-        <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="lightgray"
-            value={email}
-          />
-        </View>
-        <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="lightgray"
-            value={phone}
-            onChangeText={text => setuser({...user, phone: text})}
-            keyboardType="phone-pad"
-          />
-        </View>
-
-        <TouchableNativeFeedback onPress={handleUpdate}>
+        <TouchableNativeFeedback onPress={handleRegisteration}>
           <View style={styles.button}>
             <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
-              Update Profile
+              Register/رجسٹر
             </Text>
           </View>
         </TouchableNativeFeedback>
@@ -104,7 +90,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   form: {
-    // backgroundColor: '#498DF6',
     width: '95%',
     height: '92%',
     justifyContent: 'center',
@@ -114,25 +99,26 @@ const styles = StyleSheet.create({
   head: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   heading: {
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: 'ebrima',
-    fontWeight: '900',
-    color: '#0A7DC9',
+    color: 'green',
+    fontWeight: 'bold',
   },
   smallheading: {
-    fontSize: 8,
+    fontSize: 11,
     fontFamily: 'ebrima',
     color: '#498DF6',
   },
 
   inputs: {
     width: '100%',
-    marginVertical: 3,
+    marginVertical: 5,
   },
   input: {
+    padding: 8,
     fontSize: 12,
     fontFamily: 'ebrima',
     width: '90%',
@@ -148,18 +134,22 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: 5,
   },
   button: {
     width: '60%',
     backgroundColor: '#498DF6',
-    marginVertical: 10,
+    marginVertical: 8,
     paddingHorizontal: 5,
     paddingVertical: 8,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
     elevation: 2,
+  },
+  errBox: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '90%',
   },
   redText: {
     fontSize: 10,
@@ -168,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateProfile;
+export default Customer;

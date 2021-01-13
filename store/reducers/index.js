@@ -2,29 +2,36 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
-import register from './register';
 import user from './user';
-import resetpassword from './resetpassword';
 import notification from './notification';
-import services from './services'
-
+import services from './services';
+import otp from './otp';
+import otpredu from './otpredu';
+import order from './order';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['user', 'resetpassword', 'notification', 'register'],
+  blacklist: ['user', 'notification', 'otpredu', 'otp', 'order'],
 };
-const regPersist = {
-  key: 'register',
+const otpPersist = {
+  key: 'otp',
   storage: AsyncStorage,
-  blacklist: ['loading', 'error'],
+  blacklist: ['loading', 'confirm', 'error', 'otpError'],
+};
+
+const otpreduPersist = {
+  key: 'otpredu',
+  storage: AsyncStorage,
+  whitelist: ['user'],
 };
 
 const rootReducer = combineReducers({
-  register: persistReducer(regPersist, register),
   user,
-  resetpassword,
   notification,
-  services
+  services,
+  otp: persistReducer(otpPersist, otp),
+  otpredu: persistReducer(otpreduPersist, otpredu),
+  order,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

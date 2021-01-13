@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icoon from 'react-native-vector-icons/Ionicons';
@@ -24,10 +24,9 @@ const PartnerSettings = ({navigation}) => {
         );
       },
     });
-  }, [])
-  
-  const user = useSelector(state => state.user.user);
-  const email = useSelector(state => state.user.email);
+  }, []);
+
+  const user = useSelector((state) => state.user.user);
   const ocs = 'On Click Services';
   return (
     <View style={styles.screen}>
@@ -42,8 +41,8 @@ const PartnerSettings = ({navigation}) => {
             onPress={() =>
               navigation.navigate('updateprofile', {
                 upname: user.name,
-                upemail: user.email,
                 upphone: user.phone,
+                upexpertise: user.expertise,
               })
             }>
             <View style={styles.inputs}>
@@ -63,32 +62,6 @@ const PartnerSettings = ({navigation}) => {
               </View>
             </View>
           </TouchableNativeFeedback>
-          <TouchableNativeFeedback
-            onPress={() =>
-              navigation.navigate('updateprofile', {
-                upname: user.name,
-                upemail: user.email,
-                upphone: user.phone,
-              })
-            }>
-            <View style={styles.inputs}>
-              <View style={styles.icon}>
-                <Icoon
-                  type="Ionicons"
-                  name="ios-mail-unread"
-                  color="gray"
-                  size={27}
-                />
-              </View>
-              <View style={styles.input}>
-                <Text style={styles.txt}>Your Email:-</Text>
-                <Text style={styles.txt}>
-                  {user === null ? ocs : user.email}
-                </Text>
-              </View>
-            </View>
-          </TouchableNativeFeedback>
-
           <TouchableNativeFeedback
             onPress={() => navigation.navigate('Radius')}>
             <View
@@ -110,19 +83,6 @@ const PartnerSettings = ({navigation}) => {
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
-            onPress={() => navigation.navigate('changepassword')}>
-            <View
-              style={{...styles.inputs, marginBottom: 5, marginVertical: -10}}>
-              <View style={styles.icon}>
-                <Icon type="FontAwesome" name="lock" color="gray" size={25} />
-              </View>
-              <View style={styles.input}>
-                <Text style={styles.txt}>Change Password</Text>
-              </View>
-            </View>
-          </TouchableNativeFeedback>
-
-          <TouchableNativeFeedback
             onPress={() => navigation.navigate('logout')}>
             <View style={styles.inputs}>
               <View style={styles.icon}>
@@ -134,7 +94,7 @@ const PartnerSettings = ({navigation}) => {
                 />
               </View>
               <View style={styles.input}>
-                <Text style={styles.txt}>Logout Here</Text>
+                <Text style={styles.txt}>Logout Here </Text>
               </View>
             </View>
           </TouchableNativeFeedback>

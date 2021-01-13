@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {logoutAction} from '../../store/actions/auth';
 import Icoon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {logoutAction} from '../../store/actions/otp';
 
 const Logout = ({navigation}) => {
   const dispatch = useDispatch();
@@ -11,8 +11,8 @@ const Logout = ({navigation}) => {
     navigation.setOptions({
       title: 'Logout Screen',
     });
-  }, [])
- 
+  }, []);
+
   const handleLogout = () => {
     dispatch(logoutAction());
   };

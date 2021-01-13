@@ -13,13 +13,13 @@ import {
 import CustomLogo from './CustomLogo';
 import PartnerLogo from './PartnerLogo';
 import {useSelector} from 'react-redux';
-const Drawer = ({color}) => {
+const Drawer = () => {
   const Drawer = createDrawerNavigator();
-  const loggedUser = useSelector(state => state.register.user);
+  const type = useSelector((state) => state.otp.userType);
   return (
     <Drawer.Navigator
-      drawerContent={props =>
-        loggedUser.displayName === 'customer' ? (
+      drawerContent={(props) =>
+        type === 'customer' ? (
           <CustomLogo {...props} />
         ) : (
           <PartnerLogo {...props} />
@@ -37,7 +37,7 @@ const Drawer = ({color}) => {
           fontWeight: 'bold',
         },
       }}>
-      {loggedUser.displayName === 'customer' ? (
+      {type === 'customer' ? (
         <Fragment>
           <Drawer.Screen
             name="Home  "

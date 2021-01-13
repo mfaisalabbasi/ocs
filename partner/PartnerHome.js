@@ -1,33 +1,42 @@
-import React, {useState, useEffect, Fragment} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   TouchableNativeFeedback,
   StatusBar,
-  Dimensions,
   Text,
   Switch,
+  PermissionsAndroid,
+  Image,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icooon from 'react-native-vector-icons/MaterialIcons';
 import Icoooon from 'react-native-vector-icons/Fontisto';
-import Geolocation from '@react-native-community/geolocation';
-import MapView, {Circle, Marker, Polyline} from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
+import MapView, {Marker} from 'react-native-maps';
 import {useDispatch, useSelector} from 'react-redux';
 import {getPartner, partnerId, updateStatus} from '../store/actions/user';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {DeviceToken, updatePartnerLocation} from '../store/actions/auth';
-import PushNotification from 'react-native-push-notification';
-import ModalView from './ModalView';
+import RegisterModal from './RegisterModal';
+import messaging from '@react-native-firebase/messaging';
+import ProfileInfo from './ProfileInfo';
 
-const PartnerHome = props => {
+const PartnerHome = (props) => {
   //----------------------------------------------Navigation Setups----------------------------------------
   const [isEnabled, setIsEnabled] = useState(true);
+  const userid = useSelector((state) => state.otp.user.uid);
+  const user = useSelector((state) => state.user.user);
+  const service = useSelector((state) => state.otpredu.user.service);
 
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   useEffect(() => {
-    dispatch(updateStatus(userid, isEnabled));
+    userid &&
+      user &&
+      user.phone &&
+      dispatch(updateStatus(userid, isEnabled, service));
     props.navigation.setOptions({
       headerShown: true,
       headerTitle: '',
@@ -49,13 +58,13 @@ const PartnerHome = props => {
         return (
           <View style={styles.header}>
             <View style={{...styles.icon, width: 'auto', flexDirection: 'row'}}>
-              <Text style={{color: '#21618C', fontWeight: '900'}}>
+              <Text style={{color: '#0080FE', fontWeight: '900'}}>
                 {' '}
                 {isEnabled ? 'Active' : 'Offline'}{' '}
               </Text>
               <Switch
                 trackColor={{false: '#767577', true: '#D6DBDF'}}
-                thumbColor={isEnabled ? '#2ECC71' : '#f4f3f4'}
+                thumbColor={isEnabled ? '#0398FA' : '#f4f3f4'}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleSwitch}
                 value={isEnabled}
@@ -66,16 +75,12 @@ const PartnerHome = props => {
       },
     });
   }, [isEnabled]);
- 
 
   //----------------------------------------------Getting User----------------------------------------
   const dispatch = useDispatch();
-  const userid = useSelector(state => state.register.user.localId);
-  const [open, setopen] = useState(false);
-  const [reqcustomer, setreqcustomer] = useState({});
 
   useEffect(() => {
-    dispatch(getPartner(userid));
+    dispatch(getPartner(userid, service));
   }, []);
 
   //---------------------------------------------Handling custom , select and states -----------------
@@ -91,15 +96,12 @@ const PartnerHome = props => {
   };
 
   //--------------------------------------------------------------- Handling Map ---------------------
-
   const LATITUDE_DELTA = 0.009;
   const LONGITUDE_DELTA = 0.009;
-  const LATITUDE = 33.68439;
-  const LONGITUDE = 73.047554;
 
   const [mapstate, setmapstate] = useState({
-    latitude: LATITUDE,
-    longitude: LONGITUDE,
+    latitude: null,
+    longitude: null,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
     error: null,
@@ -111,152 +113,137 @@ const PartnerHome = props => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   });
-
-  const myGeo = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const location = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-      userid &&  dispatch(updatePartnerLocation(userid, location));
-        setmapstate({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
+  const mapReady = () => {
+    mapref.fitToSuppliedMarkers(['data'], {
+      animated: true,
+      edgePadding: {
+        top: 80,
+        bottom: Dimensions.get('screen').height / 0.9,
+        right: 0,
+        left: 0,
       },
-      error => {
-        RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
-          interval: 10000,
-          fastInterval: 5000,
-        })
-          .then(data => {
-            myGeo();
-          })
-          .catch(err => {});
-      },
-      {enableHighAccuracy: true, timeout: 200000},
-    );
+    });
   };
+
+  const myGeo = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+          userid &&
+            user &&
+            user.phone &&
+            dispatch(updatePartnerLocation(userid, location, service));
+          setmapstate({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null,
+          });
+        },
+        (error) => {
+          RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
+            interval: 10000,
+            fastInterval: 5000,
+          })
+            .then((data) => {
+              myGeo();
+            })
+            .catch((err) => {});
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 100000},
+      );
+    } else {
+      console.log('location Debied');
+    }
+  };
+
+  //---------------------------------------------------------------Handling Notification
+  const [tnx, settnx] = useState(false);
 
   useEffect(() => {
     myGeo();
-    dispatch(partnerId(userid));
-    const watchId = Geolocation.watchPosition(
-      position => {
-        const location = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-      userid &&  dispatch(updatePartnerLocation(userid, location));
-        setmapstate({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-      },
-      error => {
-        console.log(error);
-      },
-      {enableHighAccuracy: true, timeout: 200000},
-    );
+    messaging()
+      .getToken()
+      .then((token) => {
+        return (
+          userid &&
+          user &&
+          user.phone &&
+          dispatch(DeviceToken(userid, token, service))
+        );
+      });
 
-    return () => {
-      if (watchId) {
-        Geolocation.clearWatch(watchId);
-      }
-    };
-    
+    return messaging().onTokenRefresh((token) => {
+      userid &&
+        user &&
+        user.phone &&
+        dispatch(DeviceToken(userid, token, service));
+    });
+  }, [props, tnx]);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {});
+    return unsubscribe;
   }, []);
-  //---------------------------------------------------------------Device Token
 
-  PushNotification.configure({
-    onRegister: function(token) {
-      // console.log('Seller TOKEN:', token);
-      dispatch(DeviceToken(userid, token));
-    },
-    onNotification: function(notification) {
-      // console.log('Sello NOTIFICATION:', notification);
-      setreqcustomer(notification.data);
-      setopen(true);
-    },
+  useEffect(() => {
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      props.navigation.navigate(remoteMessage.data.route);
+    });
 
-    onAction: function(notification) {
-      console.log('ACTION:', notification.action);
-
-      // process the action
-    },
-    onRegistrationError: function(err) {
-      console.error(err.message, err);
-    },
-    permissions: {
-      alert: true,
-      badge: true,
-      sound: true,
-    },
-    popInitialNotification: true,
-    requestPermissions: true,
-  });
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          props.navigation.navigate(remoteMessage.data.route);
+        }
+      });
+  }, []);
 
   //------mapref
   let mapref;
   const currentLocation = () => {
     mapref.fitToCoordinates([mapstate], {animated: true});
   };
-  const [poli, setpoli] = useState(false);
-  const onMapChange = () => {
-    mapref.fitToSuppliedMarkers(['data'], {
-      animated: true,
-      edgePadding: {
-        top: 50,
-        right: 50,
-        bottom: Dimensions.get('window').height / 1.5,
-        left: 50,
-      },
-    });
-    setpoli(true);
+
+  //-----------------------------------------Profile Info
+  const [openprofileinfo, setopenprofileinfo] = useState(false);
+  const [singleMarker, setsingleMarker] = useState(false);
+  useEffect(() => {
+    props.route.params && setopenprofileinfo(true);
+    props.route.params &&
+      props.route.params.customer &&
+      props.route.params.customer.location &&
+      setsingleMarker(true);
+  }, [props]);
+
+  //----------------------Registration Form
+
+  const [newUser, setnewUser] = useState(false);
+
+  const checkNotification = () => {
+    if (!user.phone) {
+      setnewUser(true);
+    } else {
+      props.navigation.navigate('Notifications');
+      setnewUser(false);
+    }
   };
 
-  //------------------Customer Profile || Model View
-  const data = useSelector(state => state.user.requestcustomer);
-  const [found, setfound] = useState(false);
-  const [custLocation, setcustLocation] = useState({
-    latitude: 33.643011,
-    longitude: 73.040394,
-  });
-  // const data = props.route.params;
-  const locationArray = [
-    {
-      latitude: mapstate.latitude,
-      longitude: mapstate.longitude,
-    },
-    {
-      latitude: custLocation.latitude,
-      longitude: custLocation.longitude,
-    },
-  ];
-
-  useEffect(() => {
-    if (data.email) {
-      setopen(true);
-      setreqcustomer(data);
-      setcustLocation({
-        latitude: data.location.latitude,
-        longitude: data.location.longitude,
-      });
-      setfound(true);
-    }
-  }, [data]);
   //---------------------------------------------------------------Return Section
   return (
     <View style={styles.screen}>
-      <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
-
+      <StatusBar backgroundColor="#0080FE" barStyle="light-content" />
       <View style={styles.mapArea}>
         {mapstate.latitude !== null && (
           <MapView
-            ref={ref => {
+            ref={(ref) => {
               mapref = ref;
             }}
             maxZoomLevel={18}
@@ -269,36 +256,36 @@ const PartnerHome = props => {
             showsMyLocationButton={false}
             showsCompass={false}
             mapType={mapbtn.open ? 'satellite' : 'standard'}>
-            {found
-              ? locationArray.map(item => (
-                  <Fragment key={item.latitude}>
-                    {poli ? (
-                      <Polyline
-                        coordinates={locationArray}
-                        strokeWidth={5}
-                        strokeColor="#498DF6"
-                        fillColor="rgba(255,0,0,0.5)"
-                        lineDashPattern={[5]}
-                      />
-                    ) : null}
-
-                    <Marker
-                      coordinate={item}
-                      identifier={'data'}
-                      pinColor="#498DF6"
-                      opacity={0.9}
-                    />
-                  </Fragment>
-                ))
-              : null}
+            {singleMarker ? (
+              <Marker
+                key={props.route.params.customer.phone}
+                identifier={'data'}
+                coordinate={{
+                  latitude: props.route.params.customer.location.latitude,
+                  longitude: props.route.params.customer.location.longitude,
+                }}>
+                <Image
+                  key={props.route.params.latitude}
+                  onLoad={mapReady}
+                  source={require('../assets/images/avatar.png')}
+                  style={{
+                    flex: 1,
+                    width: 25,
+                    height: 25,
+                    resizeMode: 'cover',
+                    aspectRatio: 1,
+                    borderRadius: 100,
+                  }}
+                />
+              </Marker>
+            ) : null}
           </MapView>
         )}
       </View>
-
       <View style={styles.custom}>
         <TouchableNativeFeedback onPress={mapTypeHandle}>
           <View style={styles.custombtn}>
-            <Icoooon type="Fontisto" name="earth" color="#2257A9" size={16} />
+            <Icoooon type="Fontisto" name="earth" color="#2257A9" size={15} />
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback onPress={currentLocation}>
@@ -307,46 +294,38 @@ const PartnerHome = props => {
               type="MaterialIcons"
               name="my-location"
               color="#2257A9"
-              size={20}
+              size={18}
             />
           </View>
         </TouchableNativeFeedback>
       </View>
-      {found ? (
-        <TouchableNativeFeedback onPress={() => setopen(true)}>
-          <View style={styles.selectOptions}>
-            <Text style={styles.chooseBtn}> Open Profile </Text>
-            <Icon
-              type="Ionicons"
-              name="ios-arrow-up"
-              size={25}
-              color="#FFFFFF"
-            />
-          </View>
-        </TouchableNativeFeedback>
-      ) : (
-        <TouchableNativeFeedback
-          onPress={() => props.navigation.navigate('Notifications')}>
-          <View style={styles.selectOptions}>
-            <Text style={styles.chooseBtn}> Check Job Requests</Text>
-            <Icooon
-              type="MaterialIcons"
-              name="find-in-page"
-              size={23}
-              color="#FFFFFF"
-            />
-          </View>
-        </TouchableNativeFeedback>
-      )}
+      <TouchableNativeFeedback onPress={checkNotification}>
+        <View style={styles.selectOptions}>
+          <Text style={styles.chooseBtn}> Check Job Requests</Text>
+          <Icooon
+            type="MaterialIcons"
+            name="find-in-page"
+            size={23}
+            color="#FFFFFF"
+          />
+        </View>
+      </TouchableNativeFeedback>
 
-      <ModalView
-        job={open}
-        closeProfile={() => setopen(false)}
-        reqCustomer={reqcustomer}
-        getDirection={onMapChange}
-        closeDirect={() => setfound(false)}
-        currentlocation={currentLocation}
-        poli={() => setpoli(false)}
+      <ProfileInfo
+        openprofileinfo={openprofileinfo}
+        setopenprofileinfo={() => {
+          setopenprofileinfo(false);
+          setsingleMarker(false);
+        }}
+        info={props.route.params && props.route.params.customer}
+        current={currentLocation}
+      />
+      <RegisterModal
+        new={newUser}
+        closing={() => setnewUser(false)}
+        tnx={tnx}
+        closetnx={() => settnx(false)}
+        opentnx={() => settnx(true)}
       />
     </View>
   );
@@ -377,14 +356,14 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   custom: {
-    width: 35,
+    width: 25,
     marginLeft: 'auto',
-    marginRight: 15,
-    marginBottom: 15,
+    marginRight: 10,
+    marginBottom: 5,
   },
   custombtn: {
     width: '100%',
-    height: 35,
+    height: 25,
     backgroundColor: '#fff',
     elevation: 3,
     marginVertical: 5,
@@ -393,14 +372,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectOptions: {
-    width: '96%',
-    backgroundColor: '#326ECC',
-    height: '9%',
+    width: '70%',
+    backgroundColor: '#0398FA',
+    height: '7.1%',
     zIndex: 1,
-    marginBottom: 8,
-    marginTop: 1,
-    borderRadius: 10,
-    elevation: 1,
+    marginBottom: 30,
+    borderRadius: 50,
+    elevation: 2,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',

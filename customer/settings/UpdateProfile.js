@@ -4,82 +4,84 @@ import {
   Text,
   StyleSheet,
   TouchableNativeFeedback,
-  TouchableOpacity,
   TextInput,
-  StatusBar,
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
-import {resetPassword} from '../../store/actions/auth';
-const ResetPassword = ({navigation}) => {
-  const dispatch = useDispatch();
-  const er = useSelector(state => state.resetpassword.error.resetError);
-  const loading = useSelector(state => state.resetpassword.loading);
+import {updateName} from '../../store/actions/user';
+
+const UpdateProfile = ({route}) => {
+  const {upname, upphone} = route.params;
   const [err, seterr] = useState(false);
   const [user, setuser] = useState({
-    email: '',
+    name: upname,
+    phone: upphone,
   });
-  const {email} = user;
-  const loginHandler = () => {
-    seterr(false);
-    if (!email) {
+  const {name, phone} = user;
+
+  const dispatch = useDispatch();
+  const userid = useSelector((state) => state.otp.user.uid);
+  const loading = useSelector((state) => state.user.loading);
+  const er = useSelector((state) => state.user.updateError);
+
+  const handleUpdate = () => {
+    if (!name || !phone) {
       seterr(true);
     } else {
       seterr(false);
-      setuser({
-        email: '',
-      });
-      dispatch(resetPassword(email));
+      dispatch(updateName(userid, user));
     }
   };
   return (
     <View style={styles.screen}>
-      <StatusBar backgroundColor="#2257A9" barStyle="light-content" />
       <View style={styles.form}>
         <View style={styles.head}>
-          <Icon type="FontAwesome" name="edit" color="#0A7DC9" size={40} />
-          <Text style={styles.heading}>Enter your Email</Text>
-          <Text style={styles.smallheading}>
-            Reset your password by entering valid email
-          </Text>
+          <Icon type="FontAwesome" name="edit" color="#0A7DC9" size={30} />
+          <Text style={styles.heading}>On Click Services</Text>
+          <Text style={styles.smallheading}>Update Your Profile Info</Text>
         </View>
         {loading ? (
           <View>
             <ActivityIndicator size="small" color="#498DF6" />
-            <Text style={{fontFamily: 'ebrima', color: '#498DF6'}}>
-              Sending
+            <Text
+              style={{fontFamily: 'ebrima', color: '#498DF6', fontSize: 12}}>
+              Updating profile
             </Text>
           </View>
         ) : null}
+
         {err || er ? (
           <Text style={styles.redText}>
-            Error :- Fill with Registered Email
+            {er
+              ? `Error :- Something went wrong try later `
+              : `Error :- You can't update Profile without adding valid Value`}
           </Text>
         ) : null}
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
-            placeholder=" ..."
             placeholderTextColor="lightgray"
-            value={email}
-            onChangeText={text => setuser({...user, email: text})}
+            value={name}
+            onChangeText={(text) => setuser({...user, name: text})}
           />
         </View>
-        <TouchableNativeFeedback onPress={loginHandler}>
+        <View style={styles.inputs}>
+          <TextInput
+            style={styles.input}
+            placeholderTextColor="lightgray"
+            value={phone}
+            keyboardType="phone-pad"
+          />
+        </View>
+
+        <TouchableNativeFeedback onPress={handleUpdate}>
           <View style={styles.button}>
             <Text style={{color: '#FFFFFF', fontFamily: 'ebrima'}}>
-              Send Me
+              Update Profile
             </Text>
           </View>
         </TouchableNativeFeedback>
-        <View style={styles.regBtn}>
-          <TouchableOpacity>
-            <View style={{paddingVertical: 8, padding: 3}}>
-              <Text style={styles.smallheading}>Reset Your Password</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );
@@ -106,20 +108,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   heading: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'ebrima',
     fontWeight: '900',
     color: '#0A7DC9',
   },
   smallheading: {
-    fontSize: 10,
+    fontSize: 8,
     fontFamily: 'ebrima',
-    color: '#0A7DC9',
+    color: '#498DF6',
   },
 
   inputs: {
     width: '100%',
-    marginVertical: 5,
+    marginVertical: 3,
   },
   input: {
     fontSize: 12,
@@ -137,13 +139,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
+    padding: 5,
   },
   button: {
-    width: '85%',
+    width: '60%',
     backgroundColor: '#498DF6',
     marginVertical: 10,
     paddingHorizontal: 5,
-    paddingVertical: 12,
+    paddingVertical: 8,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
@@ -154,12 +157,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontFamily: 'ebrima',
   },
-  regBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    justifyContent: 'center',
-  },
 });
 
-export default ResetPassword;
+export default UpdateProfile;

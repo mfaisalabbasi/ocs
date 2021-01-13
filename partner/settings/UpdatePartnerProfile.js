@@ -12,26 +12,26 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updatePartner} from '../../store/actions/user';
 
 const UpdatePartnerProfile = ({route, navigation}) => {
-  const {upname, upemail, upphone} = route.params;
+  const {upname, upphone, upexpertise} = route.params;
   const [err, seterr] = useState(false);
   const [user, setuser] = useState({
     name: upname,
-    email: upemail,
     phone: upphone,
+    expertise: upexpertise,
   });
-  const {name, email, phone} = user;
+  const {name, phone, expertise} = user;
 
   const dispatch = useDispatch();
-  const userid = useSelector(state => state.register.user.localId);
-  const loading = useSelector(state => state.user.loading);
-  const er = useSelector(state => state.user.updateError);
-
+  const userid = useSelector((state) => state.otp.user.uid);
+  const loading = useSelector((state) => state.user.loading);
+  const service = useSelector((state) => state.user.user.service);
+  const er = useSelector((state) => state.user.updateError);
   const handleUpdate = () => {
     if (!name || !phone) {
       seterr(true);
     } else {
       seterr(false);
-      dispatch(updatePartner(userid, user));
+      dispatch(updatePartner(userid, user, service));
     }
   };
   return (
@@ -64,22 +64,26 @@ const UpdatePartnerProfile = ({route, navigation}) => {
             style={styles.input}
             placeholderTextColor="lightgray"
             value={name}
-            onChangeText={text => setuser({...user, name: text})}
+            onChangeText={(text) => setuser({...user, name: text})}
           />
         </View>
+
         <View style={styles.inputs}>
           <TextInput
+            multiline={true}
+            numberOfLines={3}
             style={styles.input}
             placeholderTextColor="lightgray"
-            value={email}
+            value={expertise}
+            onChangeText={(text) => setuser({...user, expertise: text})}
           />
         </View>
+
         <View style={styles.inputs}>
           <TextInput
             style={styles.input}
             placeholderTextColor="lightgray"
             value={phone}
-            onChangeText={text => setuser({...user, phone: text})}
             keyboardType="phone-pad"
           />
         </View>

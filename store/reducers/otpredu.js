@@ -1,26 +1,27 @@
-import {LOADING_SERVICES, SERVICES_SUCCESS, SERVICES_FAILED} from '../constant';
+import {OTP_USER_LOADING, OTP_USER_SUCCESS, OTP_USER_FAIL} from '../constant';
 
 const initialState = {
   loading: false,
-  services: [],
+  user: {},
   error: null,
 };
 
-const services = (state = initialState, action) => {
+const otpredu = (state = initialState, action) => {
   const {type, payload} = action;
   switch (type) {
-    case LOADING_SERVICES:
+    case OTP_USER_LOADING:
       return {
         ...state,
         loading: true,
       };
-    case SERVICES_SUCCESS:
+    case OTP_USER_SUCCESS:
       return {
         ...state,
         loading: false,
-        services: payload,
+        user: payload,
+        error: null,
       };
-    case SERVICES_FAILED:
+    case OTP_USER_FAIL:
       return {
         ...state,
         loading: false,
@@ -31,4 +32,4 @@ const services = (state = initialState, action) => {
   }
 };
 
-export default services;
+export default otpredu;

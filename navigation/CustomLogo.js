@@ -17,11 +17,12 @@ import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {customerProfile, nullProfile} from '../store/actions/user';
 
-const CustomLogo = props => {
+const CustomLogo = (props) => {
   const dispatch = useDispatch();
-  const userid = useSelector(state => state.register.user.localId);
-  const user = useSelector(state => state.user.user);
-  const er = useSelector(state => state.user.profileImgError);
+  const userid = useSelector((state) => state.otp.user.uid);
+  const user = useSelector((state) => state.user.user);
+  const phone = useSelector((state) => state.otp.user.phoneNumber);
+  const er = useSelector((state) => state.user.profileImgError);
 
   useEffect(() => {}, [user]);
   const ocs = 'On Click Services';
@@ -37,10 +38,10 @@ const CustomLogo = props => {
     const uploadtask = storage()
       .ref()
       .child('customers')
-      .child(user.email)
+      .child(phone)
       .putFile(uri);
 
-    uploadtask.on('state_changed', taskSnapshot => {
+    uploadtask.on('state_changed', (taskSnapshot) => {
       setprogress(true);
 
       const uploading =
@@ -52,9 +53,8 @@ const CustomLogo = props => {
 
     const url = await storage()
       .ref()
-      .child(`customers/${user.email}`)
+      .child(`customers/${phone}`)
       .getDownloadURL();
-    // setUser({...user, imgUrl: url});
     setfilename(null);
     setprogress(false);
     setpress(false);
@@ -68,7 +68,7 @@ const CustomLogo = props => {
     },
   };
   const imgPicker = () => {
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {

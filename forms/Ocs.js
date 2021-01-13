@@ -11,25 +11,45 @@ import {
 const Ocs = ({navigation}) => {
   return (
     <View style={styles.screen}>
-      <StatusBar backgroundColor="#7687A0" barStyle="light-content" />
+      <StatusBar backgroundColor="#34495E" barStyle="light-content" />
 
       <View style={styles.topView} />
       <View style={styles.form}>
         <View style={styles.imgView}>
           <Image
-            source={require('../../assets/images/logo.png')}
-            style={{width: '50%', height: '100%', resizeMode: 'center'}}
+            source={require('../assets/images/ocs.png')}
+            style={{width: 60, height: 60, borderRadius: 200}}
           />
         </View>
+        <Text
+          style={{
+            fontFamily: 'ebrima',
+            marginBottom: 2,
+            fontSize: 20,
+            color: 'green',
+            fontWeight: 'bold',
+          }}>
+          Welcome!
+        </Text>
+        <Text
+          style={{
+            fontFamily: 'ebrima',
+            marginBottom: 10,
+            fontSize: 8,
+            color: 'green',
+          }}>
+          Choose Account /اکاؤنٹ کا انتخاب کریں
+        </Text>
+
         <TouchableNativeFeedback onPress={() => navigation.navigate('Login')}>
           <View style={styles.btn}>
-            <Text style={styles.btnText}>Become OCS Customer / کسٹمر اکاؤنٹ</Text>
+            <Text style={styles.btnText}>Customer Account / کسٹمر اکاؤنٹ</Text>
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
           onPress={() => navigation.navigate('SellerLogin')}>
           <View style={{...styles.btn, backgroundColor: '#F2C229'}}>
-            <Text style={styles.btnText}>Become OCS Partner / پارٹنر اکاؤنٹ</Text>
+            <Text style={styles.btnText}>Partner Account / پارٹنر اکاؤنٹ</Text>
           </View>
         </TouchableNativeFeedback>
       </View>
@@ -52,9 +72,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imgView: {
-    width: '90%',
-    height: 110,
-    marginVertical: 2,
+    width: 60,
+    height: 60,
+    marginBottom: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },

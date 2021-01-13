@@ -6,25 +6,24 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './store/reducers/index';
 import AnimatedSplash from 'react-native-animated-splash-screen';
 import {Dimensions} from 'react-native';
-import codePush from "react-native-code-push";
-import NetInfo from "@react-native-community/netinfo";
+import codePush from 'react-native-code-push';
+import NetInfo from '@react-native-community/netinfo';
 import NetworkError from './screens/NetworkError';
 
 function App() {
-  
   const [loading, setloading] = useState(false);
   const [connected, setconnected] = useState(true);
-  const handleConnectivity = isconnected =>{
-    setconnected(isconnected)
-  }
+  const handleConnectivity = (isconnected) => {
+    setconnected(isconnected);
+  };
   useEffect(() => {
-  setTimeout(()=>setloading(true),500)
-  let isCancelled = false
-  NetInfo.addEventListener(state=> {
-    if(!isCancelled){
-      handleConnectivity(state.isConnected)
-    }
-    })
+    setTimeout(() => setloading(true), 500);
+    let isCancelled = false;
+    NetInfo.addEventListener((state) => {
+      if (!isCancelled) {
+        handleConnectivity(state.isConnected);
+      }
+    });
     return () => {
       isCancelled = true;
     };
@@ -38,7 +37,7 @@ function App() {
       logoWidth={Dimensions.get('screen').width / 1}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-       {connected ? null : <NetworkError />} 
+          {connected ? null : <NetworkError />}
           <Navigation />
         </PersistGate>
       </Provider>
@@ -46,4 +45,4 @@ function App() {
   );
 }
 
-export default  codePush(App);
+export default codePush(App);

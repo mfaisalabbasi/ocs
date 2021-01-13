@@ -1,4 +1,4 @@
-import {isPointWithinRadius} from 'geolib';
+import {orderByDistance} from 'geolib';
 import {
   GET_USER,
   FAILED_USER,
@@ -22,10 +22,10 @@ import {
   NULL_PROFILE,
 } from '../constant';
 
-export const getUser = userid => async dispatch => {
+export const getUser = (userid) => async (dispatch) => {
   try {
     const req = await fetch(
-      `https://on-click-s.firebaseio.com/customers/${userid}.json`
+      `https://on-click-s.firebaseio.com/customers/${userid}.json`,
     );
     const res = await req.json();
     res.error
@@ -42,7 +42,7 @@ export const getUser = userid => async dispatch => {
   }
 };
 
-export const updateName = (userid, user) => async dispatch => {
+export const updateName = (userid, user) => async (dispatch) => {
   dispatch({
     type: UPDATE_LOADING,
   });
@@ -74,7 +74,7 @@ export const updateName = (userid, user) => async dispatch => {
 };
 
 //------------------------------customer profile
-export const customerProfile = (userid, profileUrl) => async dispatch => {
+export const customerProfile = (userid, profileUrl) => async (dispatch) => {
   try {
     const req = await fetch(
       `https://on-click-s.firebaseio.com/customers/${userid}.json`,
@@ -102,7 +102,7 @@ export const customerProfile = (userid, profileUrl) => async dispatch => {
   }
 };
 
-export const nullProfile = () => dispatch => {
+export const nullProfile = () => (dispatch) => {
   dispatch({
     type: NULL_PROFILE,
     payload: null,
@@ -110,14 +110,18 @@ export const nullProfile = () => dispatch => {
 };
 //------------------------Getting Sellers
 
-export const allSeller = (custLocation, service) => async dispatch => {
+export const allSeller = (custLocation, service) => async (dispatch) => {
+  let serviceName = service.replace(/ /g, '').toLowerCase();
   dispatch({
     type: START_LOADING,
   });
   try {
-    const req = await fetch(`https://on-click-s.firebaseio.com/sellers.json`);
+    const req = await fetch(
+      `https://on-click-s.firebaseio.com/sellers/${serviceName}.json`,
+    );
     const res = await req.json();
     let loaded = [];
+    let filterd = [];
     if (res.error) {
       dispatch({
         type: FAILED_SELLERS,
@@ -125,35 +129,27 @@ export const allSeller = (custLocation, service) => async dispatch => {
       });
     } else {
       const vl = Object.keys(res);
-      vl.map(item => loaded.push(res[item]));
-      const filterd = loaded.filter(
-        itm =>
-         itm.service === service.toLowerCase() &&
-          itm.status === true &&
-          isPointWithinRadius(
-            {
-              latitude: custLocation.latitude,
-              longitude: custLocation.longitude,
-            },
-            {
-              latitude: itm.latitude,
-              longitude: itm.longitude,
-            },
-            itm.radius * 1000,
-          ),
-      );
-      filterd.length < 1
-        ? dispatch({
-            type: FAILED_SELLERS,
-            payload: 'jeen da error',
-          })
-        : dispatch({
-            type: GET_SELLERS,
-            payload: filterd,
-          });
+      vl.map((item) => loaded.push(res[item]));
+      filterd = loaded.filter((itm) => itm.status === true);
     }
-    
+    const nearby = orderByDistance(
+      {
+        latitude: custLocation.latitude,
+        longitude: custLocation.longitude,
+      },
+      filterd,
+    );
+    nearby.length < 1
+      ? dispatch({
+          type: FAILED_SELLERS,
+          payload: 'jeen da error',
+        })
+      : dispatch({
+          type: GET_SELLERS,
+          payload: nearby,
+        });
   } catch (error) {
+    console.log('cathc', error);
     dispatch({
       type: FAILED_SELLERS,
       payload: error,
@@ -162,7 +158,7 @@ export const allSeller = (custLocation, service) => async dispatch => {
 };
 
 //------------------------------------nulling seller
-export const nullSeller = () => async dispatch => {
+export const nullSeller = () => async (dispatch) => {
   try {
     const nullSell = [];
     dispatch({
@@ -175,7 +171,7 @@ export const nullSeller = () => async dispatch => {
 };
 
 //------------------------------------nulling seller
-export const nullNear = () => async dispatch => {
+export const nullNear = () => async (dispatch) => {
   try {
     const nullSell = {};
     dispatch({
@@ -189,7 +185,7 @@ export const nullNear = () => async dispatch => {
 
 //---------------------------------Nearest partner
 
-export const getNear = nearest => async dispatch => {
+export const getNear = (nearest) => async (dispatch) => {
   try {
     dispatch({
       type: GET_NEAREST,
@@ -200,7 +196,7 @@ export const getNear = nearest => async dispatch => {
   }
 };
 //--------------------------------NearBy Partners List
-export const nearbyPartners = nearby => async dispatch => {
+export const nearbyPartners = (nearby) => async (dispatch) => {
   try {
     dispatch({
       type: GET_NEARBY,
@@ -213,10 +209,11 @@ export const nearbyPartners = nearby => async dispatch => {
 
 //------------------------------------partner section
 
-export const getPartner = userid => async dispatch => {
+export const getPartner = (userid, service) => async (dispatch) => {
+  let serviceName = service.replace(/ /g, '');
   try {
     const req = await fetch(
-      `https://on-click-s.firebaseio.com/sellers/${userid}.json`
+      `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userid}.json`,
     );
     const res = await req.json();
     res.error
@@ -236,13 +233,14 @@ export const getPartner = userid => async dispatch => {
   }
 };
 
-export const updatePartner = (userid, user) => async dispatch => {
+export const updatePartner = (userid, user, service) => async (dispatch) => {
+  let serviceName = service.replace(/ /g, '');
   dispatch({
     type: UPDATE_LOADING,
   });
   try {
     const req = await fetch(
-      `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+      `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userid}.json`,
       {
         method: 'patch',
         ContentType: 'application/json',
@@ -268,10 +266,14 @@ export const updatePartner = (userid, user) => async dispatch => {
 };
 
 //------------------------------partner profile
-export const partnerProfile = (userid, profileUrl) => async dispatch => {
+export const partnerProfile = (userid, profileUrl, service) => async (
+  dispatch,
+) => {
+  let serviceName = service.replace(/ /g, '');
+
   try {
     const req = await fetch(
-      `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+      `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userid}.json`,
       {
         method: 'patch',
         ContentType: 'application/json',
@@ -296,12 +298,12 @@ export const partnerProfile = (userid, profileUrl) => async dispatch => {
   }
 };
 
-export const partnerId = userid => async dispatch => {
+export const partnerId = (userid) => async (dispatch) => {
   const req = await fetch(
     `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
     {
       method: 'patch',
-      ContentType: 'application/json', 
+      ContentType: 'application/json',
       body: JSON.stringify({partnerKey: userid}),
     },
   );
@@ -310,13 +312,15 @@ export const partnerId = userid => async dispatch => {
 
 //---------------------------updating status
 
-export const updateStatus = (userid, status) => async dispatch => {
+export const updateStatus = (userid, status, service) => async (dispatch) => {
+  let serviceName = service.replace(/ /g, '');
+
   const req = await fetch(
-    `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+    `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userid}.json`,
     {
       method: 'patch',
-      ContentType: 'application/json', 
-     body: JSON.stringify({status: status}),
+      ContentType: 'application/json',
+      body: JSON.stringify({status: status}),
     },
   );
   const res = await req.json();
@@ -324,9 +328,11 @@ export const updateStatus = (userid, status) => async dispatch => {
 
 //---------------------------updating status
 
-export const updateRadius = (userid, radius) => async dispatch => {
+export const updateRadius = (userid, radius, serviceName) => async (
+  dispatch,
+) => {
   const req = await fetch(
-    `https://on-click-s.firebaseio.com/sellers/${userid}.json`,
+    `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userid}.json`,
     {
       method: 'patch',
       ContentType: 'application/json',
@@ -337,7 +343,9 @@ export const updateRadius = (userid, radius) => async dispatch => {
 };
 
 //----------------------sending Notification
-export const sendingNotification = (token, customerData) => async dispatch => {
+export const sendingNotification = (token, customerData) => async (
+  dispatch,
+) => {
   dispatch({type: NOTIFICATION_LOADING});
   try {
     customerData.date = Date.now();
@@ -353,9 +361,7 @@ export const sendingNotification = (token, customerData) => async dispatch => {
         direct_book_ok: true,
         notification: {
           title: 'Dear Partner,',
-          body: `${
-            customerData.name
-          } is looking for your service, check details !!!`,
+          body: `${customerData.name} is looking for your service, check details !!!`,
           sound: 'default',
         },
         data: customerData,
@@ -374,7 +380,7 @@ export const sendingNotification = (token, customerData) => async dispatch => {
 };
 
 //-------------------null noti
-export const nullNotification = () => dispatch => {
+export const nullNotification = () => (dispatch) => {
   const error = null;
   dispatch({
     type: NOTIFICATION_ERROR,
@@ -382,14 +388,13 @@ export const nullNotification = () => dispatch => {
   });
 };
 
-export const jobRequest = (userid, job) => async dispatch => {
+export const jobRequest = (userid, job) => async (dispatch) => {
   try {
-    
     const req = await fetch(
       `https://on-click-s.firebaseio.com/sellers/${userid}/jobs.json`,
       {
         method: 'post',
-        ContentType: 'application/json', 
+        ContentType: 'application/json',
         body: JSON.stringify(job),
       },
     );
@@ -401,7 +406,7 @@ export const jobRequest = (userid, job) => async dispatch => {
 
 //---------------------------Request customer data
 
-export const requestCustomer = customer => async dispatch => {
+export const requestCustomer = (customer) => async (dispatch) => {
   try {
     dispatch({
       type: REQUEST_CUSTOMER,
@@ -413,7 +418,7 @@ export const requestCustomer = customer => async dispatch => {
 };
 
 //------------------------------------nulling request customer
-export const nullCustomer = () => async dispatch => {
+export const nullCustomer = () => async (dispatch) => {
   try {
     const nullCust = {};
     dispatch({

@@ -5,37 +5,43 @@ import {
   Text,
   Image,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
-import {requestCustomer} from '../store/actions/user';
-const Box = props => {
-  const dispatch = useDispatch();
+const Box = (props) => {
   const handlePress = () => {
-    dispatch(requestCustomer(props.dta));
+    // dispatch(requestCustomer(props.dta));
     props.navigate();
   };
   return (
     <View style={styles.screen}>
       <TouchableNativeFeedback onPress={handlePress}>
         <View style={styles.card}>
-          <View style={styles.icon}>
+          <View style={styles.imageCon}>
             <Image
-              source={require('../assets/images/bell.png')}
+              source={
+                props.dta.profileUrl
+                  ? {uri: props.dta.profileUrl}
+                  : require('../assets/images/person.jpg')
+              }
               style={{
-                flex: 1,
-                width: '100%',
-                height: '100%',
-                resizeMode: 'contain',
+                width: '70%',
+                height: '70%',
+                resizeMode: 'cover',
+                aspectRatio: 1,
+                borderRadius: 20,
               }}
             />
           </View>
           <View style={styles.title}>
             <Text style={styles.body}>
-              <Text style={styles.head}>{props.dta.name},</Text> {props.dta.msg ? props.dta.msg :'is looking for your service, kindly check further details.'}
+              <Text style={styles.head}>
+                {props.dta.name && props.dta.name},{' '}
+              </Text>
+              wants to hire you, click to get more information
             </Text>
-            <Text style={{fontWeight: 'bold', fontSize: 12}}>
-              [ {moment(props.dta.date).fromNow()} ]
+            <Text style={{fontWeight: 'bold', fontSize: 9, color: '#566573'}}>
+              [ {moment(props.dta.submitDate).fromNow()} ]
             </Text>
           </View>
         </View>
@@ -49,37 +55,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: '95%',
-    height: 120,
-    backgroundColor: '#FFFFFF',
-    elevation: 1,
-    marginTop: 15,
-    borderRadius: 10,
+    flexDirection: 'row',
+    width: Dimensions.get('screen').width / 1.06,
+    height: 65,
+    marginBottom: 10,
+    marginHorizontal: 1,
+    borderRadius: 2,
     alignItems: 'center',
     overflow: 'hidden',
+    backgroundColor: '#F8F9F9',
+    elevation: 0.5,
+    overflow: 'hidden',
   },
-  icon: {
-    width: '100%',
-    height: '35%',
+
+  imageCon: {
+    width: '20%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'lightblue',
   },
   title: {
-    width: '100%',
-    height: '65%',
+    width: '80%',
+    height: '100%',
     padding: 5,
   },
   head: {
     fontFamily: 'ebrima',
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 13,
     color: '#0140A0',
   },
   body: {
     fontWeight: '900',
-
     fontFamily: 'ebrima',
+    fontSize: 12,
+    color: '#5D6D7E',
   },
 });
 export default Box;

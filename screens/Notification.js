@@ -49,8 +49,8 @@ const Notification = ({navigation}) => {
         </View>
         <View style={styles.title}>
           <Text style={styles.body}>
-            <Text style={styles.head}>Muhammad Faisal, </Text>
-            computer is electronic brain that taks data and give information hi
+            <Text style={styles.head}>Dear customer, </Text>
+            we will try best to serve you stay connected with us.
           </Text>
           <Text style={{fontWeight: 'bold', fontSize: 9, color: '#566573'}}>
             [ {moment().format('MMMM Do YYYY, h:mm:ss a')} ]

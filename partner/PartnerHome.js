@@ -27,9 +27,10 @@ const PartnerHome = (props) => {
   //----------------------------------------------Navigation Setups----------------------------------------
   const [isEnabled, setIsEnabled] = useState(true);
   const userid = useSelector((state) => state.otp.user.uid);
+  const myuserid = useSelector((state) => state.otp.user);
+
   const user = useSelector((state) => state.user.user);
   const service = useSelector((state) => state.otpredu.user.service);
-
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   useEffect(() => {

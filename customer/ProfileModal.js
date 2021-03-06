@@ -15,7 +15,7 @@ import Icoon from 'react-native-vector-icons/Entypo';
 import {useDispatch, useSelector} from 'react-redux';
 import {nullNear, nullSeller} from '../store/actions/user';
 import {clearOrder, submitOrder} from '../store/actions/order';
-
+import {AppEventsLogger} from 'react-native-fbsdk';
 const ProfileModal = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -42,6 +42,7 @@ const ProfileModal = (props) => {
     dispatch(nullNear());
     setconfirmOrder(false);
     dispatch(clearOrder());
+    AppEventsLogger.logEvent('Cancel Pressed');
   };
 
   //---------------------------------sellers Array
@@ -70,9 +71,11 @@ const ProfileModal = (props) => {
   const confirmed = useSelector((state) => state.order.confirmed);
   const orderNow = () => {
     setconfirmOrder(true);
+    AppEventsLogger.logEvent('order now');
   };
   const onOrderConfirm = () => {
     dispatch(submitOrder(user, props.service));
+    AppEventsLogger.logEvent('confirm order');
   };
   return (
     <Modal

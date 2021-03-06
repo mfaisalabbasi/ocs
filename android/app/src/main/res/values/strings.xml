@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ocs</string>
     <string moduleConfig="true" name="CodePushDeploymentKey">zJOV3YJthXZFtSKBaMEQ28aFBSgcDuymZ1g2o</string>
+    <string name="facebook_app_id">1386410825041287</string>
+    <string name="fb_login_protocol_scheme">fb1386410825041287</string>
+
 </resources>

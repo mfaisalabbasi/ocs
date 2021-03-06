@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {otpConfirm, otpRegister} from '../store/actions/otp';
+import {AppEventsLogger} from 'react-native-fbsdk';
 
 const Login = () => {
   const confirm = useSelector((state) => state.otp.confirm);
@@ -37,6 +38,7 @@ const Login = () => {
       seter(true);
     } else {
       dispatch(otpConfirm(confirm, code));
+      AppEventsLogger.logEvent('Complete Customer Registration');
     }
   }
 

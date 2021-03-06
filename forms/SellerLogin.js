@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
+import {AppEventsLogger} from 'react-native-fbsdk';
 import {useSelector, useDispatch} from 'react-redux';
 import {otpConfirmPartner, registerPartner} from '../store/actions/otp';
 const SellerLogin = ({navigation}) => {
@@ -36,6 +37,7 @@ const SellerLogin = ({navigation}) => {
       seter(true);
     } else {
       dispatch(otpConfirmPartner(confirm, code));
+      AppEventsLogger.logEvent('Complete Partner Registration');
     }
   }
 

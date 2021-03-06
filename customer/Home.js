@@ -24,6 +24,7 @@ import {updateLocation, CustomerDeviceToken} from '../store/actions/auth';
 import ProfileModal from './ProfileModal';
 import messaging from '@react-native-firebase/messaging';
 import ProfileInfo from './ProfileInfo';
+import {AppEventsLogger} from 'react-native-fbsdk';
 
 const Home = (props) => {
   //----------------------------------------------Navigation Setups----------------------------------------
@@ -189,6 +190,7 @@ const Home = (props) => {
     } else {
       dispatch(allSeller(mapstate, service));
       setconfirm(false);
+      AppEventsLogger.logEvent('confirm service');
     }
   };
 
@@ -220,6 +222,7 @@ const Home = (props) => {
   const chooseService = () => {
     setstate(true);
     setnewUser(false);
+    AppEventsLogger.logEvent('choosed Service');
   };
 
   //---------------------------------------------------------Handling Notification

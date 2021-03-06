@@ -25,64 +25,12 @@ export const servicesData = [
     icon: electration,
   },
   {
-    name: 'Car Mechanic',
-    icon: car,
-  },
-  {
-    name: 'Bike Mechanic',
-    icon: Bike,
-  },
-  {
     name: 'Plumber',
     icon: plumber,
   },
   {
-    name: 'Carpenter',
-    icon: carpenter,
-  },
-  {
     name: 'Ac & Fridge Tech',
     icon: ac,
-  },
-  {
-    name: 'Construction',
-    icon: construction,
-  },
-  {
-    name: 'Welding Service',
-    icon: welder,
-  },
-  {
-    name: 'Light Decoration',
-    icon: light,
-  },
-  {
-    name: 'Interior Design',
-    icon: interior,
-  },
-  {
-    name: 'Teacher & Tutor',
-    icon: teacher,
-  },
-  {
-    name: 'Water Tanker',
-    icon: water,
-  },
-  {
-    name: 'Saloon',
-    icon: saloon,
-  },
-  {
-    name: 'First Aid',
-    icon: firstaid,
-  },
-  {
-    name: 'Pick & Drop',
-    icon: pick,
-  },
-  {
-    name: 'Maids',
-    icon: maids,
   },
   {
     name: 'Painter',
@@ -93,11 +41,65 @@ export const servicesData = [
     icon: marbel,
   },
   {
-    name: 'Drivers',
-    icon: drivers,
+    name: 'Carpenter',
+    icon: carpenter,
+  },
+  {
+    name: 'Construction',
+    icon: construction,
+  },
+  {
+    name: 'Welding Service',
+    icon: welder,
+  },
+  {
+    name: 'Interior Design',
+    icon: interior,
+  },
+  {
+    name: 'Light Decoration',
+    icon: light,
   },
   {
     name: 'Catering Service',
     icon: catering,
+  },
+  {
+    name: 'Water Tanker',
+    icon: water,
+  },
+  {
+    name: 'Car Mechanic',
+    icon: car,
+  },
+  {
+    name: 'Bike Mechanic',
+    icon: Bike,
+  },
+
+  {
+    name: 'Drivers',
+    icon: drivers,
+  },
+  {
+    name: 'Pick & Drop',
+    icon: pick,
+  },
+  {
+    name: 'Teacher & Tutor',
+    icon: teacher,
+  },
+  {
+    name: 'First Aid',
+    icon: firstaid,
+  },
+  {
+    name: 'Saloon',
+    icon: saloon,
+  },
+
+  {
+    name: 'Maids',
+    icon: maids,
   },
 ];

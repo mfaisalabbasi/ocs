@@ -172,7 +172,7 @@ export const otpPartner = (user) => async (dispatch) => {
     const req = await fetch(
       `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userId}.json`,
       {
-        method: 'put',
+        method: 'patch',
         headers: {
           ContentType: 'application/json',
         },

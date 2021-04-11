@@ -302,7 +302,7 @@ const Home = (props) => {
               mapType={mapbtn.open ? 'satellite' : 'standard'}>
               {sellers.slice(0, 4).map((sell) => (
                 <Marker
-                  key={sell.date}
+                  key={sell.date + sell.partnerKey}
                   identifier={'data'}
                   coordinate={{
                     latitude: sell.latitude,

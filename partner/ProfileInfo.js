@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Geocoder from 'react-native-geocoding';
 
 const ProfileInfo = (props) => {
   const callNow = () => {
@@ -24,16 +25,17 @@ const ProfileInfo = (props) => {
   };
 
   const [address, setaddress] = useState();
+  Geocoder.init('AIzaSyClqm-gEevCnkyiD45oWeFibRZ8VbmIHDc');
   useEffect(() => {
     const fetchNearby = async () => {
-      const req = await fetch(
-        `https://us1.locationiq.com/v1/reverse.php?key=pk.6ae5458d22712d8adf1548f4610d6784&lat=${
-          props.info && props.info.location.latitude
-        }&lon=${props.info && props.info.location.longitude}&format=json`,
-      );
+      const rever =
+        props.info &&
+        (await Geocoder.from({
+          latitude: props.info && props.info.location.latitude,
+          longitude: props.info && props.info.location.longitude,
+        }));
 
-      const res = await req.json();
-      setaddress(res.display_name);
+      setaddress(rever && rever.results && rever.results[0].formatted_address);
     };
     fetchNearby();
   }, [props.info]);

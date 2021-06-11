@@ -130,7 +130,10 @@ export const allSeller = (custLocation, service) => async (dispatch) => {
     } else {
       const vl = Object.keys(res);
       vl.map((item) => loaded.push(res[item]));
-      filterd = loaded.filter((itm) => itm.status === true);
+      filterd = loaded.filter(
+        (itm) =>
+          itm.status === true && itm.latitude && itm.longitude && itm.service,
+      );
     }
     const nearby = orderByDistance(
       {

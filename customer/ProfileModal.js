@@ -72,10 +72,12 @@ const ProfileModal = (props) => {
   const orderNow = () => {
     setconfirmOrder(true);
     AppEventsLogger.logEvent('order now');
+    AppEventsLogger.logEvent('fb_mobile_add_to_cart');
   };
   const onOrderConfirm = () => {
     dispatch(submitOrder(user, props.service));
     AppEventsLogger.logEvent('confirm order');
+    AppEventsLogger.logEvent('fb_mobile_purchase');
   };
   return (
     <Modal

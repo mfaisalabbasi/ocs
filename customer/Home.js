@@ -191,6 +191,7 @@ const Home = (props) => {
       dispatch(allSeller(mapstate, service));
       setconfirm(false);
       AppEventsLogger.logEvent('confirm service');
+      AppEventsLogger.logEvent('fb_mobile_initiated_checkout');
     }
   };
 
@@ -223,6 +224,7 @@ const Home = (props) => {
     setstate(true);
     setnewUser(false);
     AppEventsLogger.logEvent('choosed Service');
+    AppEventsLogger.logEvent('fb_mobile_content_view');
   };
 
   //---------------------------------------------------------Handling Notification

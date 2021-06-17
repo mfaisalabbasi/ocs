@@ -39,6 +39,7 @@ const Login = () => {
     } else {
       dispatch(otpConfirm(confirm, code));
       AppEventsLogger.logEvent('Complete Customer Registration');
+      AppEventsLogger.logEvent('fb_mobile_complete_registration');
     }
   }
 

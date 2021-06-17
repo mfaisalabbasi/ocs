@@ -38,6 +38,7 @@ const SellerLogin = ({navigation}) => {
     } else {
       dispatch(otpConfirmPartner(confirm, code));
       AppEventsLogger.logEvent('Complete Partner Registration');
+      AppEventsLogger.logEvent('fb_mobile_complete_registration');
     }
   }
 

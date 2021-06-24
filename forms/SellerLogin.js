@@ -12,6 +12,8 @@ import {
 import {AppEventsLogger} from 'react-native-fbsdk';
 import {useSelector, useDispatch} from 'react-redux';
 import {otpConfirmPartner, registerPartner} from '../store/actions/otp';
+import analytics from '@react-native-firebase/analytics';
+
 const SellerLogin = ({navigation}) => {
   const confirm = useSelector((state) => state.otp.confirm);
   const loading = useSelector((state) => state.otp.loading);
@@ -39,6 +41,7 @@ const SellerLogin = ({navigation}) => {
       dispatch(otpConfirmPartner(confirm, code));
       AppEventsLogger.logEvent('Complete Partner Registration');
       AppEventsLogger.logEvent('fb_mobile_complete_registration');
+      await analytics().logEvent('partner_register');
     }
   }
 

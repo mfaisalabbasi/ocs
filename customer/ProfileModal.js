@@ -16,6 +16,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {nullNear, nullSeller} from '../store/actions/user';
 import {clearOrder, submitOrder} from '../store/actions/order';
 import {AppEventsLogger} from 'react-native-fbsdk';
+import analytics from '@react-native-firebase/analytics';
+
 const ProfileModal = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -33,7 +35,7 @@ const ProfileModal = (props) => {
   }, [er]);
 
   const [press, setpress] = useState(false);
-  const cancelFunc = () => {
+  const cancelFunc = async () => {
     props.setopenprofile();
     props.curloc();
     props.setsrvc('Choose');
@@ -43,6 +45,7 @@ const ProfileModal = (props) => {
     setconfirmOrder(false);
     dispatch(clearOrder());
     AppEventsLogger.logEvent('Cancel Pressed');
+    await analytics().logEvent('cancel_pressed');
   };
 
   //---------------------------------sellers Array
@@ -69,15 +72,23 @@ const ProfileModal = (props) => {
   //--------------------------------Order Now Func
   const [confirmOrder, setconfirmOrder] = useState(false);
   const confirmed = useSelector((state) => state.order.confirmed);
-  const orderNow = () => {
+  const orderNow = async () => {
     setconfirmOrder(true);
     AppEventsLogger.logEvent('order now');
-    AppEventsLogger.logEvent('fb_mobile_add_to_cart');
+    AppEventsLogger.logEvent('fb_mobile_add_to_cart', {
+      fb_currency: 'USD',
+      value: 1.0,
+    });
+    await analytics().logEvent('order_now');
   };
-  const onOrderConfirm = () => {
+  const onOrderConfirm = async () => {
     dispatch(submitOrder(user, props.service));
     AppEventsLogger.logEvent('confirm order');
-    AppEventsLogger.logEvent('fb_mobile_purchase');
+    AppEventsLogger.logEvent('fb_mobile_purchase', {
+      fb_currency: 'USD',
+      value: 1.0,
+    });
+    await analytics().logEvent('confirm_order');
   };
   return (
     <Modal

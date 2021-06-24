@@ -12,6 +12,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {otpConfirm, otpRegister} from '../store/actions/otp';
 import {AppEventsLogger} from 'react-native-fbsdk';
+import analytics from '@react-native-firebase/analytics';
 
 const Login = () => {
   const confirm = useSelector((state) => state.otp.confirm);
@@ -40,6 +41,7 @@ const Login = () => {
       dispatch(otpConfirm(confirm, code));
       AppEventsLogger.logEvent('Complete Customer Registration');
       AppEventsLogger.logEvent('fb_mobile_complete_registration');
+      await analytics().logEvent('customer_register');
     }
   }
 

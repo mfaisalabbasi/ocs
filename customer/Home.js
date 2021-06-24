@@ -25,7 +25,7 @@ import ProfileModal from './ProfileModal';
 import messaging from '@react-native-firebase/messaging';
 import ProfileInfo from './ProfileInfo';
 import {AppEventsLogger} from 'react-native-fbsdk';
-
+import analytics from '@react-native-firebase/analytics';
 const Home = (props) => {
   //----------------------------------------------Navigation Setups----------------------------------------
 
@@ -184,7 +184,7 @@ const Home = (props) => {
     setopenprofile(true);
   };
 
-  const onConfirm = () => {
+  const onConfirm = async () => {
     if (!user.phone) {
       setnewUser(true);
     } else {
@@ -192,6 +192,7 @@ const Home = (props) => {
       setconfirm(false);
       AppEventsLogger.logEvent('confirm service');
       AppEventsLogger.logEvent('fb_mobile_initiated_checkout');
+      await analytics().logEvent('confirm_service');
     }
   };
 
@@ -220,11 +221,15 @@ const Home = (props) => {
   //----------------------------------------------------------Registration Section
   const [newUser, setnewUser] = useState(false);
 
-  const chooseService = () => {
+  const chooseService = async () => {
     setstate(true);
     setnewUser(false);
     AppEventsLogger.logEvent('choosed Service');
-    AppEventsLogger.logEvent('fb_mobile_content_view');
+    AppEventsLogger.logEvent('fb_mobile_content_view', {
+      fb_currency: 'USD',
+      value: 1.0,
+    });
+    await analytics().logEvent('choose_service');
   };
 
   //---------------------------------------------------------Handling Notification

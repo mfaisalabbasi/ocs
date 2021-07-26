@@ -213,7 +213,7 @@ export const nearbyPartners = (nearby) => async (dispatch) => {
 //------------------------------------partner section
 
 export const getPartner = (userid, service) => async (dispatch) => {
-  let serviceName = service.replace(/ /g, '');
+  let serviceName = service && service.replace(/ /g, '');
   try {
     const req = await fetch(
       `https://on-click-s.firebaseio.com/sellers/${serviceName}/${userid}.json`,

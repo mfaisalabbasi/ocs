@@ -9,15 +9,15 @@ import welder from '../assets/images/services/welder.jpg';
 import light from '../assets/images/services/light.jpg';
 import interior from '../assets/images/services/interior.jpg';
 import teacher from '../assets/images/services/teacher.jpg';
-import water from '../assets/images/services/water.jpg';
-import saloon from '../assets/images/services/saloon.jpg';
-import firstaid from '../assets/images/services/firstaid.jpg';
-import pick from '../assets/images/services/pick.jpg';
-import maids from '../assets/images/services/maids.jpg';
+// import water from '../assets/images/services/water.jpg';
+// import saloon from '../assets/images/services/saloon.jpg';
+// import firstaid from '../assets/images/services/firstaid.jpg';
+// import pick from '../assets/images/services/pick.jpg';
+// import maids from '../assets/images/services/maids.jpg';
 import painter from '../assets/images/services/painter.jpg';
 import marbel from '../assets/images/services/marbel.jpg';
-import drivers from '../assets/images/services/drivers.jpg';
-import catering from '../assets/images/services/catering.jpg';
+// import drivers from '../assets/images/services/drivers.jpg';
+// import catering from '../assets/images/services/catering.jpg';
 
 export const servicesData = [
   {
@@ -60,14 +60,14 @@ export const servicesData = [
     name: 'Light Decoration',
     icon: light,
   },
-  {
-    name: 'Catering Service',
-    icon: catering,
-  },
-  {
-    name: 'Water Tanker',
-    icon: water,
-  },
+  // {
+  //   name: 'Catering Service',
+  //   icon: catering,
+  // },
+  // {
+  //   name: 'Water Tanker',
+  //   icon: water,
+  // },
   {
     name: 'Car Mechanic',
     icon: car,
@@ -77,29 +77,29 @@ export const servicesData = [
     icon: Bike,
   },
 
-  {
-    name: 'Drivers',
-    icon: drivers,
-  },
-  {
-    name: 'Pick & Drop',
-    icon: pick,
-  },
+  // {
+  //   name: 'Drivers',
+  //   icon: drivers,
+  // },
+  // {
+  //   name: 'Pick & Drop',
+  //   icon: pick,
+  // },
   {
     name: 'Teacher & Tutor',
     icon: teacher,
   },
-  {
-    name: 'First Aid',
-    icon: firstaid,
-  },
-  {
-    name: 'Saloon',
-    icon: saloon,
-  },
+  // {
+  //   name: 'First Aid',
+  //   icon: firstaid,
+  // },
+  // {
+  //   name: 'Saloon',
+  //   icon: saloon,
+  // },
 
-  {
-    name: 'Maids',
-    icon: maids,
-  },
+  // {
+  //   name: 'Maids',
+  //   icon: maids,
+  // },
 ];

@@ -61,7 +61,7 @@ const About = (props) => {
             show you the list of other Availble provider according to your
             current position. You can Hire one of them that you feel suitable
             for your work. OCS is Covering Almost All doorstep service, Some of
-            them are given below.
+            them are given below. Phone:- 03135100799
           </Text>
         </View>
       </View>

@@ -23,7 +23,9 @@ const Register = ({navigation}) => {
     userId: uid,
   });
   const {name, service, expertise} = user;
-  //handling Registration
+  //handling Registrations
+  //handling Registrations
+
   const [err, seterr] = useState(false);
   const er = useSelector((state) => state.otpredu.error);
   const loading = useSelector((state) => state.otpredu.loading);
